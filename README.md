@@ -18,7 +18,12 @@ cd Higram
 
 ### 3rd step : installing Laravel dependancies
 
-After you  navigate to the project folder, use those commands to install laravel dependancies:
+Navigate to Backend Folder 
+```
+cd Backend
+```
+
+Use those commands to install laravel dependancies:
 ```
 composer update 
 composer install
@@ -33,7 +38,7 @@ cp .env.example .env
 ### 5th step : installing react dependancies
 Navigate to the react folder using 
 ```
-cd frontend
+cd ../frontend
 ```
 Then use this command to install all React depandencies 
 ```
