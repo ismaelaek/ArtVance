@@ -18,7 +18,7 @@ cd Higram
 
 ### 3rd step : installing Laravel dependancies
 
-Navigate to Backend Folder 
+Navigate to **Backend** Folder 
 ```
 cd Backend
 ```
@@ -36,7 +36,7 @@ Copy the `.env.example` file to `.env` using the command below:
 cp .env.example .env
 ```
 ### 5th step : installing react dependancies
-Navigate to the react folder using 
+Navigate to the **frontend** folder using 
 ```
 cd ../frontend
 ```
@@ -46,3 +46,26 @@ npm install
 ```
 A new folder called `node_modules` will appear in your current directory (frontend).
 
+### Final step : running the application
+
+Firstly open two terminals, one for Laravel and the other for React
+
+##### Laravel Terminal
+Navigate to the folder named **backend**
+```
+cd backend
+```
+Start the server using 
+```
+php artisan serve
+```
+
+##### React Terminal
+Navigate to the folder named **frontend**
+```
+cd frontend
+```
+Start the server using 
+```
+npm run dev
+```
