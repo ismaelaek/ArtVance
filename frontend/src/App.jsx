@@ -24,7 +24,11 @@ function App() {
   return (
     <div className='container'>
       {/* you can style stuff using classNmae only */}
-      <h1>Hello Higram</h1>
+      <h1
+        className=' text-4xl cursor- text-green-600 p-10 font-bold mb-5'
+      >Hello ArtVance</h1>
+
+
       <h1 className=' text-3xl'>
         { data }
       </h1>
