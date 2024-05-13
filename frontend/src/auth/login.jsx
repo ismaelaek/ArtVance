@@ -1,35 +1,20 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { message } from "antd";
+import { message, Form, Input, Button } from "antd";
 import "../styles/login.css";
 import Cookies from "js-cookie";
+import Logo from "../assets/artvance_logo.png";
+
 const Login = () => {
 	const navigate = useNavigate();
-	// useEffect(() => {
-	// 	const token = Cookies.get("token");
-	// 	if (token) {
-	// 		navigate("/");
-	// 	}
-	// }, [navigate]);
-	const [formData, setFormData] = useState({
-		email: "",
-		password: "",
-	});
-	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
-		});
-	};
+	const [form] = Form.useForm(); 
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-
+	const handleSubmit = async (values) => {
 		try {
 			const response = await axios.post(
 				"http://127.0.0.1:8000/api/auth/login",
-				formData
+				values 
 			);
 			const user = response.data.user;
 			if (user.isAdmin) {
@@ -51,46 +36,62 @@ const Login = () => {
 	};
 
 	return (
-		<section className="vh-100 flex items-center p-8  ">
-			<div
-				className="card w-2/4"
-				style={{
-					borderRadius: "15px",
-					backgroundColor: "rgba(255, 255, 255, 0.5)",
-				}}>
-				<div className="card-body px-5">
-					<div className=" w-full flex justify-center pb-8">
-                        {/* <img src={Logo} alt="Logo" width={120} /> */}
-                        Artvance
+		<section className="vh-100 flex justify-center items-center p-8">
+			<div className=" overflow-hidden w-2/3 rounded-3xl grid grid-cols-2 bg-white">
+				<div className="login-bg-image"></div>
+				<div className="p-5 text-center">
+					<div className="h-12 flex justify-center">
+						<img src={Logo} alt="logo" className="h-full" />
 					</div>
-					<form method="POST" onSubmit={handleSubmit}>
-						<div className="form-outline mb-4">
-							<input
-								type="text"
-								name="email"
-								placeholder="email"
-								className="form-control"
-								onChange={handleChange}
-							/>
-						</div>
-						<div className="form-outline mb-4">
-							<input
-								type="password"
-								name="password"
-								placeholder="password"
-								className="form-control"
-								onChange={handleChange}
-							/>
-						</div>
-						<button type="submit" className="btn btn-primary mt-4 w-full">
-							Log in
+					<h3>Login to your account</h3>
+					<Form
+						className="p-2"
+						form={form}
+						layout="vertical"
+						onFinish={handleSubmit}>
+						<Form.Item
+							name="email"
+							label="Email"
+							rules={[{ required: true, message: "Please input your email!" }]}>
+							<Input />
+						</Form.Item>
+						<Form.Item
+							name="password"
+							label="Password"
+							rules={[
+								{ required: true, message: "Please input your password!" },
+							]}>
+							<Input.Password />
+						</Form.Item>
+						<Form.Item>
+							<Button type="primary" htmlType="submit" className="mt-4 bg-blue-500 w-full" >
+								Log in
+							</Button>
+						</Form.Item>
+					</Form>
+					<p>
+						<Link className="no-underline" to="/register">
+							Forget Password ?
+						</Link>
+					</p>
+					<p> Or login with</p>
+					<div className=" flex gap-2 justify-center">
+						<button className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+							Google
 						</button>
-					</form>
-					<div className="text-center mt-2">
-						<p>
-							Don't have an account? <Link to="/register">Register</Link>
-						</p>
+
+						<button className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
+							Facebook
+						</button>
+
+						<button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+							Twitter
+						</button>
 					</div>
+
+					<p className="text-center mt-4">
+						Don't have an account? <Link to="/register">Register</Link>
+					</p>
 				</div>
 			</div>
 		</section>
