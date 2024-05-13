@@ -1,4 +1,4 @@
-# Higram
+# ArtVnace
 Hello everybody!
 
 
@@ -6,14 +6,14 @@ Hello everybody!
 Using the command below, clone this project to your local machine :
 
 ```
-git clone https://github.com/ismaelaek/higram.git
+git clone https://github.com/ismaelaek/ArtVance.git
 ```
 
 ### Second step
 
 Navigate to the cloned folder.
 ```
-cd Higram
+cd ArtVance
 ```
 
 ### 3rd step: installing Laravel dependencies
