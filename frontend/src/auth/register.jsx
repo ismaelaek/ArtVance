@@ -5,6 +5,8 @@ import axios from "axios";
 import Hobbies from "../assets/Hobbies.png";
 import { FaGoogle, FaFacebook, FaTwitter } from "react-icons/fa";
 import '../styles/login.css'
+import Logo from "../assets/artvance_logo.png";
+
 
 
 const Register = () => {
@@ -33,11 +35,15 @@ const Register = () => {
 		<section className="vh-100  flex  justify-center items-center p-8 ">
 			<div className=" w-2/3 bg-white grid grid-cols-2 rounded-2xl overflow-hidden">
 				<div className="p-3 text-center">
+					<div className="h-12 flex justify-center">
+						<img src={Logo} alt="logo" className="h-full" />
+					</div>
 					<h3>Create new account</h3>
 					<Form
 						name="register"
 						onFinish={onFinish}
 						layout="vertical"
+						className="pt-3"
 						scrollToFirstError>
 						<Form.Item
 							name="name"
@@ -123,7 +129,7 @@ const Register = () => {
 								type="primary"
 								htmlType="submit"
 								className="mt-2 bg-blue-500 w-full">
-								Register
+								Create account
 							</Button>
 						</Form.Item>
 					</Form>
@@ -142,7 +148,7 @@ const Register = () => {
 						</button>
 					</div>
 					<p className="text-center mt-4">
-						Alredy have an account? <Link to="/register">Log in</Link>
+						Alredy have an account? <Link to="/login">Log in</Link>
 					</p>
 				</div>
 				<div className="flex items-center justify-center w-full">

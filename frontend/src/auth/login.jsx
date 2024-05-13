@@ -79,17 +79,17 @@ const Login = () => {
 						</Link>
 					</p>
 					<p> Or login with</p>
-					<div className=" flex gap-4 justify-center text-2xl">
-						<button className="bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded-full">
+					<div className=" social-icons flex gap-4 justify-center text-2xl">
+						<button className="bg-red-600 hover:bg-red-700">
 							<FaGoogle />
 						</button>
 
-						<button className="bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full">
+						<button className="bg-blue-700 hover:bg-blue-800">
 							<FaFacebook />
 						</button>
 
-						<button className="bg-blue-500 hover:bg-blue-600 text-white font-bold p-3 rounded-full">
-							<FaTwitter  />
+						<button className="bg-blue-500 hover:bg-blue-600">
+							<FaTwitter />
 						</button>
 					</div>
 
