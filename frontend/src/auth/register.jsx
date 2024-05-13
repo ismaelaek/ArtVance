@@ -2,7 +2,10 @@ import React from "react";
 import { Form, Input, Button, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import Logo from "../assets/logo.png";
+import Hobbies from "../assets/Hobbies.png";
+import { FaGoogle, FaFacebook, FaTwitter } from "react-icons/fa";
+import '../styles/login.css'
+
 
 const Register = () => {
 	const navigate = useNavigate();
@@ -27,14 +30,10 @@ const Register = () => {
 	};
 
 	return (
-		<section className="vh-100 flex justify-between items-center p-8">
-			<div
-				className="card w-2/4"
-				style={{
-					borderRadius: "15px",
-					backgroundColor: "rgba(255, 255, 255, 0.5)",
-				}}>
-				<div className="card-body px-5">
+		<section className="vh-100  flex  justify-center items-center p-8 ">
+			<div className=" w-2/3 bg-white grid grid-cols-2 rounded-2xl overflow-hidden">
+				<div className="p-3 text-center">
+					<h3>Create new account</h3>
 					<Form
 						name="register"
 						onFinish={onFinish}
@@ -42,19 +41,32 @@ const Register = () => {
 						scrollToFirstError>
 						<Form.Item
 							name="name"
-							label="Name"
 							rules={[
 								{
 									required: true,
 									message: "Please enter your name!",
 								},
 							]}>
-							<Input />
+							<Input placeholder="Name" />
+						</Form.Item>
+
+						<Form.Item
+							name="username"
+							rules={[
+								{
+									required: true,
+									message: "Please enter your a username!",
+								},
+								{
+									min: 5,
+									message: "Username must be at least 5 characters long!",
+								},
+							]}>
+							<Input placeholder="Username" />
 						</Form.Item>
 
 						<Form.Item
 							name="email"
-							label="Email"
 							rules={[
 								{
 									type: "email",
@@ -65,12 +77,11 @@ const Register = () => {
 									message: "Please enter your email!",
 								},
 							]}>
-							<Input />
+							<Input placeholder="Email" />
 						</Form.Item>
 
 						<Form.Item
 							name="password"
-							label="Password"
 							rules={[
 								{
 									required: true,
@@ -82,12 +93,11 @@ const Register = () => {
 								},
 							]}
 							hasFeedback>
-							<Input.Password />
+							<Input.Password placeholder="Password" />
 						</Form.Item>
 
 						<Form.Item
 							name="password_confirmation"
-							label="Confirm Password"
 							dependencies={["password"]}
 							hasFeedback
 							rules={[
@@ -106,48 +116,38 @@ const Register = () => {
 									},
 								}),
 							]}>
-							<Input.Password />
+							<Input.Password placeholder="Confirm Password" />
 						</Form.Item>
-
-						<Form.Item
-							name="phone"
-							label="Phone"
-							rules={[
-								{
-									required: true,
-									message: "Please enter your phone number!",
-								},
-								{
-									min: 10,
-									message: "phone should be 10 digits long",
-								},
-								{
-									max: 10,
-									message: "phone number is too long!",
-								},
-							]}>
-							<Input />
-						</Form.Item>
-
 						<Form.Item>
-							<Button type="primary" htmlType="submit" className="w-full">
+							<Button
+								type="primary"
+								htmlType="submit"
+								className="mt-2 bg-blue-500 w-full">
 								Register
 							</Button>
 						</Form.Item>
 					</Form>
-					<div className="text-center mt-2">
-						<p>
-							Already have an account? <Link to="/login">Log in</Link>
-						</p>
+					<p> Or sign up with</p>
+					<div className=" social-icons flex gap-4 justify-center text-2xl">
+						<button className="bg-red-600 hover:bg-red-700">
+							<FaGoogle />
+						</button>
+
+						<button className="bg-blue-700 hover:bg-blue-800">
+							<FaFacebook />
+						</button>
+
+						<button className="bg-blue-500 hover:bg-blue-600">
+							<FaTwitter />
+						</button>
 					</div>
+					<p className="text-center mt-4">
+						Alredy have an account? <Link to="/register">Log in</Link>
+					</p>
 				</div>
-			</div>
-			<div className="2/4 mr-10">
-				{/* <img src={Logo} alt="Logo" width={400} /> */}
-				<h3>Discover your city with no gasoline</h3>
-				<p className="mt-2 text-center">
-					Find out where your city is and how to get there
-				</p>
+				<div className="flex items-center justify-center w-full">
+					<img src={Hobbies} alt="" />
+				</div>
 			</div>
 		</section>
 	);
