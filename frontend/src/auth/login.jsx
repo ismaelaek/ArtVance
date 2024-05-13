@@ -5,6 +5,7 @@ import { message, Form, Input, Button } from "antd";
 import "../styles/login.css";
 import Cookies from "js-cookie";
 import Logo from "../assets/artvance_logo.png";
+import {FaGoogle, FaFacebook, FaTwitter} from 'react-icons/fa'
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -64,7 +65,10 @@ const Login = () => {
 							<Input.Password />
 						</Form.Item>
 						<Form.Item>
-							<Button type="primary" htmlType="submit" className="mt-4 bg-blue-500 w-full" >
+							<Button
+								type="primary"
+								htmlType="submit"
+								className="mt-4 bg-blue-500 w-full">
 								Log in
 							</Button>
 						</Form.Item>
@@ -75,17 +79,17 @@ const Login = () => {
 						</Link>
 					</p>
 					<p> Or login with</p>
-					<div className=" flex gap-2 justify-center">
-						<button className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-							Google
+					<div className=" flex gap-4 justify-center text-2xl">
+						<button className="bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded-full">
+							<FaGoogle />
 						</button>
 
-						<button className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
-							Facebook
+						<button className="bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-full">
+							<FaFacebook />
 						</button>
 
-						<button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-							Twitter
+						<button className="bg-blue-500 hover:bg-blue-600 text-white font-bold p-3 rounded-full">
+							<FaTwitter  />
 						</button>
 					</div>
 
