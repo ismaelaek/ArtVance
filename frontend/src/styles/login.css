@@ -9,8 +9,14 @@
 
 .social-icons button{
     border-radius: 50%;
-    color: white;
     padding: 12px;
     font-weight: bold;
     box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.social-icons button:hover{
+    background-color: #e1e1e1;
+    transition-duration: .5s;
+    box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.5);
+    transform: scale(1.1);
 }

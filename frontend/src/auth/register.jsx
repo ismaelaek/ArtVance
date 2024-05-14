@@ -135,15 +135,15 @@ const Register = () => {
 					</Form>
 					<p> Or sign up with</p>
 					<div className=" social-icons flex gap-4 justify-center text-2xl">
-						<button className="bg-red-600 hover:bg-red-700">
+						<button className="text-red-600">
 							<FaGoogle />
 						</button>
 
-						<button className="bg-blue-700 hover:bg-blue-800">
+						<button className="text-blue-700">
 							<FaFacebook />
 						</button>
 
-						<button className="bg-blue-500 hover:bg-blue-600">
+						<button className="text-blue-500">
 							<FaTwitter />
 						</button>
 					</div>
