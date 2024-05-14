@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Form, Input, Button, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,13 +6,32 @@ import Hobbies from "../assets/Hobbies.png";
 import { FaGoogle, FaFacebook, FaTwitter } from "react-icons/fa";
 import '../styles/login.css'
 import Logo from "../assets/artvance_logo.png";
+import { getUsers } from "@/storage/usersSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 
 
 const Register = () => {
+	const dispatch = useDispatch()
 	const navigate = useNavigate();
 
+	const { users, usersIsLoading } = useSelector(state => state.users)
+
+	const usedUsernames = [... users.map((item) => {
+		return item.username;
+	})]
+	const usedEmail = [
+		...users.map((item) => {
+			return item.email;
+		}),
+	];
+	
+	useEffect(() => {
+        dispatch(getUsers())
+    }, [dispatch])
+
 	const onFinish = async (values) => {
+		console.log(values);
 		try {
 			const response = await axios.post(
 				"http://127.0.0.1:8000/api/auth/register",
@@ -46,14 +65,14 @@ const Register = () => {
 						className="pt-3"
 						scrollToFirstError>
 						<Form.Item
-							name="name"
+							name="nickname"
 							rules={[
 								{
 									required: true,
-									message: "Please enter your name!",
+									message: "Please enter your nickname!",
 								},
 							]}>
-							<Input placeholder="Name" />
+							<Input placeholder="nickname" />
 						</Form.Item>
 
 						<Form.Item
@@ -64,9 +83,24 @@ const Register = () => {
 									message: "Please enter your a username!",
 								},
 								{
-									min: 5,
-									message: "Username must be at least 5 characters long!",
+									min: 6,
+									message: "Username must be at least 6 characters long!",
 								},
+								{
+									pattern: /^[a-zA-Z0-9_.]+$/,
+									message:
+										"Username can only contain letters, numbers, underscore, and dot!",
+								},
+								({ getFieldValue }) => ({
+									validator(_, value) {
+										if (usedUsernames.includes(value)) {
+											return Promise.reject(
+												new Error("Username is already taken!")
+											);
+										}
+										return Promise.resolve();
+									},
+								}),
 							]}>
 							<Input placeholder="Username" />
 						</Form.Item>
@@ -82,6 +116,16 @@ const Register = () => {
 									required: true,
 									message: "Please enter your email!",
 								},
+								({ getFieldValue }) => ({
+									validator(_, value) {
+										if (usedEmail.includes(value)) {
+											return Promise.reject(
+												new Error("Email is already taken! Sign in instead ?")
+											);
+										}
+										return Promise.resolve();
+									},
+								}),
 							]}>
 							<Input placeholder="Email" />
 						</Form.Item>
