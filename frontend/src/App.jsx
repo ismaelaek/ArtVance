@@ -4,6 +4,7 @@ import store from "./storage/store";
 import Container from "./components/container";
 import Login from "./auth/login";
 import Register from "./auth/register";
+import Card from "./components/profile/card";
 import "./App.css";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 					<Routes>
 						{/*ga3 routes ldakhel d application khas ikono hna */}
 						<Route path="/" element={<h1>Home</h1>} />
+						<Route path="/profile" element={<Card />} />
 						<Route path="*" element={<h1>Page Not Found</h1>} />
 					</Routes>
 				</Container>
@@ -28,6 +30,7 @@ function App() {
 						{/** hna aykono routes dyal login with google, facebook */}
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
+
 				</Routes>
 			)}
 		</Provider>
@@ -35,3 +38,4 @@ function App() {
 }
 
 export default App;
+
