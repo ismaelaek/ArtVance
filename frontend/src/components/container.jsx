@@ -57,7 +57,7 @@ const Container = ({ children }) => {
 						</NavLink>
 						<NavLink to="/profile">
 							<FaUser /> Profile
-						</NavLink>
+						</NavLink> 
 						<NavLink to="/marketplace">
 							<FaShop /> Marketplace
 						</NavLink>
