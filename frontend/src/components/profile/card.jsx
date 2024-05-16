@@ -3,16 +3,16 @@ import ProfilePic from "../../assets/profile.jpg";
 import BackgroundPic from "../../assets/background.jpg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { AppstoreOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Menu, Dropdown } from 'antd';
+import { AppstoreOutlined} from '@ant-design/icons';
+import { Menu} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedTab } from '@/storage/profileSlice';
+import TimeLine from './timeLine/timeLine';
 
 function Card() {
     const dispatch = useDispatch();
     const [current, setCurrent] = useState('1');
     const selectedTab = useSelector(state => state.profile.profileTab);
-    
 
     const handleClick = (e) => {        
         setCurrent(e.key);
@@ -156,7 +156,7 @@ function Card() {
                         paddingLeft: "20px",
                     }}
                 >
-                    <p>From Egypt <br />55 yo<br />Work at Mchi So9ek</p>
+                    <p>From Egypt <br/>55 yo <br/>Work at Mchi So9ek </p>
                 </div>
             </div>
             {/* navbar */}
@@ -170,12 +170,6 @@ function Card() {
                     </Menu.Item>
                     <Menu.Item key="3" icon={<AppstoreOutlined />}>
                         Friend (5)
-                    </Menu.Item>
-                    <Menu.Item key="ellipsis" icon={<EllipsisOutlined />}>
-                        <Dropdown overlay={menu}>
-                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                            </a>
-                        </Dropdown>
                     </Menu.Item>
                 </Menu>
             </div>
@@ -191,7 +185,7 @@ export default Card;
 const ContentContainer = ({ selectedTab }) => {
 	switch (selectedTab) {
 		case "1":
-			return <h1>Timeline</h1>;
+			return <TimeLine/>;
 		case "2":
 			return <h1>About</h1>;
 		case "3":
