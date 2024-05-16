@@ -72,12 +72,10 @@ const Container = ({ children }) => {
 						</NavLink>
 					</nav>
 				</Sider>
-				<Layout style={{ padding: "24px 24px" }}>
+				<Layout>
 					<Content
 						className="content"
 						style={{
-							margin: 0,
-							background: colorBgContainer,
 							borderRadius: borderRadiusLG,
 							overflowX: "scroll",
 						}}>

@@ -5,6 +5,7 @@ import Container from "./components/container";
 import Login from "./auth/login";
 import Register from "./auth/register";
 import Card from "./components/profile/card";
+import Feed from "./components/feed";
 import "./App.css";
 
 function App() {
@@ -20,17 +21,17 @@ function App() {
 				<Container>
 					<Routes>
 						{/*ga3 routes ldakhel d application khas ikono hna */}
-						<Route path="/" element={<h1>Home</h1>} />
+						<Route path="/" element={<Feed />} />
 						<Route path="/profile" element={<Card />} />
+						<Route path="marketplace" element={<h1>MarketPlace</h1>} />
 						<Route path="*" element={<h1>Page Not Found</h1>} />
 					</Routes>
 				</Container>
 			) : (
-					<Routes>
-						{/** hna aykono routes dyal login with google, facebook */}
+				<Routes>
+					{/** hna aykono routes dyal login with google, facebook */}
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
-
 				</Routes>
 			)}
 		</Provider>
