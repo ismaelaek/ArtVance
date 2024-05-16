@@ -6,6 +6,7 @@ import Login from "./auth/login";
 import Register from "./auth/register";
 import Card from "./components/profile/card";
 import Feed from "./components/feed";
+import Messages from "./components/messages/messagesMain";
 import "./App.css";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 						{/*ga3 routes ldakhel d application khas ikono hna */}
 						<Route path="/" element={<Feed />} />
 						<Route path="/profile" element={<Card />} />
+						<Route path="/messages" element={<Messages />} />
 						<Route path="marketplace" element={<h1>MarketPlace</h1>} />
 						<Route path="*" element={<h1>Page Not Found</h1>} />
 					</Routes>

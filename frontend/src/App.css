@@ -44,3 +44,15 @@
     grid-template-columns: 20% 78%;
     gap: 5px;
 }
+.message-main {
+    display: grid;
+    grid-template-columns: 69% 30%;
+    gap: 20px;
+    height: calc(100vh - 90px);
+    overflow: hidden;
+}
+
+.message-conversation,
+.chat-items-container {
+    height: calc(100% - 40px);
+}
