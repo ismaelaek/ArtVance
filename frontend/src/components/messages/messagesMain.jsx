@@ -1,12 +1,13 @@
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import ChatItem from "./chatItem";
+import Conversation from "./conversation";
 
 const Messages = () => {
 	return (
 		<main className="message-main">
 			<div className="message-conversation rounded-xl bg-white h-full p-3">
-				<h1>Conversation</h1>
+				<Conversation/>
 			</div>
 			<div className=" rounded-xl bg-white p-3">
 				<Chats />
