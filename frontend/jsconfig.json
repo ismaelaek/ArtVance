@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    // ...
+    // Other options...
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
-    // ...
-  }
+      "@/*": ["./src/*"]
+    },
+    "jsx": "react" // or "preserve" if you want to preserve JSX as-is
+  },
+  // Other configurations...
 }
