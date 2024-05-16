@@ -29,7 +29,7 @@ const Login = () => {
 					secure: true,
 				});
 				message.success("Login Successful");
-				navigate("/home");
+				navigate("/");
 			}
 		} catch (error) {
 			message.error("Invalid email or password. Please try again.");
