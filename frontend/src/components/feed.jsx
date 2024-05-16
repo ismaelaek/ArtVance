@@ -6,8 +6,24 @@ const Feed = () => {
 	return (
 		<main className="rounded-2xl h-full p-3 feed-main">
 			<div className=" p-3 rounded-2xl">
-				<div className="bg-white">
+				<div className="bg-white p-2 rounded-xl">
 					<h1>New Post</h1>
+				</div>
+				{/* // ! hna fin ghaykono les posts*/}
+				<div className="posts mt-2">
+					{/* // ! hadhci ghaytms7 w ghaykon map dyal les post */}
+
+					{/* ###################################*/}
+					<div className=" bg-white  mt-3 rounded-xl p-2">
+						<h1> post 1 </h1>
+					</div>
+					<div className=" bg-white  mt-3 rounded-xl p-2">
+						<h1> post 2</h1>
+					</div>
+					<div className=" bg-white  mt-3 rounded-xl p-2">
+						<h1> post 3</h1>
+					</div>
+					{/* ###################################*/}
 				</div>
 			</div>
 			<div className="bg-white p-3 rounded-2xl">
