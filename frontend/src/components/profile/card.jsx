@@ -28,16 +28,14 @@ function Card() {
     );
 
     return (
-        <div
-            style={{
-                width: "100%",
-            }}
-        >
+        <div className=' w-full mb-5'>
             <div
                 style={{
                     fontFamily: "'Poppins', sans-serif",
                     width: "100%",
                     position: "relative",
+                    backgroundColor: 'white',
+                    overflow: 'hidden'
                 }}
             >
                 {/* Background pic */}
@@ -47,7 +45,6 @@ function Card() {
                             width: "100%",
                             height: "200px",
                             objectFit: "cover",
-                            borderRadius: "10px",
                         }}
                         src={BackgroundPic}
                         alt=""
@@ -83,7 +80,7 @@ function Card() {
                 <div
                     style={{
                         position: "absolute",
-                        top: "58%",
+                        top: "55%",
                         left: "20px",
                         transform: "translateY(-50%)",
                         display: "flex",

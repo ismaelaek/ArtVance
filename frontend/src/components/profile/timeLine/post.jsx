@@ -30,22 +30,23 @@ function Post() {
     return (
 
         
-        <div style={{ marginLeft: "20px", marginRight: "50px", marginTop: '50px' }}>
-            <hr style={{ borderColor: 'gray', width: '100%', marginBottom: '10px' }} />
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div  className='p-3 rounded-xl mt-12 bg-white'>
+            <div className='flex items-center'>
                 <img src={ProfilePic} alt="Profile" style={profilePicStyle} />
-                <div style={{ marginLeft: '10px', marginTop: "20px" }}>
-                    <h6 style={{ fontSize: '18px', marginBottom: '2px', color: 'black' }}>Ahmed Mouhssine</h6>
+                <div className='ml-2 mt-2'>
+                    <h6 className='text-xl text-black'>Ahmed Mouhssine</h6>
                     <p style={{ fontSize: '14px', color: 'gray' }}>2020-05-19</p>
                 </div>
             </div>
 
-            <div style={{marginTop:'8px', marginBottom:"20px" }}>
-                <p style={{ fontSize: '17px', fontWeight: 'normal', color: 'black', marginBottom: '10px'}}>This is a Caption of this post...</p>
+            <div className='mt-2 mb-5'>
+                <p className='text-lg text-black mb-2'>
+                    This is a Caption of this post...
+                </p>
                 <img
                     src={Poste1}
                     alt="Post"
-                    style={{ width: "100%", maxHeight: "500px", height: "auto" , borderRadius:"20px" }}
+                    style={{ width: "100%", maxHeight: "500px", height: "auto" , borderRadius:"20px" , aspectRatio : '3/2'}}
                 />
             </div>
 
@@ -54,7 +55,7 @@ function Post() {
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }} className='flex items-center justify-between'>
                 <div>
                     <Button 
-                         icon={liked ? <FaHeart color="#e84393" /> : <FaRegHeart />} 
+                        icon={liked ? <FaHeart color="#e84393" /> : <FaRegHeart />} 
                         onClick={handleLikeClick} 
                         style={{border: "none",fontSize: "20px" }} 
                     />
