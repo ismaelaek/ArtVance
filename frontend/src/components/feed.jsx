@@ -1,34 +1,28 @@
 import React from "react";
 import ProfilePic from "../assets/profile.jpg";
-import { Button } from "antd";
+import CreatePost from "./profile/timeLine/createPost";
+import Post from "./profile/timeLine/post";
 
 const Feed = () => {
 	return (
 		<main className="rounded-2xl h-full p-3 feed-main">
 			<div className=" p-3 rounded-2xl">
-				<div className="bg-white p-2 rounded-xl">
-					<h1>New Post</h1>
-				</div>
+				<CreatePost />
 				{/* // ! hna fin ghaykono les posts*/}
 				<div className="posts mt-2">
 					{/* // ! hadhci ghaytms7 w ghaykon map dyal les post */}
 
 					{/* ###################################*/}
-					<div className=" bg-white  mt-3 rounded-xl p-2">
-						<h1> post 1 </h1>
-					</div>
-					<div className=" bg-white  mt-3 rounded-xl p-2">
-						<h1> post 2</h1>
-					</div>
-					<div className=" bg-white  mt-3 rounded-xl p-2">
-						<h1> post 3</h1>
-					</div>
+					<Post />
+					<Post />
+					<Post />
+					<Post />
 					{/* ###################################*/}
 				</div>
 			</div>
-			<div className="bg-white p-3 rounded-2xl">
+			<div className="bg-white p-3 rounded-2xl h-fit mt-3">
 				<div>
-					<p className="text-lg border-b-2 border-gray-100">You might like</p>
+					<p className=" text-lg border-b-2 border-gray-100">You might like</p>
 				</div>
 				<SuggestItem />
 				<SuggestItem />

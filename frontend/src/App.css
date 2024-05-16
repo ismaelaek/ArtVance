@@ -44,3 +44,9 @@
     grid-template-columns: 20% 78%;
     gap: 5px;
 }
+
+.profile-timeline{
+    display: grid;
+    grid-template-columns: 1fr .5fr;
+    gap: 20px;
+}
