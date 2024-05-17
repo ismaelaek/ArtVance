@@ -51,3 +51,19 @@
     grid-template-columns: 1fr .5fr;
     gap: 20px;
 }
+.message-main {
+    display: grid;
+    grid-template-columns: 69% 30%;
+    gap: 20px;
+    height: calc(100vh - 90px);
+    overflow: hidden;
+}
+
+.message-conversation,
+.chat-items-container {
+    height: calc(100% - 40px);
+}
+
+.conversation{
+    height: calc(100vh - 120px);
+}
