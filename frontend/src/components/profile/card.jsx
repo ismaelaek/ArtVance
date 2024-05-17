@@ -10,6 +10,7 @@ import { setSelectedTab } from '@/storage/profileSlice';
 import TimeLine from './timeLine/timeLine';
 import Friends from './friends';
 import About from './about';
+import {Upload} from 'antd';
 
 function Card() {
     const dispatch = useDispatch();
@@ -52,37 +53,39 @@ function Card() {
                         alt=""
                     />
                     {/* Edit cover button */}
-                    <button
-                        style={{
-                            position: "absolute",
-                            top: "50%",
-                            right: "20px",
-                            zIndex: 1,
-                            backgroundColor: "rgba(0, 0, 0, 0.5)",
-                            border: "none",
-                            borderRadius: "5px",
-                            padding: "5px 10px",
-                            cursor: "pointer",
-                            color: "#fff",
-                            transition: "transform 0.2s",
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.transform = "scale(1.1)";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.transform = "scale(1)";
-                        }}
-                    >
-                        <FontAwesomeIcon icon={faCamera} />
-                        {' '}{' '} Edit cover
-                    </button>
+                    <Upload accept="image/*" showUploadList={false}>                    
+                        <button
+                            style={{
+                                position: "absolute",
+                                top: "45%",
+                                right: "20px",
+                                zIndex: 1,
+                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                border: "none",
+                                borderRadius: "5px",
+                                padding: "5px 10px",
+                                cursor: "pointer",
+                                color: "#fff",
+                                transition: "transform 0.2s",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.transform = "scale(1.1)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.transform = "scale(1)";
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faCamera} />
+                            {' '}{' '} Edit cover
+                        </button>
+                    </Upload>
                 </div>
 
                 {/* Profile pic and name */}
                 <div
                     style={{
                         position: "absolute",
-                        top: "55%",
+                        top: "50%",
                         left: "20px",
                         transform: "translateY(-50%)",
                         display: "flex",
@@ -123,26 +126,29 @@ function Card() {
                             alt=""
                         />
                         {/* Camera icon for editing picture */}
-                        <div
-                            className="camera-icon"
-                            style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                background: "rgba(0, 0, 0, 0.5)",
-                                borderRadius: "50%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                visibility: "hidden",
-                                fontSize: "28px",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faCamera} />
-                        </div>
+                        <Upload accept="image/*" showUploadList={false}>
+                            <div
+                                className="camera-icon"
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    background: "rgba(0, 0, 0, 0.5)",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    visibility: "hidden",
+                                    fontSize: "28px",
+                                    cursor: "pointer",
+                                    color: "white",
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faCamera} />
+                            </div>
+                        </Upload>
                     </div>
                     <h1>Ahmed Mouhssine</h1>
                 </div>
