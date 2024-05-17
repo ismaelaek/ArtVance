@@ -8,6 +8,8 @@ import { Menu} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedTab } from '@/storage/profileSlice';
 import TimeLine from './timeLine/timeLine';
+import Friends from './friends';
+import About from './about';
 
 function Card() {
     const dispatch = useDispatch();
@@ -184,9 +186,9 @@ const ContentContainer = ({ selectedTab }) => {
 		case "1":
 			return <TimeLine/>;
 		case "2":
-			return <h1>About</h1>;
+			return <About/>;
 		case "3":
-			return <h1>Friends</h1>;
+			return <Friends/>;
 		default:
 			return null;
 	}
