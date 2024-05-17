@@ -7,6 +7,8 @@ import Register from "./auth/register";
 import Card from "./components/profile/card";
 import Feed from "./components/feed";
 import Messages from "./components/messages/messagesMain";
+import Marketplace from "./components/market/marketplace";
+import ProductDetails from "./components/market/productDetails";
 import "./App.css";
 
 function App() {
@@ -25,7 +27,8 @@ function App() {
 						<Route path="/" element={<Feed />} />
 						<Route path="/profile" element={<Card />} />
 						<Route path="/messages" element={<Messages />} />
-						<Route path="marketplace" element={<h1>MarketPlace</h1>} />
+						<Route path="/marketplace" element={<Marketplace />} />
+						<Route path="/marketplace/art/:id" element={<ProductDetails />} />
 						<Route path="*" element={<h1>Page Not Found</h1>} />
 					</Routes>
 				</Container>
