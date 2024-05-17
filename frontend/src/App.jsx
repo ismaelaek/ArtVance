@@ -10,6 +10,7 @@ import Messages from "./components/messages/messagesMain";
 import Marketplace from "./components/market/marketplace";
 import ProductDetails from "./components/market/productDetails";
 import "./App.css";
+import EditProfile from "./components/editProfile";
 
 function App() {
 	const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
 						{/*ga3 routes ldakhel d application khas ikono hna */}
 						<Route path="/" element={<Feed />} />
 						<Route path="/profile" element={<Card />} />
+						<Route path="/profile/:id/edit" element={<EditProfile />} />
 						<Route path="/messages" element={<Messages />} />
 						<Route path="/marketplace" element={<Marketplace />} />
 						<Route path="/marketplace/art/:id" element={<ProductDetails />} />
