@@ -6,7 +6,7 @@ import { MdDriveFileRenameOutline } from 'react-icons/md';
 function About() {
     const gender = 'Male';
     const genderIcon = gender === 'Male' ? <FaMale className="text-xl mr-4 text-purple-500" /> : <FaFemale className="text-xl mr-4 text-pink-500" />;
-    
+    // commwntax
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">About</h1>
