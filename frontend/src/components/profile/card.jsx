@@ -179,7 +179,8 @@ function Card() {
 						paddingTop: "50px",
 						color: "#000",
 						paddingLeft: "20px",
-					}}>
+                    }}>
+                    <p className="text-wrap text-justify">{user.bio }</p>
 					<p>
 						From <b>{user.address}</b> <br />
 						Born on <b>{user.birthday}</b>
