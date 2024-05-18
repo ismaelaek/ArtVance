@@ -35,15 +35,15 @@ function Card() {
 				const response = await axios.get(
 					`http://127.0.0.1:8000/api/users/${decryptedId}`
 				);
-                setUser(response.data);
-                
-                // TODO add logic to return the 404 on invalid user (random url)
+				setUser(response.data);
+
+				// TODO add logic to return the 404 on invalid user (random url)
 			} catch (error) {
 				throw error;
 			}
 		};
 		getUser();
-    }, []);
+	}, [decryptedId]);
     
 
 	const menu = (
@@ -181,9 +181,9 @@ function Card() {
 						paddingLeft: "20px",
 					}}>
 					<p>
-						From Egypt <br />
-						55 yo <br />
-						Work at Mchi So9ek{" "}
+						From <b>{user.address}</b> <br />
+						Born on <b>{user.birthday}</b>
+						<br />
 					</p>
 				</div>
 			</div>
@@ -198,7 +198,7 @@ function Card() {
 				</Menu>
 			</div>
 			<div className="data">
-				<ContentContainer selectedTab={selectedTab} />
+				<ContentContainer selectedTab={selectedTab} user={user} />
 			</div>
 		</div>
 	);
@@ -206,12 +206,12 @@ function Card() {
 
 export default Card;
 
-const ContentContainer = ({ selectedTab }) => {
+const ContentContainer = ({ selectedTab, user }) => {
 	switch (selectedTab) {
 		case "1":
 			return <TimeLine />;
 		case "2":
-			return <About />;
+			return <About user={user} />;
 		case "3":
 			return <Friends />;
 		default:
