@@ -25,4 +25,5 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 
 Route::prefix('/users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
+    Route::get('/{id}', [UserController::class, 'user']);
 });
