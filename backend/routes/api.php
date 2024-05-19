@@ -28,6 +28,8 @@ Route::prefix('/users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class, 'user']);
     Route::get('/unfollowed/{id}', [UserController::class, 'getUnfollowedUsers']);
+    Route::get('/{id}/follow-stats', [UserController::class, 'getFollowersAndFollowing']);
+    Route::get('/{id}/posts', [UserController::class, 'getUserPosts']);
 });
 
 Route::post('/follow/{follower_id}/{followed_id}', [FollowController::class, 'follow']);
