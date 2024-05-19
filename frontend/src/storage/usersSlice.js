@@ -3,73 +3,35 @@ import axios from "axios";
 import { message } from "antd";
 import Cookies from "js-cookie";
 
+const API_URL = "http://127.0.0.1:8000/api/users";
+
 const initialState = {
 	users: [],
+	unfollwedUsers: [],
 	usersIsLoading: false,
 	usersError: null,
 };
 
-const getUsers = createAsyncThunk("getUsers", async () => {
+const getUsers = createAsyncThunk("users/getUsers", async () => {
 	try {
-		const response = await axios.get("http://127.0.0.1:8000/api/users")
+		const response = await axios.get(API_URL);
 		return response.data;
 	} catch (error) {
 		throw error;
 	}
 });
 
-const deleteUser = createAsyncThunk("deleteUser", async (userId, thunkAPI) => {
-	try {
-		const token = Cookies.get("token");
-		await axios.delete(`http://127.0.0.1:8000/api/users/${userId}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		message.success("User deleted successfully");
-		// Remove the deleted user from the state
-		thunkAPI.dispatch(removeUser(userId));
-	} catch (error) {
-		console.error("Error deleting user:", error);
-		throw error;
-	}
-});
-
-const updateUser = createAsyncThunk(
-	"updateUser",
-	async (formData, thunkAPI) => {
+const getUnfollowedUsers = createAsyncThunk(
+	"users/getUnfollowedUsers",
+	async (userId, { rejectWithValue }) => {
 		try {
-			const { id, ...data } = formData; 
-			const token = Cookies.get("userToken");
-			const response = await axios.put(
-				`http://127.0.0.1:8000/api/users/${id}`,
-				data,
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			message.success("Info updated successfully");
-			thunkAPI.dispatch(getUsers()); 
-			return response.data;
+			const response = await axios.get(`${API_URL}/unfollowed/${userId}`);
+			return response.data.unfollowed_users;
 		} catch (error) {
-			console.error("Error updating user:", error);
-			throw error;
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
-
-const removeUser = (userId) => (dispatch, getState) => {
-	const { users } = getState().users;
-	const updatedUsers = users.filter((user) => user.id !== userId);
-	dispatch(setUsers(updatedUsers));
-};
-
-const setUsers = (users) => (dispatch) => {
-	dispatch({ type: "users/setUsers", payload: users });
-};
 
 const UsersSlice = createSlice({
 	name: "users",
@@ -94,32 +56,21 @@ const UsersSlice = createSlice({
 				state.usersIsLoading = false;
 				state.usersError = action.error.message;
 			})
-			.addCase(deleteUser.pending, (state) => {
+			.addCase(getUnfollowedUsers.pending, (state) => {
 				state.usersIsLoading = true;
 				state.usersError = null;
 			})
-			.addCase(deleteUser.fulfilled, (state) => {
+			.addCase(getUnfollowedUsers.fulfilled, (state, action) => {
 				state.usersIsLoading = false;
+				state.unfollwedUsers = action.payload;
 				state.usersError = null;
 			})
-			.addCase(deleteUser.rejected, (state, action) => {
-				state.usersIsLoading = false;
-				state.usersError = action.error.message;
-			})
-			.addCase(updateUser.pending, (state) => {
-				state.usersIsLoading = true;
-				state.usersError = null;
-			})
-			.addCase(updateUser.fulfilled, (state) => {
-				state.usersIsLoading = false;
-				state.usersError = null;
-			})
-			.addCase(updateUser.rejected, (state, action) => {
+			.addCase(getUnfollowedUsers.rejected, (state, action) => {
 				state.usersIsLoading = false;
 				state.usersError = action.error.message;
 			});
 	},
 });
 
-export { getUsers, deleteUser, updateUser };
+export { getUsers, getUnfollowedUsers };
 export default UsersSlice.reducer;
