@@ -1,37 +1,37 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Hobbies from "../assets/Hobbies.png";
 import { FaGoogle, FaFacebook, FaTwitter } from "react-icons/fa";
-import '../styles/login.css'
+import "../styles/login.css";
 import Logo from "../assets/artvance_logo.png";
 import { getUsers } from "@/storage/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
-
-
+import Cookies from "js-cookie";
 
 const Register = () => {
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const { users, usersIsLoading } = useSelector(state => state.users)
+	const { users, usersIsLoading } = useSelector((state) => state.users);
 
-	const usedUsernames = [... users.map((item) => {
-		return item.username;
-	})]
+	const usedUsernames = [
+		...users.map((item) => {
+			return item.username;
+		}),
+	];
 	const usedEmail = [
 		...users.map((item) => {
 			return item.email;
 		}),
 	];
-	
+
 	useEffect(() => {
-        dispatch(getUsers())
-    }, [dispatch])
+		dispatch(getUsers());
+	}, [dispatch]);
 
 	const onFinish = async (values) => {
-		console.log(values);
 		try {
 			const response = await axios.post(
 				"http://127.0.0.1:8000/api/auth/register",
@@ -43,8 +43,13 @@ const Register = () => {
 				}
 			);
 			message.success("You have been registered successfully");
-			localStorage.setItem("user", JSON.stringify(response.data.user));
-			navigate("/home");
+			Cookies.set("userToken", response.data.token, {
+				expires: 7,
+				secure: true,
+			});
+			localStorage.setItem("loggedUser", JSON.stringify(response.data.user));
+
+			navigate("/");
 		} catch (error) {
 			message.error("Registration failed. Please try again.");
 		}

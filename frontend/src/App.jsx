@@ -26,7 +26,7 @@ function App() {
 					<Routes>
 						{/*ga3 routes ldakhel d application khas ikono hna */}
 						<Route path="/" element={<Feed />} />
-						<Route path="/profile" element={<Card />} />
+						<Route path="/profile/:id" element={<Card />} />
 						<Route path="/profile/:id/edit" element={<EditProfile />} />
 						<Route path="/messages" element={<Messages />} />
 						<Route path="/marketplace" element={<Marketplace />} />

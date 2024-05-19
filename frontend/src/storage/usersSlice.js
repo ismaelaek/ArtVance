@@ -11,19 +11,12 @@ const initialState = {
 
 const getUsers = createAsyncThunk("getUsers", async () => {
 	try {
-		const token = Cookies.get("token");
-		const response = await axios.get("http://127.0.0.1:8000/api/users", {
-			headers: {
-				Authorization: `Bearer ${token}`,
-				"Content-Type": "application/json",
-			},
-		});
+		const response = await axios.get("http://127.0.0.1:8000/api/users")
 		return response.data;
 	} catch (error) {
 		throw error;
 	}
 });
-
 
 const deleteUser = createAsyncThunk("deleteUser", async (userId, thunkAPI) => {
 	try {
