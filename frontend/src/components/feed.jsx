@@ -9,7 +9,7 @@ import SuggestItem from "./suggestItem";
 const Feed = () => {
 	const dispatch = useDispatch();
 	const logged = JSON.parse(localStorage.getItem("loggedUser"));
-	const [suggestions , setSuggestions] = useState([])
+	const [suggestions, setSuggestions] = useState([]);
 	const { users, unfollwedUsers, usersIsLoading } = useSelector(
 		(state) => state.users
 	);
@@ -19,10 +19,14 @@ const Feed = () => {
 	}, [dispatch, logged.id]);
 
 	useEffect(() => {
-        setSuggestions(unfollwedUsers.slice(0, 8));
-	}, [unfollwedUsers])
-	
-	
+		const randomStartIndex = Math.floor(
+			Math.random() * (unfollwedUsers.length - 8)
+		);
+		setSuggestions(
+			unfollwedUsers.slice(randomStartIndex, randomStartIndex + 8)
+		);
+	}, [unfollwedUsers]);
+
 	return (
 		<main className="rounded-2xl h-full p-3 feed-main">
 			<div className=" p-3 rounded-2xl">
@@ -47,12 +51,7 @@ const Feed = () => {
 					{usersIsLoading ? (
 						<p>Loading...</p>
 					) : (
-						suggestions.map((user) => (
-							<SuggestItem
-								key={user.id}
-								user={user}
-							/>
-						))
+						suggestions.map((user) => <SuggestItem key={user.id} user={user} />)
 					)}
 				</div>
 			</div>
@@ -61,4 +60,3 @@ const Feed = () => {
 };
 
 export default Feed;
-
