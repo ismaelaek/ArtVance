@@ -8,6 +8,7 @@ const API_URL = "http://127.0.0.1:8000/api/users";
 const initialState = {
 	users: [],
 	unfollwedUsers: [],
+	followStats: {},
 	usersIsLoading: false,
 	usersError: null,
 };
@@ -27,6 +28,18 @@ const getUnfollowedUsers = createAsyncThunk(
 		try {
 			const response = await axios.get(`${API_URL}/unfollowed/${userId}`);
 			return response.data.unfollowed_users;
+		} catch (error) {
+			return rejectWithValue(error.response.data);
+		}
+	}
+);
+
+const getFollowStats = createAsyncThunk(
+	"users/getFollowStats",
+	async (userId, { rejectWithValue }) => {
+		try {
+			const response = await axios.get(`${API_URL}/${userId}/follow-stats`);
+			return response.data ;
 		} catch (error) {
 			return rejectWithValue(error.response.data);
 		}
@@ -68,9 +81,22 @@ const UsersSlice = createSlice({
 			.addCase(getUnfollowedUsers.rejected, (state, action) => {
 				state.usersIsLoading = false;
 				state.usersError = action.error.message;
+			})
+			.addCase(getFollowStats.pending, (state) => {
+				state.usersIsLoading = true;
+				state.usersError = null;
+			})
+			.addCase(getFollowStats.fulfilled, (state, action) => {
+				state.usersIsLoading = false;
+				state.followStats = action.payload;
+				state.usersError = null;
+			})
+			.addCase(getFollowStats.rejected, (state, action) => {
+				state.usersIsLoading = false;
+				state.usersError = action.error.message;
 			});
 	},
 });
 
-export { getUsers, getUnfollowedUsers };
+export { getUsers, getUnfollowedUsers, getFollowStats };
 export default UsersSlice.reducer;

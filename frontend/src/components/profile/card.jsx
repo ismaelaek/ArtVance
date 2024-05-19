@@ -16,6 +16,7 @@ import { HiDotsVertical } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getFollowStats } from "@/storage/usersSlice";
 import { decryptId } from "@/lib/utils";
 
 function Card() {
@@ -25,12 +26,19 @@ function Card() {
 	const decryptedId = decryptId(id);
 	const [current, setCurrent] = useState("1");
 	const selectedTab = useSelector((state) => state.profile.profileTab);
+	const { followStats } = useSelector(state => state.users);
 	const [user, setUser] = useState({});
 
 	const handleClick = (e) => {
 		setCurrent(e.key);
 		dispatch(setSelectedTab(e.key));
 	};
+
+	useEffect(() => {
+		dispatch(getFollowStats(decryptedId));
+		//! fixed dak prop dyal tabs 
+		dispatch(setSelectedTab('1'));
+	}, [dispatch])
 
 	useEffect(() => {
 		const getUser = async () => {
@@ -46,6 +54,7 @@ function Card() {
 		getUser();
 	}, [decryptedId]);
 
+
 	const handleClickDrop = (e) => {
 		console.log(e.key);
 		switch (e.key) {
@@ -59,6 +68,7 @@ function Card() {
 				break;
 		}
 	};
+
 
 	const menu = (
 		<Menu onClick={handleClickDrop}>
@@ -206,7 +216,7 @@ function Card() {
 					<Menu.Item key="1">Time line</Menu.Item>
 					<Menu.Item key="2">About</Menu.Item>
 					<Menu.Item key="3" icon={<AppstoreOutlined />}>
-						Friend (5)
+						Friend ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
 				<Dropdown overlay={menu}>
@@ -214,7 +224,11 @@ function Card() {
 				</Dropdown>
 			</div>
 			<div className="data">
-				<ContentContainer selectedTab={selectedTab} user={user} />
+				<ContentContainer
+					selectedTab={selectedTab}
+					user={user}
+					stats={followStats}
+				/>
 			</div>
 		</div>
 	);
@@ -222,14 +236,14 @@ function Card() {
 
 export default Card;
 
-const ContentContainer = ({ selectedTab, user }) => {
+const ContentContainer = ({ selectedTab, user, stats }) => {
 	switch (selectedTab) {
 		case "1":
-			return <TimeLine />;
+			return <TimeLine logged={user} />;
 		case "2":
 			return <About user={user} />;
 		case "3":
-			return <Friends />;
+			return <Friends stats={stats} logged={user} />;
 		default:
 			return null;
 	}

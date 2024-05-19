@@ -36,10 +36,7 @@ const Feed = () => {
 					{/* // ! hadhci ghaytms7 w ghaykon map dyal les post */}
 
 					{/* ###################################*/}
-					<Post />
-					<Post />
-					<Post />
-					<Post />
+					
 					{/* ###################################*/}
 				</div>
 			</div>
