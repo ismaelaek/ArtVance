@@ -53,8 +53,8 @@ const Container = ({ children }) => {
 					height: "50px",
 					borderBottom: "#f5f5f5 solid 1px",
 				}}>
-				<Link className="no-underline" to='/'>
-					<h3 className="pt-2 text-main app-name">ArtVance </h3>
+				<Link className="no-underline" to="/">
+					<h3 className="pt-2 text-rebecca app-name">ArtVance </h3>
 				</Link>
 				<Input
 					className="w-1/3"

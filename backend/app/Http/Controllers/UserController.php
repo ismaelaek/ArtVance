@@ -16,21 +16,22 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function user($id)
     {
         $user = User::find($id);
         return response()->json($user);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function getUnfollowedUsers($userId)
     {
-        //
+        $user = User::findOrFail($userId);
+
+        $unfollowedUsers = User::whereNotIn('id', $user->following()->pluck('followed_id'))
+            ->where('id', '<>', $userId) 
+            ->get();
+
+        return response()->json(['unfollowed_users' => $unfollowedUsers]);
     }
 
     /**
