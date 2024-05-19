@@ -4,23 +4,25 @@ import BackgroundPic from "../../assets/background.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { AppstoreOutlined } from "@ant-design/icons";
-import { Menu } from "antd";
+import { Menu, Upload, Dropdown } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTab } from "@/storage/profileSlice";
 import TimeLine from "./timeLine/timeLine";
 import Friends from "./friends";
 import About from "./about";
-import { Upload } from "antd";
+import { LiaUserEditSolid } from "react-icons/lia";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { HiDotsVertical } from "react-icons/hi";
 import { useParams } from "react-router-dom";
-import { decryptId } from "@/lib/utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFollowStats } from "@/storage/usersSlice";
+import { decryptId } from "@/lib/utils";
 
 function Card() {
-    const navigate = useNavigate();
-	const { id } = useParams();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { id } = useParams();
 	const decryptedId = decryptId(id);
 	const [current, setCurrent] = useState("1");
 	const selectedTab = useSelector((state) => state.profile.profileTab);
@@ -37,6 +39,7 @@ function Card() {
 		//! fixed dak prop dyal tabs 
 		dispatch(setSelectedTab('1'));
 	}, [dispatch])
+
 	useEffect(() => {
 		const getUser = async () => {
 			try {
@@ -44,8 +47,6 @@ function Card() {
 					`http://127.0.0.1:8000/api/users/${decryptedId}`
 				);
 				setUser(response.data);
-
-				// TODO add logic to return the 404 on invalid user (random url)
 			} catch (error) {
 				throw error;
 			}
@@ -54,16 +55,34 @@ function Card() {
 	}, [decryptedId]);
 
 
+	const handleClickDrop = (e) => {
+		console.log(e.key);
+		switch (e.key) {
+			case "editInfo":
+				navigate("/profile/1/edit");
+				break;
+			case "editpassword":
+				navigate("/profile/setting/changepassword");
+				break;
+			default:
+				break;
+		}
+	};
+
+
 	const menu = (
-		<Menu>
-			<Menu.Item key="editInfo" icon={<FontAwesomeIcon icon={faCamera} />}>
+		<Menu onClick={handleClickDrop}>
+			<Menu.Item key="editInfo" icon={<LiaUserEditSolid />}>
 				Edit info
+			</Menu.Item>
+			<Menu.Item key="editpassword" icon={<RiLockPasswordLine />}>
+				Change password
 			</Menu.Item>
 		</Menu>
 	);
 
 	return (
-		<div className=" w-full mb-5">
+		<div className="w-full mb-5">
 			<div
 				style={{
 					fontFamily: "'Poppins', sans-serif",
@@ -72,7 +91,6 @@ function Card() {
 					backgroundColor: "white",
 					overflow: "hidden",
 				}}>
-				{/* Background pic */}
 				<div>
 					<img
 						style={{
@@ -83,7 +101,6 @@ function Card() {
 						src={user.cover ? user.cover : BackgroundPic}
 						alt=""
 					/>
-					{/* Edit cover button */}
 					<Upload accept="image/*" showUploadList={false}>
 						<button
 							style={{
@@ -109,8 +126,6 @@ function Card() {
 						</button>
 					</Upload>
 				</div>
-
-				{/* Profile pic and name */}
 				<div
 					style={{
 						position: "absolute",
@@ -143,7 +158,6 @@ function Card() {
 								"hidden";
 							e.currentTarget.style.background = "none";
 						}}>
-						{/* Profile picture */}
 						<img
 							style={{
 								width: "100%",
@@ -154,7 +168,6 @@ function Card() {
 							src={user.photo ? user.photo : ProfilePic}
 							alt=""
 						/>
-						{/* Camera icon for editing picture */}
 						<Upload accept="image/*" showUploadList={false}>
 							<div
 								className="camera-icon"
@@ -180,8 +193,6 @@ function Card() {
 					</div>
 					<h1>{user.nickname}</h1>
 				</div>
-
-				{/* Bio */}
 				<div
 					style={{
 						paddingTop: "50px",
@@ -196,15 +207,21 @@ function Card() {
 					</p>
 				</div>
 			</div>
-			{/* navbar */}
-			<div>
-				<Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
+			<div className=" flex justify-between pr-5 bg-white">
+				<Menu
+					onClick={handleClick}
+					selectedKeys={[current]}
+					mode="horizontal"
+					className="w-2/3">
 					<Menu.Item key="1">Time line</Menu.Item>
 					<Menu.Item key="2">About</Menu.Item>
 					<Menu.Item key="3" icon={<AppstoreOutlined />}>
 						Friend ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
+				<Dropdown overlay={menu}>
+					<HiDotsVertical className="text-xl" />
+				</Dropdown>
 			</div>
 			<div className="data">
 				<ContentContainer
