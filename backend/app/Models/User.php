@@ -43,6 +43,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
     }
 
+    public function getFeedPosts()
+    {
+        return Post::whereIn('user_id', $this->following()->pluck('users.id'))->latest()->get();
+    }
+
+
+
 
     protected $fillable = [
         'nickname',

@@ -19,7 +19,7 @@ function Friends({ stats, logged, hint }) {
 	);
 
 	return (
-		<div className="p-4">
+		<div className="">
 			{hint === "followers" ? (
 				<>
 					<div className=" flex justify-center">

@@ -129,7 +129,7 @@ function Card() {
 				<div
 					style={{
 						position: "absolute",
-						top: "50%",
+						top: "47%",
 						left: "20px",
 						transform: "translateY(-50%)",
 						display: "flex",
@@ -191,7 +191,7 @@ function Card() {
 							</div>
 						</Upload>
 					</div>
-					<h1 className="text-3xl m-0">{user.nickname}</h1>
+					<h1>{user.nickname}</h1>
 				</div>
 				<div
 					style={{

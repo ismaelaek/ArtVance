@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Input } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import { FaRegHeart, FaRegComment, FaHeart, FaRegBookmark, FaBookmark    } from "react-icons/fa";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import ProfilePic from '../../../assets/profile.jpg';
 import Poste1 from '../../../assets/poste1.jpg';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const { TextArea } = Input;
 const { Item } = Form;
 
 function Post({post, logged}) {
 	const [liked, setLiked] = useState(false);
-
+	const [user, setUser] = useState({});
+	useEffect(() => {
+		const getUser = async () => {
+			try {
+				const response = await axios.get(
+					`http://127.0.0.1:8000/api/users/${post.user_id}`
+				);
+				setUser(response.data);
+			} catch (error) {
+				throw error;
+			}
+		};
+		getUser();
+	}, [post.user_id]);
 	const handleLikeClick = () => {
 		setLiked(!liked);
 	};
@@ -26,7 +41,7 @@ function Post({post, logged}) {
 		borderRadius: "50%",
 		marginRight: "10px",
 	};
-	const avatarSrc = logged.photo ? logged.photo : ProfilePic;
+	const avatarSrc = user.photo ? user.photo : ProfilePic;
 
 	const date = new Date(post.created_at);
 
@@ -46,9 +61,14 @@ function Post({post, logged}) {
 	return (
 		<div className="p-3 rounded-xl mt-12 bg-white">
 			<div className="flex items-center">
-				<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
+				<Link className='no-underline' to={`/profile/${post.user_id}`}>
+					<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
+				</Link>
 				<div className="ml-2 mt-3">
-					<h6 className=" m-0 text-xl text-black"> {logged.nickname} </h6>
+					<Link className=" m-0 text-lg no-underline text-black" to={`/profile/${post.user_id}`}>
+						{" "}
+						{user.nickname}{" "}
+					</Link>
 					<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
 				</div>
 			</div>
@@ -102,7 +122,7 @@ function Post({post, logged}) {
 			<Form>
 				<div
 					style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
-					<img style={profilePicStyle} src={avatarSrc} alt="Profile" />
+					<img style={profilePicStyle} src={logged.photo} alt="Profile" />
 					<Item name="commentContent" className="flex-1 mt-4">
 						<TextArea
 							className="border-none outline-none text-lg font-semibold rounded-full bg-gray-200 pl-6 pt-2 pb-2 pr-5 text-gray-600"
