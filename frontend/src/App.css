@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 
 
+
 .app-name{
     font-family: 'Dancing Script', cursive;
     font-size: 40px;
@@ -9,7 +10,10 @@
     width: 100%;
     height: 100%;
 }
-
+.container-sider{
+    display: flex;
+    justify-content: space-between;
+}
 .content{
     height: calc(100vh - 50px);
     overflow-y: scroll;
@@ -21,18 +25,18 @@
     width: 0;
     background: transparent;
 }
-
+.sider-nav a.active {
+    color: #663399;
+}
 .sider-nav a{
     text-decoration: none;
-    font-size: 16px;
-    padding: 10px;
+    font-size: 18px;
+    padding: 15px 10px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
-}
-.active {
-    color: #5d6b6b;
+    gap: 20px;
+    color: rgb(52, 51, 51);
 }
 .feed-main {
     display: grid;
@@ -42,7 +46,7 @@
 .suggestion{
     display: grid;
     grid-template-columns: 20% 78%;
-    gap: 5px;
+    gap: 20px;
 }
 
 

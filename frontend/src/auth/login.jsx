@@ -23,7 +23,7 @@ const Login = () => {
 				message.success("Logged in as admin");
 				navigate("/dashboard");
 			} else {
-				localStorage.setItem("user", JSON.stringify(user));
+				localStorage.setItem("loggedUser", JSON.stringify(user));
 				Cookies.set("userToken", response.data.token, {
 					expires: 7,
 					secure: true,

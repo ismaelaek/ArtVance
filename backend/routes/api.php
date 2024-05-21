@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,11 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 
 Route::prefix('/users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
+    Route::get('/{id}', [UserController::class, 'user']);
+    Route::get('/unfollowed/{id}', [UserController::class, 'getUnfollowedUsers']);
+    Route::get('/{id}/follow-stats', [UserController::class, 'getFollowersAndFollowing']);
+    Route::get('/{id}/posts', [UserController::class, 'getUserPosts']);
 });
+
+Route::post('/follow/{follower_id}/{followed_id}', [FollowController::class, 'follow']);
+Route::post('/unfollow/{follower_id}/{followed_id}', [FollowController::class, 'unfollow']);
