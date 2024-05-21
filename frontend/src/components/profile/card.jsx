@@ -17,13 +17,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFollowStats } from "@/storage/usersSlice";
-import { decryptId } from "@/lib/utils";
+import { FaBirthdayCake } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
 
 function Card() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const decryptedId = decryptId(id);
 	const [current, setCurrent] = useState("1");
 	const selectedTab = useSelector((state) => state.profile.profileTab);
 	const { followStats } = useSelector(state => state.users);
@@ -35,7 +35,7 @@ function Card() {
 	};
 
 	useEffect(() => {
-		dispatch(getFollowStats(decryptedId));
+		dispatch(getFollowStats(id));
 		//! fixed dak prop dyal tabs 
 		dispatch(setSelectedTab('1'));
 	}, [dispatch])
@@ -44,7 +44,7 @@ function Card() {
 		const getUser = async () => {
 			try {
 				const response = await axios.get(
-					`http://127.0.0.1:8000/api/users/${decryptedId}`
+					`http://127.0.0.1:8000/api/users/${id}`
 				);
 				setUser(response.data);
 			} catch (error) {
@@ -52,7 +52,7 @@ function Card() {
 			}
 		};
 		getUser();
-	}, [decryptedId]);
+	}, [id]);
 
 
 	const handleClickDrop = (e) => {
@@ -191,7 +191,7 @@ function Card() {
 							</div>
 						</Upload>
 					</div>
-					<h1>{user.nickname}</h1>
+					<h1 className="text-3xl m-0">{user.nickname}</h1>
 				</div>
 				<div
 					style={{
@@ -201,8 +201,12 @@ function Card() {
 					}}>
 					<p className="text-wrap text-justify">{user.bio}</p>
 					<p>
-						From <b>{user.address}</b> <br />
-						Born on <b>{user.birthday}</b>
+						<span className="flex gap-2 items-center">
+							<FaLocationDot /> <b>{user.address}</b> <br />
+						</span>
+						<span className="flex gap-2 items-center">
+							<FaBirthdayCake /> <b>{user.birthday}</b>
+						</span>
 						<br />
 					</p>
 				</div>
@@ -215,8 +219,11 @@ function Card() {
 					className="w-2/3">
 					<Menu.Item key="1">Time line</Menu.Item>
 					<Menu.Item key="2">About</Menu.Item>
-					<Menu.Item key="3" icon={<AppstoreOutlined />}>
-						Friend ({followStats.following?.length})
+					<Menu.Item key="3">
+						Followers ({followStats.followers?.length})
+					</Menu.Item>
+					<Menu.Item key="4">
+						Following ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
 				<Dropdown overlay={menu}>
@@ -243,7 +250,9 @@ const ContentContainer = ({ selectedTab, user, stats }) => {
 		case "2":
 			return <About user={user} />;
 		case "3":
-			return <Friends stats={stats} logged={user} />;
+			return <Friends stats={stats} logged={user} hint={'following'} />;
+		case "4":
+			return <Friends stats={stats} logged={user} hint={"followers"} />;
 		default:
 			return null;
 	}

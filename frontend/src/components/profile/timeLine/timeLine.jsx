@@ -10,7 +10,6 @@ function TimeLine() {
 	const { userPosts, postsIsLoading } = useSelector((state) => state.profile);
 	const logged = JSON.parse(localStorage.getItem('loggedUser'))
 
-	console.log(logged);
 	useEffect(() => {
         dispatch(getUserPosts(logged.id));
 	}, [dispatch, logged.id]);
