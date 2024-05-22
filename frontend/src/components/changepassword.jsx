@@ -13,7 +13,7 @@ function ChangePassword() {
     return (
         <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
             <div className="flex justify-center mb-4">
-                <LockOutlined className="text-indigo-400 text-8xl" />
+                <LockOutlined className="text-indigo-300 text-8xl" />
             </div>
             <Form
                 form={form}
@@ -67,7 +67,7 @@ function ChangePassword() {
                     </Col>
                     <Col span={24} className="text-right">
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="bg-indigo-400 hover:bg-indigo-500">
+                            <Button type="primary" htmlType="submit" className="bg-indigo-300 hover:bg-indigo-400">
                                 Change Password
                             </Button>
                         </Form.Item>
