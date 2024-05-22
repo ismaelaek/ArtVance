@@ -8,6 +8,8 @@ import Poste1 from '../../../assets/poste1.jpg';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+//salam
+
 const { TextArea } = Input;
 const { Item } = Form;
 
