@@ -82,11 +82,11 @@ function Post({post, logged}) {
 				<div className="flex items-center">
 					<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
 					<div className="ml-2 mt-3">
-						<h6 className=" m-0 text-xl text-black"> {logged.nickname} </h6>
+						<h6 className=" m-0 text-xl text-black"> {user.nickname} </h6>
 						<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
 					</div>
 				</div>
-				<Dropdown overlay={menu} trigger={["click"]}>
+				<Dropdown menu={menu} trigger={["click"]}>
 					<Button
 						icon={<MoreOutlined />}
 						style={{ border: "none", fontSize: "20px" }}
