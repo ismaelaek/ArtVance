@@ -3,6 +3,7 @@ import ProfilePic from "../../assets/profile.jpg";
 import BackgroundPic from "../../assets/background.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import { AppstoreOutlined,FileProtectOutlined } from "@ant-design/icons";
 import { Menu, Upload, Dropdown } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTab } from "@/storage/profileSlice";
@@ -19,6 +20,7 @@ import { getFollowStats } from "@/storage/usersSlice";
 import { FaBirthdayCake } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import ImgCrop from "antd-img-crop";
+
 
 function Card() {
 	const dispatch = useDispatch();
@@ -64,6 +66,7 @@ function Card() {
 				break;
 			case "editpassword":
 				navigate("/profile/setting/changepassword");
+				navigate("/profile/1/privacypolicy");
 				break;
 			default:
 				break;
@@ -76,8 +79,8 @@ function Card() {
 			<Menu.Item key="editInfo" icon={<LiaUserEditSolid />}>
 				Edit info
 			</Menu.Item>
-			<Menu.Item key="editpassword" icon={<RiLockPasswordLine />}>
-				Change password
+			<Menu.Item key="editpassword" icon={<FileProtectOutlined  />}>
+				privacy policy
 			</Menu.Item>
 		</Menu>
 	);
