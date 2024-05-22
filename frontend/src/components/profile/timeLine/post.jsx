@@ -7,7 +7,6 @@ import ProfilePic from '../../../assets/profile.jpg';
 import Poste1 from '../../../assets/poste1.jpg';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-// Import statements...
 
 const { TextArea } = Input;
 const { Item } = Form;
