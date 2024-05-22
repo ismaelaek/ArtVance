@@ -39,7 +39,7 @@ const Feed = () => {
 					{/* // ! hadhci ghaytms7 w ghaykon map dyal les post */}
 
 					{feedPosts.map((post) => {
-						return <Post post={post} logged={logged} />
+						return <Post key={post.id} post={post} logged={logged} />
 					})}
 				</div>
 			</div>
