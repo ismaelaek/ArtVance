@@ -18,7 +18,7 @@ import {
 	EditOutlined,
 } from "@ant-design/icons";
 import ProfilePic from "../assets/profile.jpg";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers, getUser } from "@/storage/usersSlice";
 import moment from "moment";
@@ -30,7 +30,7 @@ const { Option } = Select;
 function EditProfile() {
 	const dispatch = useDispatch();
 	const { id } = useParams();
-	const { targetUser, users } = useSelector((state) => state.users);
+    const { targetUser, users } = useSelector((state) => state.users);
 
 	const [profilePic, setProfilePic] = useState(ProfilePic);
 
@@ -43,8 +43,8 @@ function EditProfile() {
 		if (targetUser?.photo) {
 			setProfilePic(targetUser.photo);
 		}
-	}, [targetUser]);
-
+    }, [targetUser]);
+    
 	const usedUsernames = users
 		.filter((user) => user.username !== targetUser?.username)
 		.map((user) => user.username);
@@ -53,8 +53,33 @@ function EditProfile() {
 		.map((user) => user.email);
 
 	const onFinish = async (values) => {
-        console.log(values);
+		try {
+			const formData = new FormData();
+			formData.append("username", values.username);
+			formData.append("nickname", values.nickname);
+			formData.append("email", values.email);
+			formData.append("phone", values.phone);
+			formData.append("birthday", values.birthday);
+			formData.append("gender", values.gender);
+			formData.append("address", values.address);
+			formData.append("bio", values.bio);
+			formData.append("photo", values.profilePic.file); // Assuming values.profilePic.file contains the uploaded file
+
+			const response = await axios.post(
+				`http://127.0.0.1:8000/api/users/${id}/updateProfile`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
+			message.success("Profile updated successfully");
+		} catch (error) {
+			message.error("Profile update failed. Please try again.");
+		}
 	};
+
 
 	const handleUpload = ({ file }) => {
 		const reader = new FileReader();
@@ -71,14 +96,14 @@ function EditProfile() {
 					layout="vertical"
 					onFinish={onFinish}
 					initialValues={{
-						nickname: targetUser?.nickname,
-						username: targetUser?.username,
-						email: targetUser?.email,
-						phone: targetUser?.phone,
-						birthday: targetUser?.birthday ? moment(targetUser.birthday) : null,
-						gender: targetUser?.gender,
-						address: targetUser?.address,
-						bio: targetUser?.bio,
+						nickname: targetUser.nickname,
+						username: targetUser.username,
+						email: targetUser.email,
+						phone: targetUser.phone,
+						birthday: targetUser.birthday ? moment(targetUser.birthday) : null,
+						gender: targetUser.gender,
+						address: targetUser.address,
+						bio: targetUser.bio,
 					}}>
 					<Row gutter={[16, 16]}>
 						<Col span={5}>
