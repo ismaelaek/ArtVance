@@ -4,7 +4,6 @@ import { FaPhone, FaMapMarkerAlt, FaEnvelope, FaMale, FaFemale, FaBirthdayCake }
 import { MdDriveFileRenameOutline } from 'react-icons/md';
 
 function About({ user }) {
-    console.log(user);
     const genderIcon =
 			user.gender === "male" ? (
 				<FaMale className="text-xl mr-4 text-blue-500" />

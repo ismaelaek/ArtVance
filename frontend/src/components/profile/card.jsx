@@ -17,18 +17,20 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFollowStats } from "@/storage/usersSlice";
-import { decryptId } from "@/lib/utils";
+import { FaBirthdayCake } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import ImgCrop from "antd-img-crop";
 
 
 function Card() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const decryptedId = decryptId(id);
 	const [current, setCurrent] = useState("1");
 	const selectedTab = useSelector((state) => state.profile.profileTab);
 	const { followStats } = useSelector(state => state.users);
 	const [user, setUser] = useState({});
+	const logged = JSON.parse(localStorage.getItem("loggedUser"))
 
 	const handleClick = (e) => {
 		setCurrent(e.key);
@@ -36,7 +38,7 @@ function Card() {
 	};
 
 	useEffect(() => {
-		dispatch(getFollowStats(decryptedId));
+		dispatch(getFollowStats(id));
 		//! fixed dak prop dyal tabs 
 		dispatch(setSelectedTab('1'));
 	}, [dispatch])
@@ -45,7 +47,7 @@ function Card() {
 		const getUser = async () => {
 			try {
 				const response = await axios.get(
-					`http://127.0.0.1:8000/api/users/${decryptedId}`
+					`http://127.0.0.1:8000/api/users/${id}`
 				);
 				setUser(response.data);
 			} catch (error) {
@@ -53,7 +55,7 @@ function Card() {
 			}
 		};
 		getUser();
-	}, [decryptedId]);
+	}, [id]);
 
 
 	const handleClickDrop = (e) => {
@@ -86,52 +88,35 @@ function Card() {
 	return (
 		<div className="w-full mb-5">
 			<div
+				className=" w-full relative bg-white overflow-hidden"
 				style={{
 					fontFamily: "'Poppins', sans-serif",
-					width: "100%",
-					position: "relative",
-					backgroundColor: "white",
-					overflow: "hidden",
 				}}>
 				<div>
 					<img
-						style={{
-							width: "100%",
-							height: "200px",
-							objectFit: "cover",
-						}}
+						className=" w-full h-48 object-cover"
 						src={user.cover ? user.cover : BackgroundPic}
 						alt=""
 					/>
-					<Upload accept="image/*" showUploadList={false}>
-						<button
-							style={{
-								position: "absolute",
-								top: "45%",
-								right: "20px",
-								zIndex: 1,
-								backgroundColor: "rgba(0, 0, 0, 0.5)",
-								border: "none",
-								borderRadius: "5px",
-								padding: "5px 10px",
-								cursor: "pointer",
-								color: "#fff",
-								transition: "transform 0.2s",
-							}}
-							onMouseEnter={(e) => {
-								e.target.style.transform = "scale(1.1)";
-							}}
-							onMouseLeave={(e) => {
-								e.target.style.transform = "scale(1)";
-							}}>
-							<FontAwesomeIcon icon={faCamera} /> Edit cover
-						</button>
-					</Upload>
+					{logged.id === user.id && (
+						<Upload accept="image/*" showUploadList={false}>
+							<button
+								className="edit-cover"
+								onMouseEnter={(e) => {
+									e.target.style.transform = "scale(1.1)";
+								}}
+								onMouseLeave={(e) => {
+									e.target.style.transform = "scale(1)";
+								}}>
+								<FontAwesomeIcon icon={faCamera} /> Edit cover
+							</button>
+						</Upload>
+					)}
 				</div>
 				<div
 					style={{
 						position: "absolute",
-						top: "50%",
+						top: "47%",
 						left: "20px",
 						transform: "translateY(-50%)",
 						display: "flex",
@@ -161,37 +146,20 @@ function Card() {
 							e.currentTarget.style.background = "none";
 						}}>
 						<img
-							style={{
-								width: "100%",
-								height: "100%",
-								borderRadius: "50%",
-								objectFit: "cover",
-							}}
+							className=" w-full h-full rounded-full object-cover"
 							src={user.photo ? user.photo : ProfilePic}
 							alt=""
 						/>
-						<Upload accept="image/*" showUploadList={false}>
-							<div
-								className="camera-icon"
-								style={{
-									position: "absolute",
-									top: 0,
-									left: 0,
-									width: "100%",
-									height: "100%",
-									background: "rgba(0, 0, 0, 0.5)",
-									borderRadius: "50%",
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-									visibility: "hidden",
-									fontSize: "28px",
-									cursor: "pointer",
-									color: "white",
-								}}>
-								<FontAwesomeIcon icon={faCamera} />
-							</div>
-						</Upload>
+						{logged.id === user.id && (
+							<ImgCrop>
+								<Upload accept="image/*" showUploadList={false}>
+									<div
+										className="camera-icon">
+										<FontAwesomeIcon icon={faCamera} />
+									</div>
+								</Upload>
+							</ImgCrop>
+						)}
 					</div>
 					<h1>{user.nickname}</h1>
 				</div>
@@ -203,8 +171,12 @@ function Card() {
 					}}>
 					<p className="text-wrap text-justify">{user.bio}</p>
 					<p>
-						From <b>{user.address}</b> <br />
-						Born on <b>{user.birthday}</b>
+						<span className="flex gap-2 items-center">
+							<FaLocationDot /> <b>{user.address}</b> <br />
+						</span>
+						<span className="flex gap-2 items-center">
+							<FaBirthdayCake /> <b>{user.birthday}</b>
+						</span>
 						<br />
 					</p>
 				</div>
@@ -217,8 +189,11 @@ function Card() {
 					className="w-2/3">
 					<Menu.Item key="1">Time line</Menu.Item>
 					<Menu.Item key="2">About</Menu.Item>
-					<Menu.Item key="3" icon={<AppstoreOutlined />}>
-						Friend ({followStats.following?.length})
+					<Menu.Item key="3">
+						Followers ({followStats.followers?.length})
+					</Menu.Item>
+					<Menu.Item key="4">
+						Following ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
 				<Dropdown overlay={menu}>
@@ -241,11 +216,13 @@ export default Card;
 const ContentContainer = ({ selectedTab, user, stats }) => {
 	switch (selectedTab) {
 		case "1":
-			return <TimeLine logged={user} />;
+			return <TimeLine user={user} />;
 		case "2":
 			return <About user={user} />;
 		case "3":
-			return <Friends stats={stats} logged={user} />;
+			return <Friends stats={stats} logged={user} hint={'following'} />;
+		case "4":
+			return <Friends stats={stats} logged={user} hint={"followers"} />;
 		default:
 			return null;
 	}

@@ -56,6 +56,14 @@ class UserController extends Controller
         ]);
     }
 
+    public function getFeedPosts($userId)
+    {
+        $user = User::findOrFail($userId);
+        $feedPosts = $user->getFeedPosts();
+
+        return response()->json($feedPosts);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

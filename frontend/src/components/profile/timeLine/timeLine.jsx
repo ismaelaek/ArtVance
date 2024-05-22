@@ -5,20 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserPosts } from "@/storage/profileSlice";
 
 
-function TimeLine() {
+function TimeLine({user}) {
 	const dispatch = useDispatch();
 	const { userPosts, postsIsLoading } = useSelector((state) => state.profile);
 	const logged = JSON.parse(localStorage.getItem('loggedUser'))
 
-	console.log(logged);
 	useEffect(() => {
-        dispatch(getUserPosts(logged.id));
-	}, [dispatch, logged.id]);
+        dispatch(getUserPosts(user.id));
+	}, [dispatch, user.id]);
 	
 	return (
 		<div className="profile-timeline">
 			<div className="mt-12">
-				<CreatePost />
+				{logged.id == user.id && <CreatePost />}
 				{userPosts.map((item, index) => {
 					return <Post key={index} post={item} logged={logged} />;
 				})}

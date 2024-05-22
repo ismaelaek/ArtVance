@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "@/storage/usersSlice";
 import { getUnfollowedUsers } from "@/storage/usersSlice";
 import SuggestItem from "./suggestItem";
+import { getFeedPosts } from "@/storage/feedSlice";
 
 const Feed = () => {
 	const dispatch = useDispatch();
@@ -13,9 +14,11 @@ const Feed = () => {
 	const { users, unfollwedUsers, usersIsLoading } = useSelector(
 		(state) => state.users
 	);
+	const { feedPosts, feedIsLoading } = useSelector((state) => state.feed);
 	useEffect(() => {
 		dispatch(getUsers());
 		dispatch(getUnfollowedUsers(logged.id));
+		dispatch(getFeedPosts(logged.id));
 	}, [dispatch, logged.id]);
 
 	useEffect(() => {
@@ -35,9 +38,9 @@ const Feed = () => {
 				<div className="posts mt-2">
 					{/* // ! hadhci ghaytms7 w ghaykon map dyal les post */}
 
-					{/* ###################################*/}
-					
-					{/* ###################################*/}
+					{feedPosts.map((post) => {
+						return <Post post={post} logged={logged} />
+					})}
 				</div>
 			</div>
 			<div className="bg-white p-3 rounded-2xl h-fit mt-3">
