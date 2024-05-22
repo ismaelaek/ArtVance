@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('media_type_id');
-            $table->foreign('media_type_id')->references('id')->on('media_types');
+            $table->unsignedBigInteger('post_id');
+            $table->foreign('post_id')->references('id')->on('posts');
             $table->string('url');
         });
     }

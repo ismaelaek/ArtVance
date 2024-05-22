@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('birthday')->nullable();
             $table->string('gender')->nullable();
             $table->string('address')->nullable();
-            $table->string('bio')->nullable();
+            $table->text('bio')->nullable();
             $table->string('photo')->nullable();
             $table->boolean('isAdmin')->default(false);
             $table->string('cover')->nullable();

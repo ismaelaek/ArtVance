@@ -27,11 +27,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            MediaTypeSeeder::class,
             ConversationSeeder::class,
-            NotificationTypeSeeder::class,
             MediaSeeder::class,
-            CategorySeeder::class,
             MessageSeeder::class,
             ProductSeeder::class,
             PostSeeder::class,
