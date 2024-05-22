@@ -38,8 +38,8 @@ const Feed = () => {
 				<div className="posts mt-2">
 					{/* // ! hadhci ghaytms7 w ghaykon map dyal les post */}
 
-					{feedPosts.map((post) => {
-						return <Post key={post.id} post={post} logged={logged} />
+					{feedPosts.map((post, index) => {
+						return <Post post={post} key={index} logged={logged} />
 					})}
 				</div>
 			</div>

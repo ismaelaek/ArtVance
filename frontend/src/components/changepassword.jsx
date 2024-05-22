@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
 import 'tailwindcss/tailwind.css';
-///
+
 function ChangePassword() {
     const [form] = Form.useForm();
 

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Anchor, Button, Modal } from 'antd';
 import { FileProtectOutlined, LockOutlined, InfoCircleOutlined, UserOutlined, SolutionOutlined, SafetyCertificateOutlined, SafetyOutlined, PhoneOutlined } from '@ant-design/icons';
-import ChangePassword from './changepassword'; // Import your ChangePassword component
-
+import ChangePassword from './changepassword'; 
 const { Link } = Anchor;
 
 function PrivacyPolicy() {
@@ -17,8 +16,8 @@ function PrivacyPolicy() {
     };
 
     return (
-        <main className="bg-gradient-to-br flex items-center justify-center min-h-screen p-5">
-            <div className="p-8 font-sans bg-white shadow-lg rounded-lg  ">
+        <main className="bg-gradient-to-br flex items-center justify-center min-h-screen">
+            <div className="px-8 font-sans bg-white shadow-lg rounded-lg  ">
             <div className="bg-indigo-300 rounded-b-full text-center mb-20 p-20">
                     <FileProtectOutlined className="text-6xl text-white" />
                     <h1 className="text-4xl font-bold mt-4 text-white">Privacy Policy</h1>
@@ -39,7 +38,7 @@ function PrivacyPolicy() {
                     <div className="w-full md:w-3/4">
                         <div id="introduction" className="mb-8">
                             <h2 className="text-3xl font-semibold mb-4 text-gray-600"><InfoCircleOutlined className="mr-2" />Introduction</h2>
-                            <p className="text-gray-700">Welcome to Art Viens, a social media platform for artists to share their art. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.</p>
+                            <p className="text-gray-700">Welcome to ArtVance, a social media platform for artists to share their art. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.</p>
                         </div>
                         <div id="informationCollection" className="mb-8">
                             <h2 className="text-3xl font-semibold mb-4 text-gray-600"><UserOutlined className="mr-2" />Information Collection</h2>
@@ -105,7 +104,7 @@ function PrivacyPolicy() {
                             <p className="text-gray-700 mt-2">Email: <a href="mailto:support@yourapp.com" className="text-indigo-400 hover:underline">support@yourapp.com</a></p>
                         </div>
                         <div className="text-right mt-8 ">
-                            <p className="text-gray-700 italic">Made with <span className="text-pink-500">♥</span> by the Art Viens Team</p>
+                            <p className="text-gray-700 italic">Made with <span className="text-pink-500">♥</span> by the ArtVance Team</p>
                         </div>
                     </div>
                 </div>
