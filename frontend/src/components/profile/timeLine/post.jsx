@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Form, Input } from 'antd';
-import { SendOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Dropdown, Menu } from 'antd';
+import { SendOutlined, MoreOutlined, EditOutlined, DeleteOutlined   } from '@ant-design/icons';
 import { FaRegHeart, FaRegComment, FaHeart, FaRegBookmark, FaBookmark    } from "react-icons/fa";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import ProfilePic from '../../../assets/profile.jpg';
@@ -42,15 +42,36 @@ function Post({post, logged}) {
 		.toLocaleString("sv-SE", options)
 		.replace(",", "");
 
+	const handleMenuClick = (e) => {
+		if (e.key === 'edit') {
+			// Handle edit post action
+			console.log('Edit post');
+		} else if (e.key === 'delete') {
+			// Handle delete post action
+			console.log('Delete post');
+		}
+	};
+
+	const menu = (
+        <Menu onClick={handleMenuClick}>
+            <Menu.Item key="edit" icon={<EditOutlined />}>Edit Post</Menu.Item>
+            <Menu.Item key="delete" icon={<DeleteOutlined />}>Delete Post</Menu.Item>
+        </Menu>
+    );
 
 	return (
 		<div className="p-3 rounded-xl mt-12 bg-white">
-			<div className="flex items-center">
-				<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
-				<div className="ml-2 mt-3">
-					<h6 className=" m-0 text-xl text-black"> {logged.nickname} </h6>
-					<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
+			<div className="flex justify-between">
+				<div className="flex items-center">
+					<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
+					<div className="ml-2 mt-3">
+						<h6 className=" m-0 text-xl text-black"> {logged.nickname} </h6>
+						<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
+					</div>
 				</div>
+				<Dropdown overlay={menu} trigger={['click']}>
+                    <Button icon={<MoreOutlined />} style={{ border: "none", fontSize: "20px" }} />
+                </Dropdown>
 			</div>
 
 			<div className="mt-2 mb-5">
