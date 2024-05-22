@@ -14,12 +14,9 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('media_id');
-            $table->foreign('media_id')->references('id')->on('media')->onDelete('cascade');
+            $table->string('image');
             $table->string('name');
             $table->string('description');
             $table->float('price');

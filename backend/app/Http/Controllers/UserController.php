@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -16,6 +17,44 @@ class UserController extends Controller
         return response()->json($users);
     }
 
+    public function update(Request $request, $id)
+    {
+        // Validate request data
+        // $validator = Validator::make($request->all(), [
+        //     'username' => 'required',
+        //     'nickname' => 'required',
+        //     'email' => 'required|email',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => $validator->errors()], 422);
+        // }
+
+        $user = User::findOrFail($id);
+
+        if ($request->hasFile('photo')) {
+            if ($user->photo) {
+                unlink(storage_path('app/public/media' . $user->photo));
+            }
+
+            // Store the new photo
+            $photoPath = $request->file('photo')->store('public/media');
+            $user->photo = basename($photoPath);
+        }
+
+        $user->username = $request->input('username');
+        $user->nickname = $request->input('nickname');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->birthday = $request->input('birthday');
+        $user->gender = $request->input('gender');
+        $user->address = $request->input('address');
+        $user->bio = $request->input('bio');
+
+        $user->save();
+
+        return response()->json(['message' => 'User updated successfully'], 200);
+    }
 
     public function user($id)
     {
@@ -73,13 +112,6 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Media;
 use App\Models\User;
-use App\Models\MediaType;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MediaFactory extends Factory
@@ -14,8 +14,7 @@ class MediaFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
-            'media_type_id' => MediaType::factory(),
+            'post_id' => Post::factory(),
             'url' => $this->faker->imageUrl,
         ];
     }

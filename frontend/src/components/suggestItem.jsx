@@ -3,6 +3,7 @@ import { Avatar, message } from "antd";
 import ProfilePic from "../assets/profile.jpg";
 import { useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "@/storage/followSlice";
+import { Link } from "react-router-dom";
 
 const SuggestItem = ({ user }) => {
     const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const SuggestItem = ({ user }) => {
 						<Avatar src={avatarSrc} size={50}  />
 					</div>
 					<div>
-						<p className="p-0 m-0 text-lg">{user.nickname}</p>
+						<Link to={`/profile/${user.id}`} className=" no-underline text-black p-0 m-0 text-lg">{user.nickname}</Link>
 						<p className="p-0 m-0 text-sm text-gray-500">{user.address}</p>
 					</div>
 				</div>

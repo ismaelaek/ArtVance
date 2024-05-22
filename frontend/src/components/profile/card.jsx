@@ -39,9 +39,9 @@ function Card() {
 
 	useEffect(() => {
 		dispatch(getFollowStats(id));
-		//! fixed dak prop dyal tabs 
-		dispatch(setSelectedTab('1'));
-	}, [dispatch])
+		//! fixed dak prop dyal tabs
+		dispatch(setSelectedTab("1"));
+	}, [dispatch, id, user.id]);
 
 	useEffect(() => {
 		const getUser = async () => {
@@ -59,10 +59,9 @@ function Card() {
 
 
 	const handleClickDrop = (e) => {
-		console.log(e.key);
 		switch (e.key) {
 			case "editInfo":
-				navigate("/profile/1/edit");
+				navigate(`/profile/${id}/edit`);
 				break;
 			case "editpassword":
 				navigate("/profile/setting/changepassword");
@@ -153,8 +152,7 @@ function Card() {
 						{logged.id === user.id && (
 							<ImgCrop>
 								<Upload accept="image/*" showUploadList={false}>
-									<div
-										className="camera-icon">
+									<div className="camera-icon">
 										<FontAwesomeIcon icon={faCamera} />
 									</div>
 								</Upload>
@@ -171,13 +169,16 @@ function Card() {
 					}}>
 					<p className="text-wrap text-justify">{user.bio}</p>
 					<p>
-						<span className="flex gap-2 items-center">
-							<FaLocationDot /> <b>{user.address}</b> <br />
-						</span>
-						<span className="flex gap-2 items-center">
-							<FaBirthdayCake /> <b>{user.birthday}</b>
-						</span>
-						<br />
+						{user.address && (
+							<span className="flex gap-2 items-center">
+								<FaLocationDot /> <b>{user.address}</b> <br />
+							</span>
+						)}
+						{user.birthday && (
+							<span className="flex gap-2 items-center">
+								<FaBirthdayCake /> <b>{user.birthday}</b>
+							</span>
+						)}
 					</p>
 				</div>
 			</div>
@@ -196,9 +197,11 @@ function Card() {
 						Following ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
-				<Dropdown overlay={menu}>
-					<HiDotsVertical className="text-xl" />
-				</Dropdown>
+				{logged.id == user.id && (
+					<Dropdown overlay={menu}>
+						<HiDotsVertical className="text-xl" />
+					</Dropdown>
+				)}
 			</div>
 			<div className="data">
 				<ContentContainer
@@ -220,9 +223,9 @@ const ContentContainer = ({ selectedTab, user, stats }) => {
 		case "2":
 			return <About user={user} />;
 		case "3":
-			return <Friends stats={stats} logged={user} hint={'following'} />;
+			return <Friends stats={stats} hint={'following'} />;
 		case "4":
-			return <Friends stats={stats} logged={user} hint={"followers"} />;
+			return <Friends stats={stats} hint={"followers"} />;
 		default:
 			return null;
 	}

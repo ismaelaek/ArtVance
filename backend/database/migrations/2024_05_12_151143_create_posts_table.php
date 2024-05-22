@@ -17,10 +17,6 @@ return new class extends Migration
             $table->string('caption');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->unsignedBigInteger('media_id')->nullable();
-            $table->foreign('media_id')->references('id')->on('media');
             $table->boolean('isForSale');
         });
     }

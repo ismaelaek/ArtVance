@@ -3,12 +3,15 @@ import ProfilePic from "../../assets/profile.jpg";
 import { Avatar, Input, message } from "antd";
 import { useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "@/storage/followSlice";
+import { Link } from "react-router-dom";
+import { setSelectedTab } from "@/storage/profileSlice";
 
 const { Search } = Input;
 
-function Friends({ stats, logged, hint }) {
+function Friends({ stats, hint }) {
 	const { followers, following } = stats;
 	const [searchTerm, setSearchTerm] = useState("");
+	const logged = JSON.parse(localStorage.getItem('loggedUser'))
 
 	const filteredFollowing = following.filter((user) =>
 		user.nickname.toLowerCase().includes(searchTerm.toLowerCase())
@@ -92,24 +95,33 @@ const FollowingCard = ({ user, logged }) => {
 					<Avatar src={avatarSrc} size={60} className="h-full w-full" />
 				</div>
 				<div className="ml-4 mt-3">
-					<p className="m-0 text-lg">{user.nickname}</p>
+					<Link
+						onClick={() => {
+							dispatch(setSelectedTab("1"));
+						}}
+						to={`/profile/${user.id}`}
+						className=" text-black no-underline m-0 text-lg">
+						{user.nickname}
+					</Link>
 					<p className="text-sm text-gray-500">{user.address}</p>
 				</div>
 			</div>
-			<div className="w-full flex justify-evenly text-xl">
-				<button className="btn btn-primary w-2/5">Message</button>
-				{isFollowing ? (
-					<button
-						className="btn btn-outline-primary w-2/5"
-						onClick={handleUnfollow}>
-						Unfollow
-					</button>
-				) : (
-					<button className="btn btn-primary w-2/5" onClick={handleFollow}>
-						Follow
-					</button>
-				)}
-			</div>
+			{user.id != logged.id && (
+				<div className="w-full flex justify-evenly text-xl">
+					<button className="btn btn-primary w-2/5">Message</button>
+					{isFollowing ? (
+						<button
+							className="btn btn-outline-primary w-2/5"
+							onClick={handleUnfollow}>
+							Unfollow
+						</button>
+					) : (
+						<button className="btn btn-primary w-2/5" onClick={handleFollow}>
+							Follow
+						</button>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };
@@ -150,24 +162,35 @@ const FollowerCard = ({ user, logged, following }) => {
 					<Avatar src={avatarSrc} size={60} className="h-full w-full" />
 				</div>
 				<div className="ml-4 mt-3">
-					<p className="m-0 text-lg">{user.nickname}</p>
+					<Link
+						onClick={() => {
+							dispatch(setSelectedTab("1"));
+						}}
+						to={`/profile/${user.id}`}
+						className=" text-black no-underline m-0 text-lg">
+						{user.nickname}
+					</Link>
 					<p className="text-sm text-gray-500">{user.address}</p>
 				</div>
 			</div>
-			<div className="w-full flex justify-evenly text-xl">
-				<button className="btn btn-primary w-2/5">Message</button>
-				{isFollowingBack ? (
-					<button
-						className="btn btn-outline-primary w-2/5"
-						onClick={handleUnfollow}>
-						Unfollow
-					</button>
-				) : (
-					<button className="btn btn-primary w-2/5" onClick={handleFollowBack}>
-						Follow Back
-					</button>
-				)}
-			</div>
+			{user.id != logged.id && (
+				<div className="w-full flex justify-evenly text-xl">
+					<button className="btn btn-primary w-2/5">Message</button>
+					{isFollowingBack ? (
+						<button
+							className="btn btn-outline-primary w-2/5"
+							onClick={handleUnfollow}>
+							Unfollow
+						</button>
+					) : (
+						<button
+							className="btn btn-primary w-2/5"
+							onClick={handleFollowBack}>
+							Follow Back
+						</button>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };

@@ -18,6 +18,11 @@ function TimeLine({user}) {
 		<div className="profile-timeline">
 			<div className="mt-12">
 				{logged.id == user.id && <CreatePost />}
+				{userPosts.length < 1 && (
+					<div className=" w-full flex justify-center">
+						<p>No posts yet</p>
+					</div>
+				)}
 				{userPosts.map((item, index) => {
 					return <Post key={index} post={item} logged={logged} />;
 				})}

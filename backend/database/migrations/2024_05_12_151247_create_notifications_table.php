@@ -19,8 +19,6 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('post_id');
             $table->foreign('post_id')->references('id')->on('posts');
-            $table->unsignedBigInteger('notification_type_id');
-            $table->foreign('notification_type_id')->references('id')->on('notification_types');
             $table->boolean('is_read')->default(false);
         });
     }
