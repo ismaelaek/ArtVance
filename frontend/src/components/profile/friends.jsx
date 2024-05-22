@@ -29,7 +29,7 @@ function Friends({ stats, logged, hint }) {
 							className=" mt-5 w-2/3"
 						/>
 					</div>
-					<div className="grid grid-cols-3 gap-4 p-4">
+					<div className="grid grid-cols-2 gap-4 p-4">
 						{filteredFollowing.map((user) => (
 							<FollowingCard key={user.id} user={user} logged={logged} />
 						))}
@@ -44,7 +44,7 @@ function Friends({ stats, logged, hint }) {
 							className=" mt-5 w-2/3"
 						/>
 					</div>
-					<div className="grid grid-cols-3 gap-4 p-4">
+					<div className="grid grid-cols-2 gap-4 p-4">
 						{filteredFollowers.map((user) => (
 							<FollowerCard
 								key={user.id}

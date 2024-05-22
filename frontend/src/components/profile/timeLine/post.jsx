@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Avatar, Button, Form, Input } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import { FaRegHeart, FaRegComment, FaHeart, FaRegBookmark, FaBookmark    } from "react-icons/fa";
 import { IoPaperPlaneOutline } from "react-icons/io5";
@@ -61,15 +61,17 @@ function Post({post, logged}) {
 	return (
 		<div className="p-3 rounded-xl mt-12 bg-white">
 			<div className="flex items-center">
-				<Link className='no-underline' to={`/profile/${post.user_id}`}>
+				<Link className="no-underline" to={`/profile/${post.user_id}`}>
 					<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
 				</Link>
 				<div className="ml-2 mt-3">
-					<Link className=" m-0 text-lg no-underline text-black" to={`/profile/${post.user_id}`}>
+					<Link
+						className=" m-0 text-lg no-underline text-black"
+						to={`/profile/${post.user_id}`}>
 						{" "}
 						{user.nickname}{" "}
 					</Link>
-					<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
+					<p className=' text-sm text-gray-600'>{formattedTime}</p>
 				</div>
 			</div>
 
@@ -89,11 +91,10 @@ function Post({post, logged}) {
 			</div>
 
 			<hr
-				style={{ borderColor: "gray", width: "100%", marginBottom: "10px" }}
+				className=' border-gray-400 w-full mt-2'
 			/>
 
 			<div
-				style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
 				className="flex items-center justify-between">
 				<div>
 					<Button
@@ -113,7 +114,7 @@ function Post({post, logged}) {
 				<Button
 					icon={bookmarked ? <FaBookmark color="#0984e3" /> : <FaRegBookmark />}
 					onClick={handleBookmarkClick}
-					style={{ border: "none", fontSize: "20px" }}
+					className='border-none text-xl'
 				/>
 			</div>
 
@@ -121,19 +122,19 @@ function Post({post, logged}) {
 
 			<Form>
 				<div
-					style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
-					<img style={profilePicStyle} src={logged.photo} alt="Profile" />
+					className='flex items-center mt-2 gap-3'>
+					<Avatar src={logged.photo} size={40}></Avatar>
 					<Item name="commentContent" className="flex-1 mt-4">
 						<TextArea
-							className="border-none outline-none text-lg font-semibold rounded-full bg-gray-200 pl-6 pt-2 pb-2 pr-5 text-gray-600"
+							className="border-none outline-none rounded-full bg-gray-200 pl-4 pt-2 text-gray-600"
 							placeholder="Write a comment..."
-							autoSize={{ minRows: 1, maxRows: 3 }}
+							autoSize={{ minRows: 1, maxRows: 1 }}
 						/>
 					</Item>
 					<Button
 						type="primary"
 						htmlType="submit"
-						className="bg-blue-500 ml-7 p-4 rounded-full"
+						className="bg-blue-500 p-3 rounded-full"
 						icon={<SendOutlined />}
 					/>
 				</div>

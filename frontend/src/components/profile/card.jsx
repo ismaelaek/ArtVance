@@ -3,7 +3,6 @@ import ProfilePic from "../../assets/profile.jpg";
 import BackgroundPic from "../../assets/background.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { AppstoreOutlined } from "@ant-design/icons";
 import { Menu, Upload, Dropdown } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTab } from "@/storage/profileSlice";
@@ -19,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { getFollowStats } from "@/storage/usersSlice";
 import { FaBirthdayCake } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import ImgCrop from "antd-img-crop";
 
 function Card() {
 	const dispatch = useDispatch();
@@ -28,6 +28,7 @@ function Card() {
 	const selectedTab = useSelector((state) => state.profile.profileTab);
 	const { followStats } = useSelector(state => state.users);
 	const [user, setUser] = useState({});
+	const logged = JSON.parse(localStorage.getItem("loggedUser"))
 
 	const handleClick = (e) => {
 		setCurrent(e.key);
@@ -84,47 +85,30 @@ function Card() {
 	return (
 		<div className="w-full mb-5">
 			<div
+				className=" w-full relative bg-white overflow-hidden"
 				style={{
 					fontFamily: "'Poppins', sans-serif",
-					width: "100%",
-					position: "relative",
-					backgroundColor: "white",
-					overflow: "hidden",
 				}}>
 				<div>
 					<img
-						style={{
-							width: "100%",
-							height: "200px",
-							objectFit: "cover",
-						}}
+						className=" w-full h-48 object-cover"
 						src={user.cover ? user.cover : BackgroundPic}
 						alt=""
 					/>
-					<Upload accept="image/*" showUploadList={false}>
-						<button
-							style={{
-								position: "absolute",
-								top: "45%",
-								right: "20px",
-								zIndex: 1,
-								backgroundColor: "rgba(0, 0, 0, 0.5)",
-								border: "none",
-								borderRadius: "5px",
-								padding: "5px 10px",
-								cursor: "pointer",
-								color: "#fff",
-								transition: "transform 0.2s",
-							}}
-							onMouseEnter={(e) => {
-								e.target.style.transform = "scale(1.1)";
-							}}
-							onMouseLeave={(e) => {
-								e.target.style.transform = "scale(1)";
-							}}>
-							<FontAwesomeIcon icon={faCamera} /> Edit cover
-						</button>
-					</Upload>
+					{logged.id === user.id && (
+						<Upload accept="image/*" showUploadList={false}>
+							<button
+								className="edit-cover"
+								onMouseEnter={(e) => {
+									e.target.style.transform = "scale(1.1)";
+								}}
+								onMouseLeave={(e) => {
+									e.target.style.transform = "scale(1)";
+								}}>
+								<FontAwesomeIcon icon={faCamera} /> Edit cover
+							</button>
+						</Upload>
+					)}
 				</div>
 				<div
 					style={{
@@ -159,37 +143,20 @@ function Card() {
 							e.currentTarget.style.background = "none";
 						}}>
 						<img
-							style={{
-								width: "100%",
-								height: "100%",
-								borderRadius: "50%",
-								objectFit: "cover",
-							}}
+							className=" w-full h-full rounded-full object-cover"
 							src={user.photo ? user.photo : ProfilePic}
 							alt=""
 						/>
-						<Upload accept="image/*" showUploadList={false}>
-							<div
-								className="camera-icon"
-								style={{
-									position: "absolute",
-									top: 0,
-									left: 0,
-									width: "100%",
-									height: "100%",
-									background: "rgba(0, 0, 0, 0.5)",
-									borderRadius: "50%",
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-									visibility: "hidden",
-									fontSize: "28px",
-									cursor: "pointer",
-									color: "white",
-								}}>
-								<FontAwesomeIcon icon={faCamera} />
-							</div>
-						</Upload>
+						{logged.id === user.id && (
+							<ImgCrop>
+								<Upload accept="image/*" showUploadList={false}>
+									<div
+										className="camera-icon">
+										<FontAwesomeIcon icon={faCamera} />
+									</div>
+								</Upload>
+							</ImgCrop>
+						)}
 					</div>
 					<h1>{user.nickname}</h1>
 				</div>
@@ -246,7 +213,7 @@ export default Card;
 const ContentContainer = ({ selectedTab, user, stats }) => {
 	switch (selectedTab) {
 		case "1":
-			return <TimeLine logged={user} />;
+			return <TimeLine user={user} />;
 		case "2":
 			return <About user={user} />;
 		case "3":
