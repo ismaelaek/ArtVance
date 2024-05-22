@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 const API_URL = "http://127.0.0.1:8000/api/users";
 
 const initialState = {
+	targetUser: {},
 	users: [],
 	unfollwedUsers: [],
 	followStats: {},
@@ -45,6 +46,19 @@ const getFollowStats = createAsyncThunk(
 		}
 	}
 );
+
+const getUser = createAsyncThunk(
+	"users/getUser",
+	async (userId, { rejectWithValue }) => {
+		try {
+			const response = await axios.get(`${API_URL}/${userId}`);
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data);
+		}
+	}
+);
+
 
 const UsersSlice = createSlice({
 	name: "users",
@@ -94,9 +108,23 @@ const UsersSlice = createSlice({
 			.addCase(getFollowStats.rejected, (state, action) => {
 				state.usersIsLoading = false;
 				state.usersError = action.error.message;
+			})
+			.addCase(getUser.pending, (state) => {
+				state.usersIsLoading = true;
+				state.usersError = null;
+			})
+			.addCase(getUser.fulfilled, (state, action) => {
+				state.usersIsLoading = false;
+				state.targetUser = action.payload;
+				state.usersError = null;
+			})
+			.addCase(getUser.rejected, (state, action) => {
+				state.usersIsLoading = false;
+				state.usersError = action.error.message;
 			});
+		
 	},
 });
 
-export { getUsers, getUnfollowedUsers, getFollowStats };
+export { getUsers, getUnfollowedUsers, getFollowStats, getUser };
 export default UsersSlice.reducer;

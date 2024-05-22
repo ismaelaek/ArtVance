@@ -57,10 +57,9 @@ function Card() {
 
 
 	const handleClickDrop = (e) => {
-		console.log(e.key);
 		switch (e.key) {
 			case "editInfo":
-				navigate("/profile/1/edit");
+				navigate(`/profile/${id}/edit`);
 				break;
 			case "editpassword":
 				navigate("/profile/setting/changepassword");
@@ -195,9 +194,11 @@ function Card() {
 						Following ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
-				<Dropdown overlay={menu}>
-					<HiDotsVertical className="text-xl" />
-				</Dropdown>
+				{logged.id == user.id && (
+					<Dropdown overlay={menu}>
+						<HiDotsVertical className="text-xl" />
+					</Dropdown>
+				)}
 			</div>
 			<div className="data">
 				<ContentContainer
