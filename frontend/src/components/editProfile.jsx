@@ -66,7 +66,7 @@ function EditProfile() {
 			formData.append("photo", values.profilePic.file); // Assuming values.profilePic.file contains the uploaded file
 
 			const response = await axios.post(
-				`http://127.0.0.1:8000/api/users/${id}/updateProfile`,
+				`http://127.0.0.1:8000/api/users/${targetUser.id}/updateProfile`,
 				formData,
 				{
 					headers: {
