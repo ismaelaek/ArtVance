@@ -78,14 +78,21 @@ function Post({post, logged}) {
 
 	return (
 		<div className="p-3 rounded-xl mt-12 bg-white">
-			<div className="flex items-center">
-				<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
-				<div className="ml-2 mt-3">
-					<h6 className=" m-0 text-xl text-black"> {logged.nickname} </h6>
-					<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
+			<div className="flex justify-between">
+				<div className="flex items-center">
+					<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
+					<div className="ml-2 mt-3">
+						<h6 className=" m-0 text-xl text-black"> {logged.nickname} </h6>
+						<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
+					</div>
 				</div>
+				<Dropdown overlay={menu} trigger={["click"]}>
+					<Button
+						icon={<MoreOutlined />}
+						style={{ border: "none", fontSize: "20px" }}
+					/>
+				</Dropdown>
 			</div>
-
 			<div className="mt-2 mb-5">
 				<p className="text-lg text-black mb-2">{post.caption}</p>
 				<img
@@ -101,12 +108,9 @@ function Post({post, logged}) {
 				/>
 			</div>
 
-			<hr
-				className=' border-gray-400 w-full mt-2'
-			/>
+			<hr className=" border-gray-400 w-full mt-2" />
 
-			<div
-				className="flex items-center justify-between">
+			<div className="flex items-center justify-between">
 				<div>
 					<Button
 						icon={liked ? <FaHeart color="#e84393" /> : <FaRegHeart />}
@@ -125,15 +129,14 @@ function Post({post, logged}) {
 				<Button
 					icon={bookmarked ? <FaBookmark color="#0984e3" /> : <FaRegBookmark />}
 					onClick={handleBookmarkClick}
-					className='border-none text-xl'
+					className="border-none text-xl"
 				/>
 			</div>
 
 			<hr style={{ borderColor: "gray", width: "100%", marginTop: "10px" }} />
 
 			<Form>
-				<div
-					className='flex items-center mt-2 gap-3'>
+				<div className="flex items-center mt-2 gap-3">
 					<Avatar src={logged.photo} size={40}></Avatar>
 					<Item name="commentContent" className="flex-1 mt-4">
 						<TextArea
