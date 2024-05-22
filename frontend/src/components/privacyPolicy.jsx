@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Anchor, Button, Modal } from 'antd';
 import { FileProtectOutlined, LockOutlined, InfoCircleOutlined, UserOutlined, SolutionOutlined, SafetyCertificateOutlined, SafetyOutlined, PhoneOutlined } from '@ant-design/icons';
-import ChangePassword from './changepassword'; // Import your ChangePassword component
-
+import ChangePassword from './changepassword'; 
 const { Link } = Anchor;
 
 function PrivacyPolicy() {

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, Form, Input } from 'antd';
-import { SendOutlined } from '@ant-design/icons';
+import { Avatar, Button, Form, Input, Dropdown, Menu } from 'antd';
+import { SendOutlined, MoreOutlined, EditOutlined, DeleteOutlined   } from '@ant-design/icons';
 import { FaRegHeart, FaRegComment, FaHeart, FaRegBookmark, FaBookmark    } from "react-icons/fa";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import ProfilePic from '../../../assets/profile.jpg';
 import Poste1 from '../../../assets/poste1.jpg';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+
+//salam
 
 const { TextArea } = Input;
 const { Item } = Form;
@@ -57,21 +59,30 @@ function Post({post, logged}) {
 		.toLocaleString("sv-SE", options)
 		.replace(",", "");
 
+	const handleMenuClick = (e) => {
+		if (e.key === 'edit') {
+			// Handle edit post action
+			console.log('Edit post');
+		} else if (e.key === 'delete') {
+			// Handle delete post action
+			console.log('Delete post');
+		}
+	};
+
+	const menu = (
+        <Menu onClick={handleMenuClick}>
+            <Menu.Item key="edit" icon={<EditOutlined />}>Edit Post</Menu.Item>
+            <Menu.Item key="delete" icon={<DeleteOutlined />}>Delete Post</Menu.Item>
+        </Menu>
+    );
 
 	return (
 		<div className="p-3 rounded-xl mt-12 bg-white">
 			<div className="flex items-center">
-				<Link className="no-underline" to={`/profile/${post.user_id}`}>
-					<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
-				</Link>
+				<img src={avatarSrc} alt="Profile" style={profilePicStyle} />
 				<div className="ml-2 mt-3">
-					<Link
-						className=" m-0 text-lg no-underline text-black"
-						to={`/profile/${post.user_id}`}>
-						{" "}
-						{user.nickname}{" "}
-					</Link>
-					<p className=' text-sm text-gray-600'>{formattedTime}</p>
+					<h6 className=" m-0 text-xl text-black"> {logged.nickname} </h6>
+					<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
 				</div>
 			</div>
 
