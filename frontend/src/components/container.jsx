@@ -15,7 +15,6 @@ const { Header, Content, Sider } = Layout;
 const Container = ({ children }) => {
 	const navigate = useNavigate();
 	const [loggedUser, setLoggedUser] = useState({});
-	const [encryptedId, setEncryptedId] = useState("");
 	const handleLogout = () => {
 		Cookies.remove("userToken");
 		Cookies.remove("loggedUser");
@@ -31,8 +30,7 @@ const Container = ({ children }) => {
 			const logged = JSON.parse(localStorage.getItem("loggedUser"));
 			setLoggedUser(logged);
 
-			//! hna kanhachiw id bach maybanch f url
-			setEncryptedId(encryptId(logged.id));
+			
 		}
 	}, [navigate]);
 	
@@ -64,13 +62,13 @@ const Container = ({ children }) => {
 					}></Input>
 				<div className="flex p-2 gap-3  items-center h-full">
 					<Link
-						to={`/profile/${encryptedId}`}
+						to={`/profile/${loggedUser.id}`}
 						className=" no-underline text-black hover:underline">
 						<p className="pt-3 text-lg text-center line-height-full">
 							{loggedUser?.username}
 						</p>
 					</Link>
-					<Link to={`/profile/${encryptedId}`}>
+					<Link to={`/profile/${loggedUser.id}`}>
 						<Avatar src={loggedUser.photo} alt="profile picture" />
 					</Link>
 				</div>
@@ -86,7 +84,7 @@ const Container = ({ children }) => {
 						<NavLink to="/">
 							<FaHome /> Feed
 						</NavLink>
-						<NavLink to={`/profile/${encryptedId}`}>
+						<NavLink to={`/profile/${loggedUser.id}`}>
 							<FaUser /> Profile
 						</NavLink>
 						<NavLink to="/marketplace">
