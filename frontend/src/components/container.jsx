@@ -17,7 +17,7 @@ const Container = ({ children }) => {
 	const [loggedUser, setLoggedUser] = useState({});
 	const handleLogout = () => {
 		Cookies.remove("userToken");
-		Cookies.remove("loggedUser");
+		localStorage.removeItem("loggedUser");
 		navigate("/login");
 	};
 	useEffect(() => {
