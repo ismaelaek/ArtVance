@@ -15,7 +15,7 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'caption' => 'required|string',
             'isForSale' => 'required|boolean',
-            'media.*' => 'required|file|mimes:jpg,jpeg,png,gif,mp4|max:10240',
+            'media.*' => 'file|mimes:jpg,jpeg,png,gif,mp4|max:10240',
         ]);
 
         $post = new Post();

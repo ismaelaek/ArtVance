@@ -151,17 +151,23 @@ function Post({ post, logged }) {
 					<div className="w-full max-w-2xl">
 						<Carousel
 							arrows
-							className="w-full max-w-2xl overflow-hidden">
+							style={{
+								height: "600px",
+							}}
+							className="w-full max-w-2xl overflow-hidden ">
 							{postMedia.map((media, index) => (
 								<div
 									key={index}
-									style={{
-										maxHeight: "450px",
-									}}>
+									className="flex justify-center items-center"
+									>
 									<img
 										src={media.url}
 										alt={`Post ${index + 1}`}
-										className="w-full ratio-1x1 object-center"
+										className="h-full object-center"
+										style={{
+											width: "100%",
+											aspectRatio: '1/1'
+										}}
 									/>
 								</div>
 							))}
