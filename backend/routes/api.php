@@ -44,6 +44,7 @@ Route::post('/follow/{follower_id}/{followed_id}', [FollowController::class, 'fo
 Route::post('/unfollow/{follower_id}/{followed_id}', [FollowController::class, 'unfollow']);
 
 
-Route::prefix('/posts')->middleware('auth:api')->group( function (){
-    Route::post('/new', [PostController::class, 'store']);
+Route::prefix('/posts')->group( function (){
+    Route::post('/new', [PostController::class, 'store'])->middleware('auth:api');
+    Route::get('/{id}/media', [PostController::class, 'getPostMedia']);
 });

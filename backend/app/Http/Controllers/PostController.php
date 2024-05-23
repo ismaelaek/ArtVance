@@ -41,4 +41,13 @@ class PostController extends Controller
         ], 201);
     }
 
+    
+    public function getPostMedia($post_id)
+    {
+        $post = Post::find($post_id);
+        $media = $post->media()->get();
+        return response()->json([
+            'media' => $media,
+        ], 200);
+    }
 }

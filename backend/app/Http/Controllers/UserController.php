@@ -101,7 +101,8 @@ class UserController extends Controller
     public function getFeedPosts($userId)
     {
         $user = User::findOrFail($userId);
-        $feedPosts = $user->getFeedPosts()->orderBy('created_at', 'desc')->get();
+        $feedPosts = $user->getFeedPosts();
+
         return response()->json($feedPosts);
     }
 
