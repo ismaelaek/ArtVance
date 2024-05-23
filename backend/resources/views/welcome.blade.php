@@ -7,6 +7,5 @@
     <title>Higram server</title>
 </head>
 <body>
-    <h1>Hello haha</h1>
 </body>
 </html>

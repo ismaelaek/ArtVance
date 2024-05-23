@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Media extends Model
 {
     use HasFactory;
-    public function mediaType()
+    public function post()
     {
-        return $this->belongsTo(MediaType::class);
+        return $this->belongsTo(Post::class);
     }
 }

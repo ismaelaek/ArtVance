@@ -16,9 +16,5 @@ class Notification extends Model
     {
         return $this->belongsTo(Post::class);
     }
-    public function notification_type()
-    {
-        return $this->belongsTo(NotificationType::class);
-    }
     
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Layout, theme } from "antd";
+import { Input, Layout, message, theme } from "antd";
 import { NavLink, Link } from "react-router-dom";
 import { FaHome, FaUser, FaBookmark } from "react-icons/fa";
 import { FaShop, FaMessage } from "react-icons/fa6";
@@ -8,7 +8,9 @@ import { RiSettings5Fill } from "react-icons/ri";
 import { Avatar } from "antd";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { encryptId } from "@/lib/utils";
+import axios from "axios";
+import { BiLogOut } from "react-icons/bi";
+
 
 const { Header, Content, Sider } = Layout;
 
@@ -16,9 +18,29 @@ const Container = ({ children }) => {
 	const navigate = useNavigate();
 	const [loggedUser, setLoggedUser] = useState({});
 	const handleLogout = () => {
-		Cookies.remove("userToken");
-		localStorage.removeItem("loggedUser");
-		navigate("/login");
+
+		const token = Cookies.get("userToken");
+
+		axios
+			.post(
+				"http://127.0.0.1:8000/api/auth/logout",
+				{},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			.then((response) => {
+				Cookies.remove("userToken");
+				Cookies.remove("loggedUser");
+				message.success(response.data.message);
+				navigate("/login");
+			})
+			.catch((error) => {
+				message.error("Error logging out");
+			});
+
 	};
 	useEffect(() => {
 		const userToken = Cookies.get("userToken");
@@ -52,7 +74,7 @@ const Container = ({ children }) => {
 					borderBottom: "#f5f5f5 solid 1px",
 				}}>
 				<Link className="no-underline" to="/">
-					<h3 className="pt-2 text-rebecca app-name">ArtVance </h3>
+					<h3 className="pt-2 text-indigo-400  app-name">ArtVance </h3>
 				</Link>
 				<Input
 					className="w-1/3"
@@ -80,7 +102,7 @@ const Container = ({ children }) => {
 					style={{
 						background: colorBgContainer,
 					}}>
-					<nav className="flex flex-col justify-center w-full px-4 pt-4 sider-nav">
+					<nav className="flex  font-semibold flex-col justify-center w-full px-4 pt-4 sider-nav">
 						<NavLink to="/">
 							<FaHome /> Feed
 						</NavLink>
@@ -93,14 +115,19 @@ const Container = ({ children }) => {
 						<NavLink to="/messages">
 							<FaMessage /> Messages
 						</NavLink>
-						<NavLink to="/settings">
+						<NavLink to="/settings/privacy">
 							<RiSettings5Fill /> Settings
 						</NavLink>
 						<NavLink to="/saved">
 							<FaBookmark /> Saved
 						</NavLink>
 					</nav>
-					<button onClick={handleLogout}>log out</button>
+					<button
+						className=" absolute bottom-3 left-8 text-xl flex gap-3 items-center"
+						onClick={handleLogout}>
+						<BiLogOut />
+						<span>log out</span>
+					</button>
 				</Sider>
 				<Layout>
 					<Content

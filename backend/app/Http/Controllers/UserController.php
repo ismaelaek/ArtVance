@@ -19,6 +19,8 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        return response()->json($request);
+        
         // Validate request data
         // $validator = Validator::make($request->all(), [
         //     'username' => 'required',
@@ -77,10 +79,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($userId);
 
-        $posts = $user->posts;
+        $posts = $user->posts()->orderBy('created_at', 'desc')->get();
 
         return response()->json($posts);
     }
+
 
     public function getFollowersAndFollowing($userId)
     {
@@ -98,8 +101,7 @@ class UserController extends Controller
     public function getFeedPosts($userId)
     {
         $user = User::findOrFail($userId);
-        $feedPosts = $user->getFeedPosts();
-
+        $feedPosts = $user->getFeedPosts()->orderBy('created_at', 'desc')->get();
         return response()->json($feedPosts);
     }
 
