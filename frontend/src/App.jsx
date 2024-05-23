@@ -29,7 +29,7 @@ function App() {
 						<Route path="/" element={<Feed />} />
 						<Route path="/profile/:id" element={<Card />} />
 						<Route path="/profile/:id/edit" element={<EditProfile />} />
-						<Route path="/profile/:id/privacypolicy" element={<PrivacyPolicy />} />
+						<Route path="/settings/privacy" element={<PrivacyPolicy />} />
 						<Route path="/messages" element={<Messages />} />
 						<Route path="/marketplace" element={<Marketplace />} />
 						<Route path="/marketplace/art/:id" element={<ProductDetails />} />

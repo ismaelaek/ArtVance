@@ -19,6 +19,8 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        return response()->json($request);
+        
         // Validate request data
         // $validator = Validator::make($request->all(), [
         //     'username' => 'required',

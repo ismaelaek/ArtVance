@@ -63,9 +63,8 @@ function Card() {
 			case "editInfo":
 				navigate(`/profile/${id}/edit`);
 				break;
-			case "editpassword":
-				navigate("/profile/setting/changepassword");
-				navigate("/profile/1/privacypolicy");
+			case "privacy":
+				navigate("/settings/privacy");
 				break;
 			default:
 				break;
@@ -78,7 +77,7 @@ function Card() {
 			<Menu.Item key="editInfo" icon={<LiaUserEditSolid />}>
 				Edit info
 			</Menu.Item>
-			<Menu.Item key="editpassword" icon={<FileProtectOutlined  />}>
+			<Menu.Item key="privacy" icon={<FileProtectOutlined  />}>
 				privacy policy
 			</Menu.Item>
 		</Menu>
