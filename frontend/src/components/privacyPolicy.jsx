@@ -117,7 +117,7 @@ function PrivacyPolicy() {
                 centered
                 bodyStyle={{ padding: '20px' }}
             >
-                <ChangePassword />
+                <ChangePassword  onClose={handleCancel}/>
                 </Modal>
         </main>
     );

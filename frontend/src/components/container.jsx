@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Layout, theme } from "antd";
+import { Input, Layout, message, theme } from "antd";
 import { NavLink, Link } from "react-router-dom";
 import { FaHome, FaUser, FaBookmark } from "react-icons/fa";
 import { FaShop, FaMessage } from "react-icons/fa6";
@@ -8,7 +8,7 @@ import { RiSettings5Fill } from "react-icons/ri";
 import { Avatar } from "antd";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { encryptId } from "@/lib/utils";
+import axios from "axios";
 import { BiLogOut } from "react-icons/bi";
 
 
@@ -18,9 +18,27 @@ const Container = ({ children }) => {
 	const navigate = useNavigate();
 	const [loggedUser, setLoggedUser] = useState({});
 	const handleLogout = () => {
-		Cookies.remove("userToken");
-		Cookies.remove("loggedUser");
-		navigate("/login");
+		const token = Cookies.get("userToken");
+
+		axios
+			.post(
+				"http://127.0.0.1:8000/api/auth/logout",
+				{},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			)
+			.then((response) => {
+				Cookies.remove("userToken");
+				Cookies.remove("loggedUser");
+				message.success(response.data.message);
+				navigate("/login");
+			})
+			.catch((error) => {
+				message.error("Error logging out");
+			});
 	};
 	useEffect(() => {
 		const userToken = Cookies.get("userToken");
