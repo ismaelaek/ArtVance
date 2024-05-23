@@ -18,6 +18,7 @@ const Container = ({ children }) => {
 	const navigate = useNavigate();
 	const [loggedUser, setLoggedUser] = useState({});
 	const handleLogout = () => {
+
 		const token = Cookies.get("userToken");
 
 		axios
@@ -39,6 +40,7 @@ const Container = ({ children }) => {
 			.catch((error) => {
 				message.error("Error logging out");
 			});
+
 	};
 	useEffect(() => {
 		const userToken = Cookies.get("userToken");

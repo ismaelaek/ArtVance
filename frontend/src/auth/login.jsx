@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { message, Form, Input, Button } from "antd";
@@ -6,10 +6,25 @@ import "../styles/login.css";
 import Cookies from "js-cookie";
 import Logo from "../assets/artvance_logo.png";
 import {FaGoogle, FaFacebook, FaTwitter} from 'react-icons/fa'
+import { Component } from "lucide-react";
+import React, { useEffect } from 'react';
 
 const Login = () => {
 	const navigate = useNavigate();
 	const [form] = Form.useForm(); 
+
+	useEffect(() => {
+		console.log("ok");
+		console.log(localStorage.getItem("loggedUser"))
+		if(localStorage.getItem("loggedUser") != null) {
+			const user = localStorage.getItem("loggedUser");
+			console.log(user)
+			navigate("/");
+		}
+		return () => {
+
+		};
+	}, []);
 
 	const handleSubmit = async (values) => {
 		try {
@@ -18,12 +33,13 @@ const Login = () => {
 				values 
 			);
 			const user = response.data.user;
+			localStorage.setItem("loggedUser", JSON.stringify(user));
+
 			if (user.isAdmin) {
 				Cookies.set("token", response.data.token, { expires: 7, secure: true });
 				message.success("Logged in as admin");
 				navigate("/dashboard");
 			} else {
-				localStorage.setItem("loggedUser", JSON.stringify(user));
 				Cookies.set("userToken", response.data.token, {
 					expires: 7,
 					secure: true,

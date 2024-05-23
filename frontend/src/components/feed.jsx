@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CreatePost from "./profile/timeLine/createPost";
 import Post from "./profile/timeLine/post";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +10,7 @@ import { getFeedPosts } from "@/storage/feedSlice";
 
 const Feed = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const logged = JSON.parse(localStorage.getItem("loggedUser"));
 	const [suggestions, setSuggestions] = useState([]);
 	const { users, unfollwedUsers, usersIsLoading } = useSelector(
@@ -16,10 +18,13 @@ const Feed = () => {
 	);
 	const { feedPosts, feedIsLoading } = useSelector((state) => state.feed);
 	useEffect(() => {
+		if(localStorage.getItem("loggedUser") == null) {
+			navigate("/login");
+		}
 		dispatch(getUsers());
-		dispatch(getUnfollowedUsers(logged.id));
-		dispatch(getFeedPosts(logged.id));
-	}, [dispatch, logged.id]);
+		dispatch(getUnfollowedUsers(logged != null ? logged.id : null));
+		dispatch(getFeedPosts(logged != null ? logged.id : null));
+	}, [dispatch, logged != null ? logged.id : null]);
 
 	useEffect(() => {
 		const randomStartIndex = Math.floor(

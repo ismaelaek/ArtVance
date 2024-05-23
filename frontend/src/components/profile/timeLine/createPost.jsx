@@ -7,7 +7,7 @@ const { Item } = Form;
 
 function CreatePost() {
 	const logged = JSON.parse(localStorage.getItem("loggedUser"));
-	const avatarSrc = logged.photo ? logged.photo : ProfilePic;
+	const avatarSrc = logged != null && logged.photo ? logged.photo : ProfilePic;
 
 	const profilePicStyle = {
 		width: "50px",
