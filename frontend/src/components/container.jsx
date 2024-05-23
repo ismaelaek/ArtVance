@@ -34,6 +34,7 @@ const Container = ({ children }) => {
 			.then((response) => {
 				Cookies.remove("userToken");
 				Cookies.remove("loggedUser");
+				localStorage.removeItem("loggedUser")
 				message.success(response.data.message);
 				navigate("/login");
 			})
