@@ -101,7 +101,7 @@ function PrivacyPolicy() {
                         <div id="contactUs" className="mb-8">
                             <h2 className="text-3xl font-semibold mb-4 text-gray-600"><PhoneOutlined className="mr-2" />Contact Us</h2>
                             <p className="text-gray-700">If you have any questions about this Privacy Policy, please contact us at:</p>
-                            <p className="text-gray-700 mt-2">Email: <a href="mailto:support@yourapp.com" className="text-indigo-400 hover:underline">support@yourapp.com</a></p>
+                            <p className="text-gray-700 mt-2">Email: <a href="mailto:support@artvance.com" className="text-indigo-400 hover:underline">support@artvance.com</a></p>
                         </div>
                         <div className="text-right mt-8 ">
                             <p className="text-gray-700 italic">Made with <span className="text-pink-500">♥</span> by the ArtVance Team</p>

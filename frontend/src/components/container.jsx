@@ -9,6 +9,8 @@ import { Avatar } from "antd";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { encryptId } from "@/lib/utils";
+import { BiLogOut } from "react-icons/bi";
+
 
 const { Header, Content, Sider } = Layout;
 
@@ -52,7 +54,7 @@ const Container = ({ children }) => {
 					borderBottom: "#f5f5f5 solid 1px",
 				}}>
 				<Link className="no-underline" to="/">
-					<h3 className="pt-2 text-rebecca app-name">ArtVance </h3>
+					<h3 className="pt-2 text-indigo-400  app-name">ArtVance </h3>
 				</Link>
 				<Input
 					className="w-1/3"
@@ -80,7 +82,7 @@ const Container = ({ children }) => {
 					style={{
 						background: colorBgContainer,
 					}}>
-					<nav className="flex flex-col justify-center w-full px-4 pt-4 sider-nav">
+					<nav className="flex  font-semibold flex-col justify-center w-full px-4 pt-4 sider-nav">
 						<NavLink to="/">
 							<FaHome /> Feed
 						</NavLink>
@@ -93,14 +95,19 @@ const Container = ({ children }) => {
 						<NavLink to="/messages">
 							<FaMessage /> Messages
 						</NavLink>
-						<NavLink to="/settings">
+						<NavLink to="/settings/privacy">
 							<RiSettings5Fill /> Settings
 						</NavLink>
 						<NavLink to="/saved">
 							<FaBookmark /> Saved
 						</NavLink>
 					</nav>
-					<button onClick={handleLogout}>log out</button>
+					<button
+						className=" absolute bottom-3 left-8 text-xl flex gap-3 items-center"
+						onClick={handleLogout}>
+						<BiLogOut />
+						<span>log out</span>
+					</button>
 				</Sider>
 				<Layout>
 					<Content
