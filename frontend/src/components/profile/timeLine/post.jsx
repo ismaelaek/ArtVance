@@ -16,12 +16,12 @@ import Cookies from 'js-cookie';
 const { TextArea } = Input;
 const { Item } = Form;
 
-function Post({ post, logged }) {
+function Post({ post, logged, isBookMarked }) {
 	const [user, setUser] = useState({});
 	const [postMedia, setPostMedia] = useState([]);
 	const [postLikes, setPostLikes] = useState(0);
 	const [liked, setLiked] = useState(false); 
-	const [bookmarked, setBookmarked] = useState(false);
+	const [bookmarked, setBookmarked] = useState( isBookMarked || post.isSaved ||false);
 
 	const dispatch = useDispatch();
 
