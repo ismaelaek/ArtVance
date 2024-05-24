@@ -6,7 +6,8 @@ import { IoPaperPlaneOutline } from "react-icons/io5";
 import ProfilePic from '../../../assets/profile.jpg';
 import Poste1 from '../../../assets/poste1.jpg';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const { TextArea } = Input;
 const { Item } = Form;
@@ -14,6 +15,8 @@ const { Item } = Form;
 function Post({ post, logged }) {
     const [liked, setLiked] = useState(false);
     const [user, setUser] = useState({});
+	const [bookmarked, setBookmarked] = useState(false);
+	const navigate = useNavigate();
     useEffect(() => {
         const getUser = async () => {
             try {
@@ -32,10 +35,39 @@ function Post({ post, logged }) {
         setLiked(!liked);
     };
 
-    const [bookmarked, setBookmarked] = useState(false);
-    const handleBookmarkClick = () => {
-        setBookmarked(!bookmarked);
-    };
+	// making this working
+	const handleBookmarkClick = async () => {
+		try {
+			if (!bookmarked) {
+				const response = await axios.post(
+					'http://127.0.0.1:8000/api/save/save-post', 
+					{post_id: post.id, user_id: logged.id}, 	
+				{
+					headers: {
+						'Authorization': `Bearer ${Cookies.get('userToken')}`
+					}
+				});
+				if (response.data.success) {
+					setBookmarked(true);
+					// navigate('/save');
+				}
+			} else {
+				const response = await axios.delete(
+					`http://127.0.0.1:8000/api/unsave-post/${post.id}`, 
+					{
+					headers: {
+						'Authorization': `Bearer ${localStorage.getItem('token')}`
+					}
+				});
+				if (response.data.success) {
+					setBookmarked(false);
+				}
+			}
+		} catch (error) {
+			console.error('Error (un)saving post:', error);
+		}
+	};
+	
 
     const profilePicStyle = {
         width: "50px",

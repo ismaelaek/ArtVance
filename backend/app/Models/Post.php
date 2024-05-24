@@ -28,4 +28,8 @@ class Post extends Model
     {
         return $this->hasMany(Notification::class);
     }
+    public function saves()
+    {
+    return $this->hasMany(Save::class);
+    }
 }
