@@ -19,6 +19,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        // TODO the request returns empty array
         return response()->json($request);
         
         // Validate request data
@@ -79,10 +80,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($userId);
 
-        $posts = $user->posts;
+        $posts = $user->posts()->orderBy('created_at', 'desc')->get();
 
         return response()->json($posts);
     }
+
 
     public function getFollowersAndFollowing($userId)
     {
