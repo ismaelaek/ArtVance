@@ -3,6 +3,7 @@
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\auth\PasswordController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
@@ -50,6 +51,8 @@ Route::prefix('/posts')->group( function (){
     Route::get('/{id}/media', [PostController::class, 'getPostMedia']);
     Route::post('/{postId}/like', [UserController::class, 'likePost']);
     Route::delete('/{postId}/unlike', [UserController::class, 'unlikePost']);
+    Route::get('/{postId}/likes-count', [PostController::class, 'getLikesCount']);
+    Route::get('/{postId}/has-liked/{userId}', [PostController::class, 'hasUserLikedPost']);
 });
 
 Route::prefix('/save')->group(function () {

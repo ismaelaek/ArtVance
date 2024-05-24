@@ -10,8 +10,7 @@ function SavePosts() {
   // const [loggedUser, setLoggedUser] = useState({});
   const navigate = useNavigate();
   const logged = JSON.parse(localStorage.getItem('loggedUser'))
-  console.log(logged)
-  console.log(logged.id)
+
 
   // useEffect(() => {
 	// 	const userToken = Cookies.get("userToken");

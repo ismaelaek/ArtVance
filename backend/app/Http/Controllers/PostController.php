@@ -56,4 +56,20 @@ class PostController extends Controller
             'media' => $media,
         ], 200);
     }
+
+    public function getLikesCount($postId)
+    {
+        $post = Post::findOrFail($postId);
+        $likesCount = $post->likes()->count();
+        return response()->json(['likesCount' => $likesCount]);
+    }
+
+    public function hasUserLikedPost($postId, $userId)
+    {
+        $post = Post::findOrFail($postId);
+
+        $hasLiked = $post->likes()->where('user_id', $userId)->exists();
+
+        return response()->json(['hasLiked' => $hasLiked]);
+    }
 }

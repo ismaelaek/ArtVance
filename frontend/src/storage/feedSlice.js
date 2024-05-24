@@ -12,11 +12,21 @@ const initialState = {
 
 const token = Cookies.get("userToken");
 
+const axiosConfig = {
+	cache: {
+		maxAge: 15 * 60 * 1000, 
+	},
+	timeout: 10000, 
+};
+
 export const getFeedPosts = createAsyncThunk(
 	"feed/getFeedPosts",
 	async (id, { rejectWithValue }) => {
 		try {
-			const response = await axios.get(`http://127.0.0.1:8000/api/${id}/feed`);
+			const response = await axios.get(
+				`http://127.0.0.1:8000/api/${id}/feed`,
+				axiosConfig
+			);
 			return response.data;
 		} catch (error) {
 			return rejectWithValue(
@@ -37,9 +47,9 @@ export const addPost = createAsyncThunk(
 					headers: {
 						"Content-Type": "multipart/form-data",
 					},
+					...axiosConfig,
 				}
 			);
-			message.success(response.data.message);
 			return response.data;
 		} catch (error) {
 			return rejectWithValue(error.response?.data || "Error adding post");
@@ -58,6 +68,7 @@ export const likePost = createAsyncThunk(
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
+					...axiosConfig,
 				}
 			);
 			return response.data;
@@ -78,6 +89,7 @@ export const unlikePost = createAsyncThunk(
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
+					...axiosConfig,
 				}
 			);
 			return response.data;
@@ -86,6 +98,7 @@ export const unlikePost = createAsyncThunk(
 		}
 	}
 );
+
 
 const feedSlice = createSlice({
 	name: "feed",
