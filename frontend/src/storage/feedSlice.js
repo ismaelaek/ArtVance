@@ -9,6 +9,7 @@ const initialState = {
 	addIsLoading: false,
 	feedError: null,
 };
+
 const token = Cookies.get("userToken");
 
 export const getFeedPosts = createAsyncThunk(
@@ -28,7 +29,6 @@ export const getFeedPosts = createAsyncThunk(
 export const addPost = createAsyncThunk(
 	"feed/addPost",
 	async (payload, { rejectWithValue }) => {
-		console.log(payload);
 		try {
 			const response = await axios.post(
 				`http://127.0.0.1:8000/api/posts/new`,
@@ -43,6 +43,46 @@ export const addPost = createAsyncThunk(
 			return response.data;
 		} catch (error) {
 			return rejectWithValue(error.response?.data || "Error adding post");
+		}
+	}
+);
+
+export const likePost = createAsyncThunk(
+	"feed/likePost",
+	async ({ userId, postId }, { rejectWithValue }) => {
+		try {
+			const response = await axios.post(
+				`http://127.0.0.1:8000/api/posts/${postId}/like`,
+				{ user_id: userId },
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.response?.data || "Error liking post");
+		}
+	}
+);
+
+export const unlikePost = createAsyncThunk(
+	"feed/unlikePost",
+	async ({ userId, postId }, { rejectWithValue }) => {
+		try {
+			const response = await axios.delete(
+				`http://127.0.0.1:8000/api/posts/${postId}/unlike`,
+				{
+					data: { user_id: userId },
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.response?.data || "Error unliking post");
 		}
 	}
 );
@@ -74,6 +114,24 @@ const feedSlice = createSlice({
 			})
 			.addCase(addPost.rejected, (state, action) => {
 				state.addIsLoading = false;
+				state.feedError = action.payload;
+			})
+			.addCase(likePost.pending, (state) => {
+				state.feedError = null;
+			})
+			.addCase(likePost.fulfilled, (state, action) => {
+				state.addIsLoading = false;
+			})
+			.addCase(likePost.rejected, (state, action) => {
+				state.feedError = action.payload;
+			})
+			.addCase(unlikePost.pending, (state) => {
+				state.feedError = null;
+			})
+			.addCase(unlikePost.fulfilled, (state, action) => {
+				state.addIsLoading = false;
+			})
+			.addCase(unlikePost.rejected, (state, action) => {
 				state.feedError = action.payload;
 			});
 	},

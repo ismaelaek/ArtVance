@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Like;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -108,12 +110,35 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function likePost(Request $request, $postId)
     {
-        //
+        $user =User::findOrFail($request->user_id);
+        $post = Post::findOrFail($postId);
+
+        if (!$user->likes()->where('post_id', $postId)->exists()) {
+            $like = new Like();
+            $like->user_id = $request->user_id;
+            $like->post_id = $postId;
+            $like->save();
+            return response()->json(['message' => 'Post liked successfully.']);
+        }
+
+        return response()->json(['message' => 'You have already liked this post.'], 400);
+    }
+
+    public function unlikePost(Request $request, $postId)
+    {
+        $user = User::findOrFail($request->user_id);
+        $post = Post::findOrFail($postId);
+
+        $like = $user->likes()->where('post_id', $postId)->first();
+
+        if ($like) {
+            $like->delete();
+            return response()->json(['message' => 'Post unliked successfully.']);
+        }
+
+        return response()->json(['message' => 'You have not liked this post.'], 400);
     }
 
 

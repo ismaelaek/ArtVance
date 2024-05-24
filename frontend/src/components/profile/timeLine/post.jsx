@@ -17,6 +17,8 @@ import {
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { likePost, unlikePost } from "@/storage/feedSlice";
 
 const { TextArea } = Input;
 const { Item } = Form;
@@ -25,11 +27,13 @@ function Post({ post, logged }) {
 	const [liked, setLiked] = useState(false);
 	const [user, setUser] = useState({});
 	const [postMedia, setPostMedia] = useState([]);
+	const [bookmarked, setBookmarked] = useState(false);
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const getUser = async () => {
 			try {
-				// Check if user data exists in local storage
 				const cachedUserData = localStorage.getItem(`user_${post.user_id}`);
 				if (cachedUserData) {
 					setUser(JSON.parse(cachedUserData));
@@ -38,7 +42,6 @@ function Post({ post, logged }) {
 						`http://127.0.0.1:8000/api/users/${post.user_id}`
 					);
 					setUser(response.data);
-					// Save user data to local storage
 					localStorage.setItem(
 						`user_${post.user_id}`,
 						JSON.stringify(response.data)
@@ -59,7 +62,7 @@ function Post({ post, logged }) {
 						`http://127.0.0.1:8000/api/posts/${post.id}/media`
 					);
 					setPostMedia(response.data.media);
-					console.log('fetched')
+					console.log("fetched");
 					localStorage.setItem(
 						`post_media_${post.id}`,
 						JSON.stringify(response.data.media)
@@ -74,12 +77,15 @@ function Post({ post, logged }) {
 		getPostMedia();
 	}, [post.user_id, post.id]);
 
-
 	const handleLikeClick = () => {
+		if (liked) {
+			dispatch(unlikePost({ userId: logged.id, postId: post.id }));
+		} else {
+			dispatch(likePost({ userId: logged.id, postId: post.id }));
+		}
 		setLiked(!liked);
 	};
 
-	const [bookmarked, setBookmarked] = useState(false);
 	const handleBookmarkClick = () => {
 		setBookmarked(!bookmarked);
 	};
@@ -155,7 +161,7 @@ function Post({ post, logged }) {
 								style={{
 									height: "600px",
 								}}
-								className="w-full max-w-2xl overflow-hidden ">
+								className="w-full max-w-2xl overflow-hidden">
 								{postMedia.map((media, index) => (
 									<div key={index} className="flex justify-center items-center">
 										<img
@@ -175,7 +181,7 @@ function Post({ post, logged }) {
 				</div>
 			</div>
 
-			<hr className=" border-gray-400 w-full mt-2" />
+			<hr className="border-gray-400 w-full mt-2" />
 
 			<div className="flex items-center justify-between">
 				<div>
