@@ -19,6 +19,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        // TODO the request returns empty array
         return response()->json($request);
         
         // Validate request data

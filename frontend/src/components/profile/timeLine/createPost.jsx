@@ -9,13 +9,15 @@ const { Item } = Form;
 
 function CreatePost() {
 	const [mediaFiles, setMediaFiles] = useState([]);
+	const logged = JSON.parse(localStorage.getItem("loggedUser"));
 	const [formValues, setFormValues] = useState({
 		caption: "",
-		isForSale: false,
+		user_id: logged.id,
+		isForSale: 0,
 	});
 
 	const dispatch = useDispatch();
-	const logged = JSON.parse(localStorage.getItem("loggedUser"));
+	
 	const avatarSrc = logged.photo ? logged.photo : ProfilePic;
 
 	const profilePicStyle = {
@@ -31,11 +33,15 @@ function CreatePost() {
 	};
 
 	const handleSubmit = () => {
-		const payload = {
-			...formValues,
-			media: mediaFiles,
-		};
-		console.log(payload);
+		let payload;
+		if (mediaFiles.length > 0) {
+			payload = {
+				...formValues,
+				media: mediaFiles,
+			};
+		} else {
+			payload = formValues;
+		}
 		dispatch(addPost(payload));
 	};
 

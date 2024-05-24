@@ -149,29 +149,28 @@ function Post({ post, logged }) {
 				<p className="text-lg text-gray-700 mb-2">{post.caption}</p>
 				<div className="w-full flex justify-center items-center overflow-hidden">
 					<div className="w-full max-w-2xl">
-						<Carousel
-							arrows
-							style={{
-								height: "600px",
-							}}
-							className="w-full max-w-2xl overflow-hidden ">
-							{postMedia.map((media, index) => (
-								<div
-									key={index}
-									className="flex justify-center items-center"
-									>
-									<img
-										src={media.url}
-										alt={`Post ${index + 1}`}
-										className="h-full object-center"
-										style={{
-											width: "100%",
-											aspectRatio: '1/1'
-										}}
-									/>
-								</div>
-							))}
-						</Carousel>
+						{postMedia.length > 0 && (
+							<Carousel
+								arrows
+								style={{
+									height: "600px",
+								}}
+								className="w-full max-w-2xl overflow-hidden ">
+								{postMedia.map((media, index) => (
+									<div key={index} className="flex justify-center items-center">
+										<img
+											src={media.url}
+											alt={`Post ${index + 1}`}
+											className="h-full object-center"
+											style={{
+												width: "100%",
+												aspectRatio: "1/1",
+											}}
+										/>
+									</div>
+								))}
+							</Carousel>
+						)}
 					</div>
 				</div>
 			</div>

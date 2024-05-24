@@ -20,7 +20,7 @@ class PostController extends Controller
 
         $post = new Post();
         $post->caption = $validatedData['caption'];
-        $post->user_id = Auth::id();
+        $post->user_id = $request->user_id;
         $post->isForSale = $validatedData['isForSale'];
         $post->save();
 
