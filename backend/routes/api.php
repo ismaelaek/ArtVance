@@ -45,8 +45,11 @@ Route::post('/follow/{follower_id}/{followed_id}', [FollowController::class, 'fo
 Route::post('/unfollow/{follower_id}/{followed_id}', [FollowController::class, 'unfollow']);
 
 
-Route::prefix('/posts')->middleware('auth:api')->group( function (){
+Route::prefix('/posts')->group( function (){
     Route::post('/new', [PostController::class, 'store']);
+    Route::get('/{id}/media', [PostController::class, 'getPostMedia']);
+    Route::post('/{postId}/like', [UserController::class, 'likePost']);
+    Route::delete('/{postId}/unlike', [UserController::class, 'unlikePost']);
 });
 
 Route::prefix('/save')->group(function () {
