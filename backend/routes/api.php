@@ -4,6 +4,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\auth\PasswordController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,4 +50,10 @@ Route::prefix('/posts')->group( function (){
     Route::get('/{id}/media', [PostController::class, 'getPostMedia']);
     Route::post('/{postId}/like', [UserController::class, 'likePost']);
     Route::delete('/{postId}/unlike', [UserController::class, 'unlikePost']);
+});
+
+Route::prefix('/save')->group(function () {
+    Route::post('/save-post', [SaveController::class, 'savePost']);
+    Route::delete('/unsave-post/{id}', [SaveController::class, 'unsavePost']);
+    Route::get('/saved-posts', [SaveController::class, 'getSavedPosts']);
 });
