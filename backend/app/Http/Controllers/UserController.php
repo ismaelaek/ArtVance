@@ -78,15 +78,32 @@ class UserController extends Controller
         return response()->json(['unfollowed_users' => $unfollowedUsers]);
     }
 
+    // public function getUserPosts($userId)
+    // {
+    //     $user = User::findOrFail($userId);
+
+    //     $posts = $user->posts()->orderBy('created_at', 'desc')->get();
+
+    //     return response()->json($posts);
+    // }
+
     public function getUserPosts($userId)
     {
-        $user = User::findOrFail($userId);
+    $user = User::findOrFail($userId);
 
-        $posts = $user->posts()->orderBy('created_at', 'desc')->get();
+    $posts = $user->posts()->orderBy('created_at', 'desc')->get();
 
-        return response()->json($posts);
+    // Get the IDs of posts saved by the user
+    $savedPostIds = $user->saves()->pluck('post_id')->toArray();
+
+    // Add isSaved field to each post
+    $posts = $posts->map(function ($post) use ($savedPostIds) {
+        $post->isSaved = in_array($post->id, $savedPostIds);
+        return $post;
+    });
+
+    return response()->json($posts);
     }
-
 
     public function getFollowersAndFollowing($userId)
     {

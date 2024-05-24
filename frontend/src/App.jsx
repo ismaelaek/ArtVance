@@ -12,6 +12,7 @@ import ProductDetails from "./components/market/productDetails";
 import "./App.css";
 import EditProfile from "./components/editProfile";
 import PrivacyPolicy from "./components/privacyPolicy";
+import SavePosts from "./components/savedPosts";
 
 function App() {
 	const location = useLocation();
@@ -33,6 +34,7 @@ function App() {
 						<Route path="/messages" element={<Messages />} />
 						<Route path="/marketplace" element={<Marketplace />} />
 						<Route path="/marketplace/art/:id" element={<ProductDetails />} />
+						<Route path="/saved" element={<SavePosts />} />	
 						<Route path="*" element={<h1>Page Not Found</h1>} />
 					</Routes>
 				</Container>
