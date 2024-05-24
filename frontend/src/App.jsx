@@ -34,7 +34,7 @@ function App() {
 						<Route path="/messages" element={<Messages />} />
 						<Route path="/marketplace" element={<Marketplace />} />
 						<Route path="/marketplace/art/:id" element={<ProductDetails />} />
-						<Route path="/save" element={<SavePosts />} />	
+						<Route path="/saved" element={<SavePosts />} />	
 						<Route path="*" element={<h1>Page Not Found</h1>} />
 					</Routes>
 				</Container>

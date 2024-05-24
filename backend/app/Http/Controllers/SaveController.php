@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Save;
+use App\Models\User;
 
 class SaveController extends Controller
 {
@@ -35,11 +36,21 @@ class SaveController extends Controller
         return response()->json(['success' => false], 404);
     }
 
-    public function getSavedPosts()
+    public function getSavedPosts(Request $request)
     {
-        $user = auth()->user();
-        $savedPosts = $user->saves()->with('post')->get()->pluck('post');
+        // $user = auth()->user();
+        // $savedPosts = $user->saves()->with('post')->get()->pluck('post');
 
-        return response()->json($savedPosts);
+        // return response()->json($savedPosts);
+
+        $user = $request->user();
+        if ($user) {
+            $savedPosts = $user->saves()->with('post')->get()->pluck('post');
+            return response()->json($savedPosts);
+        }
+
+        // If the user is not found, return an error response
+        return response()->json(['error' => 'User not found'], 404);
     }
-}
+ }
+
