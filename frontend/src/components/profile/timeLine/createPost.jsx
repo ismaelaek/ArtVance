@@ -22,6 +22,7 @@ function CreatePost() {
 
 	const avatarSrc = logged.photo ? logged.photo : ProfilePic;
 
+
 	const profilePicStyle = {
 		width: "50px",
 		height: "50px",
