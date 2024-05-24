@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Avatar, Button, Form, Input, Dropdown, Menu, Carousel } from "antd";
 import ProfilePic from "../../../assets/profile.jpg";
 import {
@@ -19,34 +19,73 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { likePost, unlikePost } from "@/storage/feedSlice";
+import { debounce } from "lodash";
 
 const { TextArea } = Input;
 const { Item } = Form;
 
 function Post({ post, logged }) {
-	const [liked, setLiked] = useState(false);
 	const [user, setUser] = useState({});
 	const [postMedia, setPostMedia] = useState([]);
+	const [postLikes, setPostLikes] = useState(0);
+	const [liked, setLiked] = useState(false); 
 	const [bookmarked, setBookmarked] = useState(false);
 
 	const dispatch = useDispatch();
 
+	const fetchUser = async (userId) => {
+		const cachedUserData = localStorage.getItem(`user_${userId}`);
+		if (cachedUserData) {
+			return JSON.parse(cachedUserData);
+		} else {
+			const response = await axios.get(
+				`http://127.0.0.1:8000/api/users/${userId}`
+			);
+			localStorage.setItem(`user_${userId}`, JSON.stringify(response.data));
+			return response.data;
+		}
+	};
+
+	const fetchPostMedia = async (postId) => {
+		const cachedPostMedia = localStorage.getItem(`post_media_${postId}`);
+		if (cachedPostMedia) {
+			return JSON.parse(cachedPostMedia);
+		} else {
+			const response = await axios.get(
+				`http://127.0.0.1:8000/api/posts/${postId}/media`
+			);
+			localStorage.setItem(
+				`post_media_${postId}`,
+				JSON.stringify(response.data.media)
+			);
+			return response.data.media;
+		}
+	};
+
+	const fetchPostLikes = async (postId) => {
+		const response = await axios.get(
+			`http://127.0.0.1:8000/api/posts/${postId}/likes-count`
+		);
+		return response.data.likesCount;
+	};
+
+	const checkIfUserLikedPost = async () => {
+		try {
+			const response = await axios.get(
+				`http://127.0.0.1:8000/api/posts/${post.id}/has-liked/${logged.id}`
+			);
+			return response.data.hasLiked;
+		} catch (error) {
+			console.error("Error checking if user liked post:", error);
+			return false; 
+		}
+	};
+
 	useEffect(() => {
 		const getUser = async () => {
 			try {
-				const cachedUserData = localStorage.getItem(`user_${post.user_id}`);
-				if (cachedUserData) {
-					setUser(JSON.parse(cachedUserData));
-				} else {
-					const response = await axios.get(
-						`http://127.0.0.1:8000/api/users/${post.user_id}`
-					);
-					setUser(response.data);
-					localStorage.setItem(
-						`user_${post.user_id}`,
-						JSON.stringify(response.data)
-					);
-				}
+				const userData = await fetchUser(post.user_id);
+				setUser(userData);
 			} catch (error) {
 				console.error("Error fetching user data:", error);
 			}
@@ -54,36 +93,57 @@ function Post({ post, logged }) {
 
 		const getPostMedia = async () => {
 			try {
-				const cachedPostMedia = localStorage.getItem(`post_media_${post.id}`);
-				if (cachedPostMedia) {
-					setPostMedia(JSON.parse(cachedPostMedia));
-				} else {
-					const response = await axios.get(
-						`http://127.0.0.1:8000/api/posts/${post.id}/media`
-					);
-					setPostMedia(response.data.media);
-					console.log("fetched");
-					localStorage.setItem(
-						`post_media_${post.id}`,
-						JSON.stringify(response.data.media)
-					);
-				}
+				const mediaData = await fetchPostMedia(post.id);
+				setPostMedia(mediaData);
 			} catch (error) {
 				console.error("Error fetching post media:", error);
 			}
 		};
 
+		const getPostLikes = async () => {
+			try {
+				const likesCount = await fetchPostLikes(post.id);
+				setPostLikes(likesCount);
+			} catch (error) {
+				console.error("Error fetching post likes:", error);
+			}
+		};
+
+		const checkLikedStatus = async () => {
+			const likedStatus = await checkIfUserLikedPost();
+			setLiked(likedStatus);
+		};
+
 		getUser();
 		getPostMedia();
+		getPostLikes();
+		checkLikedStatus();
 	}, [post.user_id, post.id]);
 
+	const debouncedFetchPostLikes = useCallback(
+		debounce(async () => {
+			try {
+				const likesCount = await fetchPostLikes(post.id);
+				setPostLikes(likesCount);
+			} catch (error) {
+				console.error("Error fetching post likes:", error);
+			}
+		}, 500),
+		[post.id]
+	);
+
 	const handleLikeClick = () => {
-		if (liked) {
-			dispatch(unlikePost({ userId: logged.id, postId: post.id }));
-		} else {
-			dispatch(likePost({ userId: logged.id, postId: post.id }));
+		try {
+			if (liked) {
+				dispatch(unlikePost({ userId: logged.id, postId: post.id }));
+			} else {
+				dispatch(likePost({ userId: logged.id, postId: post.id }));
+			}
+			setLiked(!liked);
+			debouncedFetchPostLikes();
+		} catch (error) {
+			console.error("Error toggling like status:", error);
 		}
-		setLiked(!liked);
 	};
 
 	const handleBookmarkClick = () => {
@@ -184,12 +244,18 @@ function Post({ post, logged }) {
 			<hr className="border-gray-400 w-full mt-2" />
 
 			<div className="flex items-center justify-between">
-				<div>
-					<Button
-						icon={liked ? <FaHeart color="#e84393" /> : <FaRegHeart />}
-						onClick={handleLikeClick}
-						style={{ border: "none", fontSize: "20px" }}
-					/>
+				<div className=" flex gap-2 items-center">
+					<span className="flex gap-1 items-center ">
+						<Button
+							icon={liked ? <FaHeart color="#e84393" /> : <FaRegHeart />}
+							onClick={handleLikeClick}
+							className=""
+							style={{ border: "none", fontSize: "20px" }}
+						/>
+						{postLikes !== 0 && (
+							<p className="text-xl text-gray-700 mt-3">{postLikes}</p>
+						)}
+					</span>
 					<Button
 						icon={<FaRegComment />}
 						style={{ border: "none", fontSize: "20px" }}
