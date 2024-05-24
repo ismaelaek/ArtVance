@@ -18,6 +18,7 @@ const Container = ({ children }) => {
 	const navigate = useNavigate();
 	const [loggedUser, setLoggedUser] = useState({});
 	const handleLogout = () => {
+
 		const token = Cookies.get("userToken");
 
 		axios
@@ -33,12 +34,14 @@ const Container = ({ children }) => {
 			.then((response) => {
 				Cookies.remove("userToken");
 				Cookies.remove("loggedUser");
+				localStorage.removeItem("loggedUser")
 				message.success(response.data.message);
 				navigate("/login");
 			})
 			.catch((error) => {
 				message.error("Error logging out");
 			});
+
 	};
 	useEffect(() => {
 		const userToken = Cookies.get("userToken");
