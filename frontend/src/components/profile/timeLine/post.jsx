@@ -9,6 +9,7 @@ import { IoPaperPlaneOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { likePost, unlikePost } from "@/storage/feedSlice";
 import { savePost, unsavePost } from '../../postService';
+import { EditOutlined, DeleteOutlined, SendOutlined } from "@ant-design/icons";
 import Cookies from 'js-cookie';
 
 const { TextArea } = Input;
