@@ -58,5 +58,5 @@ Route::prefix('/posts')->group( function (){
 Route::prefix('/save')->group(function () {
     Route::post('/save-post', [SaveController::class, 'savePost']);
     Route::delete('/unsave-post/{id}', [SaveController::class, 'unsavePost']);
-    Route::get('/saved-posts', [SaveController::class, 'getSavedPosts']);
+    Route::get('/saved-posts/{id}', [SaveController::class, 'getSavedPosts']);
 });

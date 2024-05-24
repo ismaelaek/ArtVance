@@ -36,14 +36,14 @@ class SaveController extends Controller
         return response()->json(['success' => false], 404);
     }
 
-    public function getSavedPosts(Request $request)
+    public function getSavedPosts(Request $request, $id)
     {
         // $user = auth()->user();
         // $savedPosts = $user->saves()->with('post')->get()->pluck('post');
 
         // return response()->json($savedPosts);
 
-        $user = $request->user();
+        $user = User::findOrFail($id);
         if ($user) {
             $savedPosts = $user->saves()->with('post')->get()->pluck('post');
             return response()->json($savedPosts);

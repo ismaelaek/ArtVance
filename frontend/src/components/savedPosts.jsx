@@ -26,20 +26,16 @@ function SavePosts() {
 	// 	}
 	// }, [navigate]);
   
-  console.log(Cookies.get('userToken'));
   useEffect(() => {
     const fetchSavedPosts = async () => {
     
       try {
         const response = await axios.get(
-          'http://127.0.0.1:8000/api/save/saved-posts', 
+          `http://127.0.0.1:8000/api/save/saved-posts/${logged.id}`, 
           {
             headers: {
               'Authorization': `Bearer ${Cookies.get('userToken')}`
             },
-            params: {
-              user_id: logged.id
-            }
           }
         );
         setSavedPosts(response.data);
@@ -65,7 +61,7 @@ function SavePosts() {
     <div>
       <h1>Saved Posts</h1>
       {savedPosts.map((post) => (
-        <Post key={post.id} post={post} logged={logged} isBookMarked={true} /> // Pass the logged user
+        <Post key={post.id} post={post} logged={logged} isBookMarked={true} /> 
       ))}
     </div>
   );
