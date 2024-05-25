@@ -74,12 +74,12 @@ const Search = () => {
 					</div>
 					<div className="grid grid-cols-2 gap-4">
 						{resultsPosts.map((post) => (
-							<div className=" rounded-xl bg-white p-3">
+							<div key={post.id} className=" rounded-xl bg-white p-3">
 								<p>{post.caption}</p>
 								<p>
 									by : "
 									<Link
-										to={`/profile/${post.userId}`}
+										to={`/profile/${post.user_id}`}
 										className="no-underline text-gray-700 p-0 m-0">
 										{users.map((user) => {
 											if (user.id === post.user_id) {

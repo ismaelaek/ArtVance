@@ -29,7 +29,7 @@ function ChangePassword({ onClose }) {
 				message.error(response.data.error);
 			} else {
 				message.success(response.data.message);
-				onClose(); // Close the modal on success
+				onClose(); 
 			}
 		} catch (error) {
 			message.error("Error changing password:");

@@ -20,26 +20,31 @@ const Container = ({ children }) => {
 	const handleLogout = () => {
 		const token = Cookies.get("userToken");
 
-		axios
-			.post(
-				"http://127.0.0.1:8000/api/auth/logout",
-				{},
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			)
-			.then((response) => {
-				Cookies.remove("userToken");
-				Cookies.remove("loggedUser");
-				localStorage.removeItem("loggedUser");
-				message.success(response.data.message);
-				navigate("/login");
-			})
-			.catch((error) => {
-				message.error("Error logging out");
-			});
+		// axios
+		// 	.post(
+		// 		"http://127.0.0.1:8000/api/auth/logout",
+		// 		{},
+		// 		{
+		// 			headers: {
+		// 				Authorization: `Bearer ${token}`,
+		// 			},
+		// 		}
+		// 	)
+		// 	.then((response) => {
+		// 		Cookies.remove("userToken");
+		// 		Cookies.remove("loggedUser");
+		// 		localStorage.removeItem("loggedUser");
+		// 		message.success(response.data.message);
+		// 		navigate("/login");
+		// 	})
+		// 	.catch((error) => {
+		// 		message.error("Error logging out");
+		// 	});
+		Cookies.remove("userToken");
+		Cookies.remove("loggedUser");
+		localStorage.removeItem("loggedUser");
+		// message.success(response.data.message);
+		navigate("/login");
 	};
 
 	useEffect(() => {
