@@ -79,7 +79,7 @@ const Search = () => {
 								<p>
 									by : "
 									<Link
-										to={`/profile/${post.userId}`}
+										to={`/profile/${post.user_id}`}
 										className="no-underline text-gray-700 p-0 m-0">
 										{users.map((user) => {
 											if (user.id === post.user_id) {
