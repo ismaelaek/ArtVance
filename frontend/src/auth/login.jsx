@@ -14,11 +14,8 @@ const Login = () => {
 	const [form] = Form.useForm(); 
 
 	useEffect(() => {
-		console.log("ok");
-		console.log(localStorage.getItem("loggedUser"))
 		if(localStorage.getItem("loggedUser") != null) {
 			const user = localStorage.getItem("loggedUser");
-			console.log(user)
 			navigate("/");
 		}
 		return () => {

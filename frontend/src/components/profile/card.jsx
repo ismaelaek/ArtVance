@@ -3,8 +3,8 @@ import ProfilePic from "../../assets/profile.jpg";
 import BackgroundPic from "../../assets/background.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { AppstoreOutlined,FileProtectOutlined } from "@ant-design/icons";
-import { Menu, Upload, Dropdown } from "antd";
+import { AppstoreOutlined, FileProtectOutlined } from "@ant-design/icons";
+import { Menu, Upload, Dropdown, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTab } from "@/storage/profileSlice";
 import TimeLine from "./timeLine/timeLine";
@@ -17,10 +17,10 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFollowStats } from "@/storage/usersSlice";
+import { followUser, unfollowUser } from "@/storage/followSlice";
 import { FaBirthdayCake } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import ImgCrop from "antd-img-crop";
-
 
 function Card() {
 	const dispatch = useDispatch();
@@ -28,9 +28,11 @@ function Card() {
 	const { id } = useParams();
 	const [current, setCurrent] = useState("1");
 	const selectedTab = useSelector((state) => state.profile.profileTab);
-	const { followStats } = useSelector(state => state.users);
+	const { followStats } = useSelector((state) => state.users);
 	const [user, setUser] = useState({});
-	const logged = JSON.parse(localStorage.getItem("loggedUser"))
+	const logged = JSON.parse(localStorage.getItem("loggedUser"));
+
+	const [isFollowing, setIsFollowing] = useState(false);
 
 	const handleClick = (e) => {
 		setCurrent(e.key);
@@ -39,9 +41,8 @@ function Card() {
 
 	useEffect(() => {
 		dispatch(getFollowStats(id));
-		//! fixed dak prop dyal tabs
 		dispatch(setSelectedTab("1"));
-	}, [dispatch, id, user.id]);
+	}, [dispatch, id, user.id, isFollowing]);
 
 	useEffect(() => {
 		const getUser = async () => {
@@ -55,8 +56,16 @@ function Card() {
 			}
 		};
 		getUser();
-	}, [id]);
-
+		setIsFollowing(false);
+		if (followStats) {
+			followStats?.followers?.map((follower) => {
+				if (follower.id === logged.id) {
+					setIsFollowing(true);
+					return
+				}
+			});
+		}
+	}, [id, logged.id]);
 
 	const handleClickDrop = (e) => {
 		switch (e.key) {
@@ -71,28 +80,47 @@ function Card() {
 		}
 	};
 
-
 	const menu = (
 		<Menu onClick={handleClickDrop}>
 			<Menu.Item key="editInfo" icon={<LiaUserEditSolid />}>
 				Edit info
 			</Menu.Item>
-			<Menu.Item key="privacy" icon={<FileProtectOutlined  />}>
-				privacy policy
+			<Menu.Item key="privacy" icon={<FileProtectOutlined />}>
+				Privacy policy
 			</Menu.Item>
 		</Menu>
 	);
 
+	const handleFollow =  () => {
+		try {
+			dispatch(
+				followUser({ followerId: logged.id, followedId: user.id })
+			);
+			setIsFollowing(true);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const handleUnfollow =  () => {
+		try {
+			dispatch(
+				unfollowUser({ followerId: logged.id, followedId: user.id })
+			);
+			setIsFollowing(false);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
 	return (
 		<div className="w-full mb-5">
 			<div
-				className=" w-full relative bg-white overflow-hidden"
-				style={{
-					fontFamily: "'Poppins', sans-serif",
-				}}>
+				className="w-full relative bg-white overflow-hidden"
+				style={{ fontFamily: "'Poppins', sans-serif" }}>
 				<div>
 					<img
-						className=" w-full h-48 object-cover"
+						className="w-full h-48 object-cover"
 						src={user.cover ? user.cover : BackgroundPic}
 						alt=""
 					/>
@@ -144,7 +172,7 @@ function Card() {
 							e.currentTarget.style.background = "none";
 						}}>
 						<img
-							className=" w-full h-full rounded-full object-cover"
+							className="w-full h-full rounded-full object-cover"
 							src={user.photo ? user.photo : ProfilePic}
 							alt=""
 						/>
@@ -181,7 +209,25 @@ function Card() {
 					</p>
 				</div>
 			</div>
-			<div className=" flex justify-between pr-5 bg-white">
+			{logged.id != id && (
+				<div className="bg-white">
+					<div className="w-1/4 flex gap-3 ml-4">
+						{isFollowing ? (
+							<button
+								className="btn btn-outline-primary"
+								onClick={handleUnfollow}>
+								Unfollow
+							</button>
+						) : (
+							<button className="btn btn-primary" onClick={handleFollow}>
+								Follow
+							</button>
+						)}
+						<button className="btn btn-primary">Message</button>
+					</div>
+				</div>
+			)}
+			<div className="flex justify-between pr-5 bg-white">
 				<Menu
 					onClick={handleClick}
 					selectedKeys={[current]}
@@ -196,7 +242,7 @@ function Card() {
 						Following ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
-				{logged.id == user.id && (
+				{logged.id === user.id && (
 					<Dropdown overlay={menu}>
 						<HiDotsVertical className="text-xl" />
 					</Dropdown>
@@ -222,7 +268,7 @@ const ContentContainer = ({ selectedTab, user, stats }) => {
 		case "2":
 			return <About user={user} />;
 		case "3":
-			return <Friends stats={stats} hint={'following'} />;
+			return <Friends stats={stats} hint={"following"} />;
 		case "4":
 			return <Friends stats={stats} hint={"followers"} />;
 		default:
