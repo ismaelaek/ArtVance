@@ -4,6 +4,7 @@ import usersSlice from "./usersSlice";
 import profileSlice from "./profileSlice";
 import followSlice from "./followSlice";
 import feedSlice from "./feedSlice";
+import postsSlice from "./postsSlice";
 
 const store = configureStore({
 	reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
 		profile: profileSlice,
 		follow: followSlice,
 		feed: feedSlice,
+		posts: postsSlice,
 	},
 });
 

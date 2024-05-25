@@ -58,13 +58,15 @@ function SavePosts() {
   // }
 
   return (
-    <div>
-      <h1>Saved Posts</h1>
-      {savedPosts.map((post) => (
-        <Post key={post.id} post={post} logged={logged} isBookMarked={true} /> 
-      ))}
-    </div>
-  );
+    <main className=" flex justify-center "
+    >
+			<div className=" w-2/3">
+				{savedPosts.map((post) => (
+					<Post key={post.id} post={post} logged={logged} isBookMarked={true} />
+				))}
+      </div>
+		</main>
+	);
 }
 
 export default SavePosts;
