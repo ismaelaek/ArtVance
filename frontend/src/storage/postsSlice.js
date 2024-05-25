@@ -15,6 +15,18 @@ export const getAllPosts = createAsyncThunk(
 	}
 );
 
+export const deletePost = createAsyncThunk(
+	"posts/deletePost",
+    async (postId, { rejectWithValue }) => {
+        try {
+            const response = await axios.delete(`${API_URL}/posts/${postId}`);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
+
 const postsSlice = createSlice({
 	name: "posts",
 	initialState: {
@@ -34,7 +46,17 @@ const postsSlice = createSlice({
             .addCase(getAllPosts.rejected, (state, action) => {
                 state.postsIsLoadin = false;
                 state.postsError = action.error.message;
-			});
+			})
+		    .addCase(deletePost.pending, (state) => {
+                state.postsIsLoadin = true;
+			})
+		    .addCase(deletePost.fulfilled, (state, action) => {
+                state.postsIsLoadin = false;
+			})
+		    .addCase(deletePost.rejected, (state, action) => {
+                state.postsIsLoadin = false;
+                state.postsError = action.error.message;
+            })
 	},
 });
 

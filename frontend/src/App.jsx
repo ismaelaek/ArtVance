@@ -14,6 +14,7 @@ import EditProfile from "./components/editProfile";
 import PrivacyPolicy from "./components/privacyPolicy";
 import SavePosts from "./components/savedPosts";
 import Search from "./components/search";
+import AddProdcut from "./components/market/addProdcut";
 
 function App() {
 	const location = useLocation();
@@ -34,6 +35,7 @@ function App() {
 						<Route path="/settings/privacy" element={<PrivacyPolicy />} />
 						<Route path="/messages" element={<Messages />} />
 						<Route path="/marketplace" element={<Marketplace />} />
+						<Route path="/marketplace/addlisting" element={<AddProdcut />} />
 						<Route path="/marketplace/art/:id" element={<ProductDetails />} />
 						<Route path="/saved" element={<SavePosts />} />
 						<Route path="/search" element={<Search />} />
