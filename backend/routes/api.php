@@ -5,6 +5,7 @@ use App\Http\Controllers\auth\PasswordController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -54,11 +55,16 @@ Route::prefix('/posts')->group( function (){
     Route::delete('/{postId}/unlike', [UserController::class, 'unlikePost']);
     Route::get('/{postId}/likes-count', [PostController::class, 'getLikesCount']);
     Route::get('/{postId}/has-liked/{userId}', [PostController::class, 'hasUserLikedPost']);
+    Route::delete('/{id}', [PostController::class, 'destroy']);
 });
 
 Route::prefix('/save')->group(function () {
     Route::post('/save-post', [SaveController::class, 'savePost']);
     Route::delete('/unsave-post/{id}', [SaveController::class, 'unsavePost']);
     Route::get('/saved-posts/{id}', [SaveController::class, 'getSavedPosts']);
-    //! fixed passing id using params
+});
+
+Route::prefix('/products')->group(function () {
+    Route::post('/', [ProductController::class, 'store']);
+    Route::get('/all', [ProductController::class, 'index']);
 });

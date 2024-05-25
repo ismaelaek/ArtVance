@@ -79,4 +79,20 @@ class PostController extends Controller
 
         return response()->json(['hasLiked' => $hasLiked]);
     }
+
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
+
+        if ($post->media()->exists()) {
+            $post->media()->delete();
+        }
+
+        $post->delete();
+
+        return response()->json([
+            'message' => 'Post and related media deleted successfully!'
+        ], 200);
+    }
+
 }
