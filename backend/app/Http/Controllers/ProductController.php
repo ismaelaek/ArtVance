@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
 
+    public function index()
+    {
+        $allProducts = Product::all();
+        return response()->json($allProducts);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

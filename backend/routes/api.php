@@ -66,4 +66,5 @@ Route::prefix('/save')->group(function () {
 
 Route::prefix('/products')->group(function () {
     Route::post('/', [ProductController::class, 'store']);
+    Route::get('/all', [ProductController::class, 'index']);
 });
