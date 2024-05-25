@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { Upload, Button, Form, Input, Checkbox, Modal } from "antd";
-import { PictureOutlined } from "@ant-design/icons";
+import { Upload, Button, Form, Input, Checkbox, Avatar, Image } from "antd";
+import { PlusOutlined, PictureOutlined } from "@ant-design/icons";
 import ProfilePic from "../../../assets/profile.jpg";
 import { addPost } from "@/storage/feedSlice";
 import { useDispatch } from "react-redux";
+import { getUserPosts } from "@/storage/profileSlice";
 
 const { Item } = Form;
+
+const getBase64 = (file) =>
+	new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = (error) => reject(error);
+	});
 
 function CreatePost() {
 	const [mediaFile, setMediaFile] = useState(null);
@@ -22,22 +31,20 @@ function CreatePost() {
 
 	const avatarSrc = logged.photo ? logged.photo : ProfilePic;
 
-
-	const profilePicStyle = {
-		width: "50px",
-		height: "50px",
-		borderRadius: "50%",
-		marginRight: "10px",
-	};
-
-	const handleMediaChange = ({ fileList }) => {
+	const handleMediaChange = async ({ fileList }) => {
 		const file = fileList.length > 0 ? fileList[0].originFileObj : null;
 		setMediaFile(file);
 		if (file) {
-			setPreviewImage(URL.createObjectURL(file));
+			const base64 = await getBase64(file);
+			setPreviewImage(base64);
 		} else {
 			setPreviewImage("");
 		}
+	};
+
+	const handleCheckboxChange = (e) => {
+		const newValue = e.target.checked ? "1" : "0";
+		setFormValues({ ...formValues, isForSale: newValue });
 	};
 
 	const handleSubmit = () => {
@@ -45,37 +52,55 @@ function CreatePost() {
 			? { ...formValues, media: mediaFile }
 			: formValues;
 		dispatch(addPost(payload));
+		setFormValues({
+			caption: "",
+			isForSale: "0",
+		});
+		dispatch(getUserPosts(logged.id))
 	};
 
 	const handleFormChange = (changedValues) => {
 		setFormValues((prevValues) => ({ ...prevValues, ...changedValues }));
 	};
 
+	const uploadButton = (
+		<button
+			style={{
+				border: 0,
+				background: "none",
+			}}
+			type="button">
+			<PlusOutlined />
+			<div style={{ marginTop: 8 }}>Upload</div>
+		</button>
+	);
+
 	return (
 		<Form
 			className="bg-white p-4 rounded-xl shadow-md"
 			onFinish={handleSubmit}
 			onValuesChange={handleFormChange}
-			initialValues={{ isForSale: "0" }}
+			initialValues={{caption: "",isForSale: "0" }}
 			style={{
 				margin: "auto",
 				borderRadius: "12px",
 				border: "1px solid #e5e5e5",
 			}}>
-			<div className="flex items-center mb-4">
-				<img style={profilePicStyle} src={avatarSrc} alt="Profile" />
+			<div className="flex items-center gap-2 mb-4">
+				<Avatar size={60} src={avatarSrc} alt="profile picture" />
 				<Item name="caption" className="flex-1 mb-0">
 					<Input
-						className="border-none outline-none h-14 text-lg rounded-lg bg-gray-100 px-4 py-2 text-gray-700"
+						value={formValues.caption}
+						className="border-none outline-none h-14 text-lg rounded-xl bg-gray-100 px-4 py-2 text-gray-700"
 						placeholder="What's happening?"
 					/>
 				</Item>
 			</div>
 
-			<div className="mb-4">
+			<div className="mb-2">
 				<Upload
 					accept="image/*,video/*"
-					beforeUpload={() => false}
+					listType="picture-card"
 					fileList={
 						mediaFile
 							? [
@@ -85,42 +110,29 @@ function CreatePost() {
 										status: "done",
 										url: previewImage,
 									},
-							  ]
+							]
 							: []
 					}
 					onChange={handleMediaChange}
-					onPreview={() => setPreviewOpen(true)}
-					listType="picture-card"
-					className="upload-list-inline"
-					style={{ display: "flex", justifyContent: "center" }}>
-					{!mediaFile && (
-						<Button
-							icon={<PictureOutlined />}
-							style={{
-								backgroundColor: "#0070F3",
-								color: "white",
-								borderRadius: "6px",
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								height: "100px",
-								width: "100px",
-							}}>
-							Add Media
-						</Button>
-					)}
+					beforeUpload={() => false}
+					onPreview={() => setPreviewOpen(true)}>
+					{mediaFile ? null : uploadButton}
 				</Upload>
+				{previewImage && (
+					<Image
+						wrapperStyle={{ display: "none" }}
+						preview={{
+							visible: previewOpen,
+							onVisibleChange: (visible) => setPreviewOpen(visible),
+							afterOpenChange: (visible) => !visible && setPreviewImage(""),
+						}}
+						src={previewImage}
+					/>
+				)}
 			</div>
 
-			<Modal
-				visible={previewOpen}
-				footer={null}
-				onCancel={() => setPreviewOpen(false)}>
-				<img alt="preview" style={{ width: "100%" }} src={previewImage} />
-			</Modal>
-
-			<Item name="isForSale" valuePropName="checked" className="mb-4">
-				<Checkbox>Is this for sale?</Checkbox>
+			<Item name="isForSale">
+				<Checkbox defaultChecked={formValues.isForSale==='1'} onChange={handleCheckboxChange}>Is this for sale?</Checkbox>
 			</Item>
 
 			<div className="flex justify-end">
@@ -128,8 +140,7 @@ function CreatePost() {
 					<Button
 						type="primary"
 						htmlType="submit"
-						className="bg-blue-600 text-white "
-						>
+						className="bg-blue-600 text-white">
 						Post
 					</Button>
 				</Item>

@@ -32,7 +32,6 @@ function Card() {
 	const [user, setUser] = useState({});
 	const logged = JSON.parse(localStorage.getItem("loggedUser"));
 
-	// State to manage follow/unfollow
 	const [isFollowing, setIsFollowing] = useState(false);
 
 	const handleClick = (e) => {
@@ -43,7 +42,7 @@ function Card() {
 	useEffect(() => {
 		dispatch(getFollowStats(id));
 		dispatch(setSelectedTab("1"));
-	}, [dispatch, id, user.id]);
+	}, [dispatch, id, user.id, isFollowing]);
 
 	useEffect(() => {
 		const getUser = async () => {
@@ -57,11 +56,15 @@ function Card() {
 			}
 		};
 		getUser();
-		followStats?.followers.map((follower) => {
-			if (follower.id == logged.id) {
-				setIsFollowing(true);
-			} 
-		})
+		setIsFollowing(false);
+		if (followStats) {
+			followStats?.followers?.map((follower) => {
+				if (follower.id === logged.id) {
+					setIsFollowing(true);
+					return
+				}
+			});
+		}
 	}, [id, logged.id]);
 
 	const handleClickDrop = (e) => {
