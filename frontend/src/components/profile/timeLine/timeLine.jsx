@@ -7,12 +7,13 @@ import { getUserPosts } from "@/storage/profileSlice";
 
 function TimeLine({user}) {
 	const dispatch = useDispatch();
-	const { userPosts, postsIsLoading } = useSelector((state) => state.profile);
+	const { userPosts, profilePostsIsLoading } = useSelector((state) => state.profile);
+	const { postsIsLoadin  }  =   useSelector(state=> state.posts)
 	const logged = JSON.parse(localStorage.getItem('loggedUser'))
 
 	useEffect(() => {
-        dispatch(getUserPosts(user.id));
-	}, [dispatch, user.id]);
+		dispatch(getUserPosts(user.id));
+	}, [dispatch, user.id, postsIsLoadin]);
 	
 	return (
 		<div className="profile-timeline">

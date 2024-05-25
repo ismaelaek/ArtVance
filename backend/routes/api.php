@@ -54,6 +54,7 @@ Route::prefix('/posts')->group( function (){
     Route::delete('/{postId}/unlike', [UserController::class, 'unlikePost']);
     Route::get('/{postId}/likes-count', [PostController::class, 'getLikesCount']);
     Route::get('/{postId}/has-liked/{userId}', [PostController::class, 'hasUserLikedPost']);
+    Route::delete('/{id}', [PostController::class, 'destroy']);
 });
 
 Route::prefix('/save')->group(function () {

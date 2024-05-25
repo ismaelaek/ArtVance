@@ -7,7 +7,7 @@ const API_URL = "http://127.0.0.1:8000/api/users";
 const initialState = {
 	profileTab: "1",
 	userPosts: [],
-	postsIsLoading: false,
+	profilepostsIsLoading: false,
 	postsError: null,
 };
 
@@ -34,16 +34,16 @@ const profileSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(getUserPosts.pending, (state) => {
-				state.postsIsLoading = true;
+				state.profilepostsIsLoading = true;
 				state.postsError = null;
 			})
 			.addCase(getUserPosts.fulfilled, (state, action) => {
-				state.postsIsLoading = false;
+				state.profilepostsIsLoading = false;
 				state.userPosts = action.payload;
 				state.postsError = null;
 			})
 			.addCase(getUserPosts.rejected, (state, action) => {
-				state.postsIsLoading = false;
+				state.profilepostsIsLoading = false;
 				state.postsError = action.payload;
 			});
 	},
