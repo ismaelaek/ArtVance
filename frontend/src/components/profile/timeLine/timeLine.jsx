@@ -3,24 +3,33 @@ import CreatePost from "./createPost";
 import Post from "./post";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserPosts } from "@/storage/profileSlice";
+import {
+	FaPhone,
+	FaMapMarkerAlt,
+	FaEnvelope,
+	FaMale,
+	FaFemale,
+	FaBirthdayCake,
+} from "react-icons/fa";
 
-
-function TimeLine({user}) {
+function TimeLine({ user }) {
 	const dispatch = useDispatch();
-	const { userPosts, profilePostsIsLoading } = useSelector((state) => state.profile);
-	const { postsIsLoadin  }  =   useSelector(state=> state.posts)
-	const logged = JSON.parse(localStorage.getItem('loggedUser'))
+	const { userPosts, profilePostsIsLoading } = useSelector(
+		(state) => state.profile
+	);
+	const { postsIsLoading } = useSelector((state) => state.posts);
+	const logged = JSON.parse(localStorage.getItem("loggedUser"));
 
 	useEffect(() => {
 		dispatch(getUserPosts(user.id));
-	}, [dispatch, user.id, postsIsLoadin]);
-	
+	}, [dispatch, user.id, postsIsLoading]);
+
 	return (
 		<div className="profile-timeline">
 			<div className="mt-12">
-				{logged.id == user.id && <CreatePost />}
+				{logged.id === user.id && <CreatePost />}
 				{userPosts.length < 1 && (
-					<div className=" w-full flex justify-center mt-4">
+					<div className="w-full flex justify-center mt-4">
 						<p>No posts yet</p>
 					</div>
 				)}
@@ -28,8 +37,7 @@ function TimeLine({user}) {
 					return <Post key={index} post={item} logged={logged} />;
 				})}
 			</div>
-			<div className=" w-full bg-white h-full p-3 mt-5 rounded-xl">
-				<h1>Hello</h1>
+			<div className="w-full  p-3 mt-5 rounded-xl">
 			</div>
 		</div>
 	);

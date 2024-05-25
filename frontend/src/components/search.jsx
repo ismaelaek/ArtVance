@@ -17,7 +17,7 @@ const useQuery = () => {
 const Search = () => {
 	const dispatch = useDispatch();
 	const { users, usersIsLoading } = useSelector((state) => state.users);
-	const { allPosts, postsIsLoading } = useSelector((state) => state.posts);
+	const { allPosts, postsIsLoadin } = useSelector((state) => state.posts);
 	const query = useQuery();
 	const searchTerm = query.get("q");
 	const [resultsUsers, setResultsUsers] = useState([]);
