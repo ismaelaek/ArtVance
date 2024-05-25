@@ -11,14 +11,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BiLogOut } from "react-icons/bi";
 
-
 const { Header, Content, Sider } = Layout;
 
 const Container = ({ children }) => {
 	const navigate = useNavigate();
 	const [loggedUser, setLoggedUser] = useState({});
-	const handleLogout = () => {
 
+	const handleLogout = () => {
 		const token = Cookies.get("userToken");
 
 		axios
@@ -34,32 +33,35 @@ const Container = ({ children }) => {
 			.then((response) => {
 				Cookies.remove("userToken");
 				Cookies.remove("loggedUser");
-				localStorage.removeItem("loggedUser")
+				localStorage.removeItem("loggedUser");
 				message.success(response.data.message);
 				navigate("/login");
 			})
 			.catch((error) => {
 				message.error("Error logging out");
 			});
-
 	};
+
 	useEffect(() => {
 		const userToken = Cookies.get("userToken");
 		if (!userToken) {
 			navigate("/login");
 		} else {
-
-			//! kayjib user li dar login mn local storage 
 			const logged = JSON.parse(localStorage.getItem("loggedUser"));
 			setLoggedUser(logged);
-
-			
 		}
 	}, [navigate]);
-	
+
 	const {
 		token: { colorBgContainer, borderRadiusLG },
 	} = theme.useToken();
+
+	const handleSearchChange = (event) => {
+		const value = event.target.value;
+		if (value.trim() !== "") {
+			navigate(`/search/?q=${encodeURIComponent(value)}`);
+		}
+	};
 
 	return (
 		<Layout>
@@ -75,18 +77,19 @@ const Container = ({ children }) => {
 					borderBottom: "#f5f5f5 solid 1px",
 				}}>
 				<Link className="no-underline" to="/">
-					<h3 className="pt-2 text-indigo-400  app-name">ArtVance </h3>
+					<h3 className="pt-2 text-indigo-400 app-name">ArtVance</h3>
 				</Link>
 				<Input
 					className="w-1/3"
 					placeholder="Search something..."
+					onChange={handleSearchChange}
 					suffix={
 						<SearchOutlined style={{ color: "rgba(0,0,0,.25)" }} />
 					}></Input>
-				<div className="flex p-2 gap-3  items-center h-full">
+				<div className="flex p-2 gap-3 items-center h-full">
 					<Link
 						to={`/profile/${loggedUser.id}`}
-						className=" no-underline text-black hover:underline">
+						className="no-underline text-black hover:underline">
 						<p className="pt-3 text-lg text-center line-height-full">
 							{loggedUser?.username}
 						</p>
@@ -103,7 +106,7 @@ const Container = ({ children }) => {
 					style={{
 						background: colorBgContainer,
 					}}>
-					<nav className="flex  font-semibold flex-col justify-center w-full px-4 pt-4 sider-nav">
+					<nav className="flex font-semibold flex-col justify-center w-full px-4 pt-4 sider-nav">
 						<NavLink to="/">
 							<FaHome /> Feed
 						</NavLink>
@@ -124,7 +127,7 @@ const Container = ({ children }) => {
 						</NavLink>
 					</nav>
 					<button
-						className=" absolute bottom-3 left-8 text-xl flex gap-3 items-center"
+						className="absolute bottom-3 left-8 text-xl flex gap-3 items-center"
 						onClick={handleLogout}>
 						<BiLogOut />
 						<span>log out</span>
@@ -137,7 +140,6 @@ const Container = ({ children }) => {
 							borderRadius: borderRadiusLG,
 							overflowX: "scroll",
 						}}>
-						{/* had childer hya Routes li kaykoun ldakhl dyalha ga3 routes, y3ni content atbdelt m3a route machi m3a state */}
 						{children}
 					</Content>
 				</Layout>

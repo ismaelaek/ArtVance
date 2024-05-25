@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+
+    public function index()
+    {
+        $allPosts = Post::all();
+        return response()->json($allPosts);
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
