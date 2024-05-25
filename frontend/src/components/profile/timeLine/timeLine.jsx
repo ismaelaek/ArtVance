@@ -19,7 +19,7 @@ function TimeLine({user}) {
 			<div className="mt-12">
 				{logged.id == user.id && <CreatePost />}
 				{userPosts.length < 1 && (
-					<div className=" w-full flex justify-center">
+					<div className=" w-full flex justify-center mt-4">
 						<p>No posts yet</p>
 					</div>
 				)}
