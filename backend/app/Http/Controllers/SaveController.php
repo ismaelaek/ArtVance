@@ -26,7 +26,7 @@ class SaveController extends Controller
 
     public function unsavePost($id)
     {
-        $save = Save::where('user_id', auth()->id())->where('post_id', $id)->first();
+        $save = Save::where('post_id', $id)->first();
 
         if ($save) {
             $save->delete();
@@ -49,8 +49,7 @@ class SaveController extends Controller
             return response()->json($savedPosts);
         }
 
-        // If the user is not found, return an error response
         return response()->json(['error' => 'User not found'], 404);
     }
- }
+}
 
