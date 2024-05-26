@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Avatar, Button, Form, Input, Dropdown, Menu, Carousel } from "antd";
 import ProfilePic from "../../../assets/profile.jpg";
-import Poste1 from "../../../assets/poste1.jpg";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
 	FaRegHeart,
 	FaRegComment,
@@ -11,7 +10,8 @@ import {
 	FaRegBookmark,
 	FaBookmark,
 } from "react-icons/fa";
-import { IoPaperPlaneOutline } from "react-icons/io5";
+import { BiRepost } from "react-icons/bi";
+
 import { useDispatch } from "react-redux";
 import { likePost, unlikePost } from "@/storage/feedSlice";
 import { debounce } from "lodash";
@@ -23,8 +23,7 @@ import {
 	MoreOutlined,
 } from "@ant-design/icons";
 import { deletePost } from "@/storage/postsSlice";
-import Cookies from "js-cookie";
-import { getUserPosts } from "@/storage/profileSlice";
+import { setPostData } from "@/storage/postDataSlice";
 
 const { TextArea } = Input;
 const { Item } = Form;
@@ -39,7 +38,7 @@ function Post({ post, logged, isBookMarked }) {
 	);
 
 	const dispatch = useDispatch();
-
+	const navigate = useNavigate();
 	const fetchUser = async (userId) => {
 		const cachedUserData = localStorage.getItem(`user_${userId}`);
 		if (cachedUserData) {
@@ -173,6 +172,11 @@ function Post({ post, logged, isBookMarked }) {
 			console.error("Error (un)saving post:", error);
 		}
 	};
+	const handleCommentClick = () => {
+		const postData = { post: post, media: postMedia, likes: postLikes, owner: user }
+		dispatch(setPostData(postData));
+		navigate(`/post/${post.id}`)
+	}
 
 	const profilePicStyle = {
 		width: "50px",
@@ -281,9 +285,10 @@ function Post({ post, logged, isBookMarked }) {
 					<Button
 						icon={<FaRegComment />}
 						style={{ border: "none", fontSize: "20px" }}
+						onClick={handleCommentClick}
 					/>
 					<Button
-						icon={<IoPaperPlaneOutline />}
+						icon={<BiRepost className="text-2xl" />}
 						style={{ border: "none", fontSize: "20px" }}
 					/>
 				</div>

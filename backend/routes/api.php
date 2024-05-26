@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\auth\PasswordController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
@@ -56,6 +57,8 @@ Route::prefix('/posts')->group( function (){
     Route::get('/{postId}/likes-count', [PostController::class, 'getLikesCount']);
     Route::get('/{postId}/has-liked/{userId}', [PostController::class, 'hasUserLikedPost']);
     Route::delete('/{id}', [PostController::class, 'destroy']);
+    Route::get('/{postId}/comments', [CommentController::class, 'getCommentsByPost']);
+    Route::post('/new-comment', [CommentController::class, 'store']);
 });
 
 Route::prefix('/save')->group(function () {

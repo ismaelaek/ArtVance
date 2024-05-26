@@ -15,7 +15,7 @@ import PrivacyPolicy from "./components/privacyPolicy";
 import SavePosts from "./components/savedPosts";
 import Search from "./components/search";
 import AddProdcut from "./components/market/addProdcut";
-
+import PostDetails from "./components/postDetails";
 function App() {
 	const location = useLocation();
 
@@ -38,6 +38,7 @@ function App() {
 						<Route path="/marketplace/addlisting" element={<AddProdcut />} />
 						<Route path="/marketplace/art/:id" element={<ProductDetails />} />
 						<Route path="/saved" element={<SavePosts />} />
+						<Route path="/post/:id" element={<PostDetails />} />
 						<Route path="/search" element={<Search />} />
 						<Route path="*" element={<h1>Page Not Found</h1>} />
 					</Routes>
