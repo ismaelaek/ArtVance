@@ -6,6 +6,7 @@ import followSlice from "./followSlice";
 import feedSlice from "./feedSlice";
 import postsSlice from "./postsSlice";
 import productsSlice from "./productsSlice";
+import postDataSlice from "./postDataSlice";
 
 const store = configureStore({
 	reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
 		feed: feedSlice,
 		posts: postsSlice,
 		products: productsSlice,
+		postData: postDataSlice,
 	},
 });
 
