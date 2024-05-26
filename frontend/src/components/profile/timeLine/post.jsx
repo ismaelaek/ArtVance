@@ -173,10 +173,17 @@ function Post({ post, logged, isBookMarked }) {
 		}
 	};
 	const handleCommentClick = () => {
-		const postData = { post: post, media: postMedia, likes: postLikes, owner: user }
+		const postData = {
+			post: post,
+			media: postMedia,
+			likes: postLikes,
+			owner: user,
+			userLiked: liked,
+			saved: bookmarked,
+		};
 		dispatch(setPostData(postData));
-		navigate(`/post/${post.id}`)
-	}
+		navigate(`/post/${post.id}`);
+	};
 
 	const profilePicStyle = {
 		width: "50px",
