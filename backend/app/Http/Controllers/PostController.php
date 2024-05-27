@@ -84,6 +84,8 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        $post->comments()->delete();
+
         if ($post->media()->exists()) {
             $post->media()->delete();
         }
@@ -91,8 +93,9 @@ class PostController extends Controller
         $post->delete();
 
         return response()->json([
-            'message' => 'Post and related media deleted successfully!'
+            'message' => 'Post, comments, and related media deleted successfully!'
         ], 200);
     }
+
 
 }

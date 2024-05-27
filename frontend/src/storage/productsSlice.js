@@ -33,6 +33,7 @@ export const addProduct = createAsyncThunk(
 					},
 				}
             );
+            console.log(response.data);
             return response.data;
 		} catch (error) {
 			return rejectWithValue(error.response?.data || "Error adding product");
@@ -62,7 +63,7 @@ const productSlice = createSlice({
             })
             .addCase(addProduct.fulfilled, (state, action) => {
                 state.prodisLoading = false;
-                state.products.append(action.payload);
+                // state.products.append(action.payload);
             })
             .addCase(addProduct.rejected, (state, action) => {
                 state.prodisLoading = false;

@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-	Form,
-	Input,
-	Upload,
-	Button,
-	message,
-	Avatar,
-	InputNumber,
-} from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { Form, Input, Button, message, Avatar, InputNumber, Modal } from "antd";
 import placeHolder from "../../assets/photoplaceholder.png";
 import { useDispatch } from "react-redux";
 import { addProduct } from "@/storage/productsSlice";
@@ -22,41 +13,63 @@ export default function AddProduct() {
 		name: "",
 		price: "",
 		description: "",
-		imageList: [],
-		user_id : logged.id
+		image: null,
+		user_id: logged.id,
 	});
+	const [previewVisible, setPreviewVisible] = useState(false);
+	const [previewImage, setPreviewImage] = useState("");
+	const [previewTitle, setPreviewTitle] = useState("");
 	const dispatch = useDispatch();
-	const Navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const onFinish = () => {
-		dispatch(addProduct(formData))
+		if (!formData.image) {
+			message.error("Please upload an image!");
+			return;
+		}
+
+		const productData = new FormData();
+		productData.append("name", formData.name);
+		productData.append("price", formData.price);
+		productData.append("description", formData.description);
+		productData.append("user_id", formData.user_id);
+		productData.append("image", formData.image);
+
+		dispatch(addProduct(productData))
 			.then(() => {
 				message.success("Product added successfully!");
-				console.log(formData);
+				// navigate("/path-to-redirect");
 			})
 			.catch((error) => {
 				message.error("Failed to add product: " + error.message);
 			});
 	};
 
-
 	const onFinishFailed = (errorInfo) => {
 		console.log("Failed:", errorInfo);
 	};
 
 	const handleFormChange = (changedValues, allValues) => {
-		setFormData({ ...formData, ...allValues });
+		setFormData((prevState) => ({
+			...prevState,
+			...allValues,
+		}));
 	};
 
-	const handleImageUpload = (info) => {
-		const { status } = info.file;
-		if (status === "done") {
-			message.success(`${info.file.name} file uploaded successfully.`);
-			setFormData({ ...formData, imageList: [info.file.originFileObj] });
-		} else if (status === "error") {
-			message.error(`${info.file.name} file upload failed.`);
+	const handleImageChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			setFormData((prevState) => ({ ...prevState, image: file }));
+			setPreviewImage(URL.createObjectURL(file));
+			setPreviewTitle(file.name);
 		}
 	};
+
+	const handlePreview = () => {
+		setPreviewVisible(true);
+	};
+
+	const handleCancel = () => setPreviewVisible(false);
 
 	return (
 		<main
@@ -69,7 +82,7 @@ export default function AddProduct() {
 					onFinish={onFinish}
 					onFinishFailed={onFinishFailed}
 					layout="vertical"
-					onValuesChange={handleFormChange}>
+					onValuesChange={(_, allValues) => handleFormChange(null, allValues)}>
 					<Form.Item
 						label="Name"
 						name="name"
@@ -105,13 +118,17 @@ export default function AddProduct() {
 						label="Upload"
 						name="image"
 						rules={[{ required: true, message: "Please upload an image!" }]}>
-						<Upload
-							beforeUpload={() => false}
-							listType="picture"
-							onChange={handleImageUpload}
-							fileList={formData.imageList}>
-							<Button icon={<InboxOutlined />}>Add image</Button>
-						</Upload>
+						<input
+							type="file"
+							accept="image/*"
+							onChange={handleImageChange}
+							className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-violet-50 file:text-violet-700
+                hover:file:bg-violet-100"
+						/>
 					</Form.Item>
 
 					<Form.Item>
@@ -124,33 +141,37 @@ export default function AddProduct() {
 			<div>
 				<h3>Preview</h3>
 				<div
-					className="grid gap-3 opacity-40"
+					className="grid gap-3"
 					style={{ gridTemplateColumns: "1fr 0.5fr" }}>
 					<div className="rounded-xl overflow-hidden w-full ratio-1x1">
-						{formData.imageList.length > 0 ? (
+						{formData.image ? (
 							<img
-								src={URL.createObjectURL(formData.imageList[0])}
-								alt=""
-								className="w-full"
+								src={previewImage}
+								alt="Product"
+								className="w-full h-auto rounded"
+								onClick={handlePreview}
+								style={{ cursor: "pointer" }}
 							/>
 						) : (
-							<img src={placeHolder} alt="" className="w-full" />
+							<img
+								src={placeHolder}
+								alt="Placeholder"
+								className="w-full h-auto rounded"
+							/>
 						)}
 					</div>
 					<div>
-						<h3>{formData.name ? formData.name : "Name"}</h3>
+						<h3>{formData.name || "Name"}</h3>
 						<p className="text-xl m-0 font-bold">
-							{formData.price ? formData.price : "00.00"} MAD
+							{formData.price ? `${formData.price} MAD` : "00.00 MAD"}
 						</p>
 						<p className="text-gray-500">
-							Listed 5 days ago in <b>Tinghir </b>
+							Listed 5 days ago in <b>Tinghir</b>
 						</p>
 						<hr />
 						<p className="text-3xl m-0"> Details</p>
 						<p className="m-0 max-h-44 overflow-hidden text-justify">
-							{formData.description
-								? formData.description
-								: "Description goes here"}
+							{formData.description || "Description goes here"}
 						</p>
 						<hr />
 						<p className="text-3xl m-0"> Seller information</p>

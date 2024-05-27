@@ -20,8 +20,8 @@ const Product = ({ product }) => {
 				/>
 			</div>
 			<div className=" p-2 overflow-hidden">
-				<p className="text-2xl m-0">{product.name} Mad</p>
-				<p className=" text-xl font-bold m-0"> {product.price}</p>
+				<p className="text-2xl m-0">{product.name} </p>
+				<p className=" text-xl font-bold m-0"> {product.price} Mad</p>
 				<p className="text-nowrap m-0">{product.description}</p>
 				<p className="text-gray-500">Tinghir</p>
 			</div>
