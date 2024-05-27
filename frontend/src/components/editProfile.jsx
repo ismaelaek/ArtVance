@@ -96,7 +96,7 @@ function EditProfile() {
 						username: logged.username,
 						email: logged.email,
 						phone: logged.phone,
-						birthday: moment(logged.birthday),
+						birthday: logged.birthday ? moment(logged.birthday) : "",
 						gender: logged.gender,
 						address: logged.address,
 						bio: logged.bio,

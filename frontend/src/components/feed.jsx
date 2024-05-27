@@ -50,7 +50,7 @@ const Feed = () => {
 			</div>
 			<div className="bg-white p-3 rounded-2xl h-fit mt-3">
 				<div>
-					<p className=" text-lg border-b-2 border-gray-100">You might like</p>
+					<p className=" text-lg border-b-2 border-gray-100">You might know</p>
 				</div>
 				<div>
 					{usersIsLoading ? (

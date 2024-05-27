@@ -6,6 +6,7 @@ use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -22,7 +23,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         // TODO the request returns empty array
-        
+
         // Validate request data
         // $validator = Validator::make($request->all(), [
         //     'username' => 'required',
@@ -35,16 +36,6 @@ class UserController extends Controller
         // }
 
         $user = User::findOrFail($id);
-
-        if ($request->hasFile('photo')) {
-            if ($user->photo) {
-                unlink(storage_path('app/public/media' . $user->photo));
-            }
-
-            // Store the new photo
-            $photoPath = $request->file('photo')->store('public/media');
-            $user->photo = basename($photoPath);
-        }
 
         $user->username = $request->input('username');
         $user->nickname = $request->input('nickname');
@@ -71,7 +62,7 @@ class UserController extends Controller
         $user = User::findOrFail($userId);
 
         $unfollowedUsers = User::whereNotIn('id', $user->following()->pluck('followed_id'))
-            ->where('id', '<>', $userId) 
+            ->where('id', '<>', $userId)
             ->get();
 
         return response()->json(['unfollowed_users' => $unfollowedUsers]);
@@ -88,20 +79,20 @@ class UserController extends Controller
 
     public function getUserPosts($userId)
     {
-    $user = User::findOrFail($userId);
+        $user = User::findOrFail($userId);
 
-    $posts = $user->posts()->orderBy('created_at', 'desc')->get();
+        $posts = $user->posts()->orderBy('created_at', 'desc')->get();
 
-    // Get the IDs of posts saved by the user
-    $savedPostIds = $user->saves()->pluck('post_id')->toArray();
+        // Get the IDs of posts saved by the user
+        $savedPostIds = $user->saves()->pluck('post_id')->toArray();
 
-    // Add isSaved field to each post
-    $posts = $posts->map(function ($post) use ($savedPostIds) {
-        $post->isSaved = in_array($post->id, $savedPostIds);
-        return $post;
-    });
+        // Add isSaved field to each post
+        $posts = $posts->map(function ($post) use ($savedPostIds) {
+            $post->isSaved = in_array($post->id, $savedPostIds);
+            return $post;
+        });
 
-    return response()->json($posts);
+        return response()->json($posts);
     }
 
     public function getFollowersAndFollowing($userId)
@@ -128,7 +119,7 @@ class UserController extends Controller
 
     public function likePost(Request $request, $postId)
     {
-        $user =User::findOrFail($request->user_id);
+        $user = User::findOrFail($request->user_id);
         $post = Post::findOrFail($postId);
 
         if (!$user->likes()->where('post_id', $postId)->exists()) {
@@ -164,5 +155,24 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function updateProfilePic(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($request->hasFile('photo')) {
+            if ($user->photo) {
+                Storage::delete($user->photo);
+            }
+
+            $file = $request->file('photo');
+            $path = $file->store('profile', 'public');
+            $url = url('storage/' . $path);
+            $user->photo = $url;
+            $user->save();
+        }
+
+        return response()->json(['user' =>  $user, 'message' => 'Profile picture updated successfully']);
     }
 }

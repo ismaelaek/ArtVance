@@ -31,6 +31,7 @@ function Card() {
 	const { followStats } = useSelector((state) => state.users);
 	const [user, setUser] = useState({});
 	const logged = JSON.parse(localStorage.getItem("loggedUser"));
+	const [loading, setLoading] = useState(false);
 
 	const [isFollowing, setIsFollowing] = useState(false);
 
@@ -61,11 +62,11 @@ function Card() {
 			followStats?.followers?.map((follower) => {
 				if (follower.id === logged.id) {
 					setIsFollowing(true);
-					return
+					return;
 				}
 			});
 		}
-	}, [id, logged.id]);
+	}, [id, logged.id, loading]);
 
 	const handleClickDrop = (e) => {
 		switch (e.key) {
@@ -91,25 +92,75 @@ function Card() {
 		</Menu>
 	);
 
-	const handleFollow =  () => {
+	const handleFollow = () => {
 		try {
-			dispatch(
-				followUser({ followerId: logged.id, followedId: user.id })
-			);
+			dispatch(followUser({ followerId: logged.id, followedId: user.id }));
 			setIsFollowing(true);
 		} catch (error) {
 			message.error(error.message);
 		}
 	};
 
-	const handleUnfollow =  () => {
+	const handleUnfollow = () => {
 		try {
-			dispatch(
-				unfollowUser({ followerId: logged.id, followedId: user.id })
-			);
+			dispatch(unfollowUser({ followerId: logged.id, followedId: user.id }));
 			setIsFollowing(false);
 		} catch (error) {
 			message.error(error.message);
+		}
+	};
+
+	
+
+	const handleUploadChange = (info) => {
+		if (info.file.status === "uploading") {
+			setLoading(true);
+			return;
+		}
+		if (info.file.status === "done") {
+			setLoading(false);
+			message.success(`${info.file.name} file uploaded successfully`);
+		} else if (info.file.status === "error") {
+			setLoading(false);
+			message.error(`${info.file.name} file upload failed.`);
+		}
+	};
+
+	const beforeUpload = (file) => {
+		const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+		if (!isJpgOrPng) {
+			message.error("You can only upload JPG/PNG file!");
+		}
+		const isLt2M = file.size / 1024 / 1024 < 2;
+		if (!isLt2M) {
+			message.error("Image must be smaller than 2MB!");
+		}
+		return isJpgOrPng && isLt2M;
+	};
+
+	const handleUpdateProfilePic = async ({ file }) => {
+		const formData = new FormData();
+		formData.append("photo", file);
+
+		try {
+			setLoading(true);
+			const respons = await axios.post(
+				`http://127.0.0.1:8000/api/users/${logged.id}/update-profile-pic`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
+			message.success("Profile picture updated successfully");
+			localStorage.setItem("loggedUser", JSON.stringify(respons.data.user));
+			navigate(`/profile/${logged.id}`);
+		} catch (error) {
+			console.error("Error updating profile picture:", error);
+			message.error("Failed to update profile picture");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -177,10 +228,16 @@ function Card() {
 							alt=""
 						/>
 						{logged.id === user.id && (
-							<ImgCrop>
-								<Upload accept="image/*" showUploadList={false}>
+							<ImgCrop aspect={1} showGrid>
+								<Upload
+									accept="image/*"
+									showUploadList={false}
+									beforeUpload={beforeUpload}
+									onChange={handleUploadChange}
+									customRequest={handleUpdateProfilePic}>
 									<div className="camera-icon">
 										<FontAwesomeIcon icon={faCamera} />
+										{loading && <span>Uploading...</span>}
 									</div>
 								</Upload>
 							</ImgCrop>
