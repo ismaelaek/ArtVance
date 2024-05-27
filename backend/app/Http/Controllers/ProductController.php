@@ -35,7 +35,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->price = $request->price;
         $product->user_id = $request->user_id;
-        $product->image = $url ?? null;
+        $product->image = $url;
         $product->save();
 
         return response()->json($product, 201);

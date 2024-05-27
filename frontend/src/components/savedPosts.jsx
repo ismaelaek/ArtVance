@@ -56,6 +56,13 @@ function SavePosts() {
   // if (error) {
   //   return <div>Error: {error.message}</div>;
   // }
+  if (savedPosts.length === 0) {
+    return <main className=" flex justify-center">
+      <div>
+        <p>You don't have any saved post yet</p>
+      </div>
+    </main>
+  }
 
   return (
     <main className=" flex justify-center "

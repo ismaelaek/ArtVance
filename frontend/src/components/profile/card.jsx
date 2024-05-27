@@ -13,7 +13,7 @@ import About from "./about";
 import { LiaUserEditSolid } from "react-icons/lia";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { HiDotsVertical } from "react-icons/hi";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFollowStats } from "@/storage/usersSlice";
@@ -196,15 +196,39 @@ function Card() {
 					}}>
 					<p className="text-wrap text-justify">{user.bio}</p>
 					<p>
-						{user.address && (
+						{user.address ? (
 							<span className="flex gap-2 items-center">
 								<FaLocationDot /> <b>{user.address}</b> <br />
 							</span>
+						) : (
+							logged.id == user.id && (
+								<span className="flex gap-2 items-center">
+									<FaLocationDot />{" "}
+									<Link
+										className=" no-underline text-gray-700"
+										to={`/profile/${logged.id}/edit`}>
+										Add address
+									</Link>{" "}
+									<br />
+								</span>
+							)
 						)}
-						{user.birthday && (
+						{user.birthday ? (
 							<span className="flex gap-2 items-center">
-								<FaBirthdayCake /> <b>{user.birthday}</b>
+								<FaBirthdayCake /> <b>{user.birthday}</b> <br />
 							</span>
+						) : (
+							logged.id == user.id && (
+								<span className="flex gap-2 items-center">
+									<FaBirthdayCake />{" "}
+									<Link
+										className=" no-underline text-gray-700"
+										to={`/profile/${logged.id}/edit`}>
+										Add birthday
+									</Link>{" "}
+									<br />
+								</span>
+							)
 						)}
 					</p>
 				</div>

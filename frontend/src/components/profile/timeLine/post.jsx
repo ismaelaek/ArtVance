@@ -238,7 +238,9 @@ function Post({ post, logged, isBookMarked }) {
 					</div>
 				</div>
 				{logged.id === post.user_id && (
-					<Dropdown menu={menu} trigger={["click"]}>
+					// fix this, whenever i click it shows this error React.Children.only expected to receive a single React element child.
+					// at Object.onlyChild [as only]
+					<Dropdown overlay={menu} trigger={["click"]}>
 						<Button
 							icon={<MoreOutlined />}
 							style={{ border: "none", fontSize: "20px" }}
