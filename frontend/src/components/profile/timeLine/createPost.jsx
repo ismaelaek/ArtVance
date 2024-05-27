@@ -131,9 +131,9 @@ function CreatePost() {
 				)}
 			</div>
 
-			<Item name="isForSale">
+			{/* <Item name="isForSale">
 				<Checkbox defaultChecked={formValues.isForSale==='1'} onChange={handleCheckboxChange}>Is this for sale?</Checkbox>
-			</Item>
+			</Item> */}
 
 			<div className="flex justify-end">
 				<Item>
