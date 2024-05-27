@@ -238,7 +238,7 @@ function Post({ post, logged, isBookMarked }) {
 					</div>
 				</div>
 				{logged.id === post.user_id && (
-					<Dropdown overlay={menu} trigger={["click"]}>
+					<Dropdown menu={menu} trigger={["click"]}>
 						<Button
 							icon={<MoreOutlined />}
 							style={{ border: "none", fontSize: "20px" }}
@@ -251,26 +251,16 @@ function Post({ post, logged, isBookMarked }) {
 				<div className="w-full flex justify-center items-center overflow-hidden">
 					<div className="w-full max-w-2xl">
 						{postMedia.length > 0 && (
-							<Carousel
-								arrows
-								style={{
-									height: "600px",
-								}}
-								className="w-full max-w-2xl overflow-hidden">
-								{postMedia.map((media, index) => (
-									<div key={index} className="flex justify-center items-center">
-										<img
-											src={media.url}
-											alt={`Post ${index + 1}`}
-											className="h-full object-center"
-											style={{
-												width: "100%",
-												aspectRatio: "1/1",
-											}}
-										/>
-									</div>
-								))}
-							</Carousel>
+							<div className="flex justify-center items-center">
+								<img
+									src={postMedia[0].url}
+									alt={`Post media`}
+									className="h-full object-center"
+									style={{
+										width: "100%",
+									}}
+								/>
+							</div>
 						)}
 					</div>
 				</div>

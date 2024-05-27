@@ -22,7 +22,6 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         // TODO the request returns empty array
-        return response()->json($request);
         
         // Validate request data
         // $validator = Validator::make($request->all(), [
@@ -58,7 +57,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['message' => 'User updated successfully'], 200);
+        return response()->json(['user' => $user, 'message' => 'Profile updated successfully'], 200);
     }
 
     public function user($id)

@@ -198,12 +198,14 @@ export default function PostDetails() {
 				className="rounded-xl bg-white h-full p-3 grid gap-6 overflow-auto"
 				style={{ gridTemplateColumns: "1fr 0.5fr" }}>
 				<div className="h-fit overflow-hidden rounded-xl py-2">
-					<img
-						src={imgSrc}
-						alt=""
-						className="w-full "
-						style={{ maxHeight: 560, aspectRatio: "auto" }}
-					/>
+					<div className="flex justify-center">
+						<img
+							src={imgSrc}
+							alt=""
+							className="h-full"
+							style={{ height: 560, aspectRatio: "auto" }}
+						/>
+					</div>
 					<hr />
 					<div className="flex gap-4 items-center text-lg">
 						<span className=" flex gap-2 items-center ">

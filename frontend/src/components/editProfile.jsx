@@ -22,71 +22,67 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers, getUser } from "@/storage/usersSlice";
 import moment from "moment";
-import ImgCrop from "antd-img-crop";
-
+import axios from "axios";
+import { formatDate } from "@/lib/utils";
 const { TextArea } = Input;
 const { Option } = Select;
 
 function EditProfile() {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { id } = useParams();
-    const { targetUser, users } = useSelector((state) => state.users);
+	const { users } = useSelector((state) => state.users);
+	const logged = JSON.parse(localStorage.getItem("loggedUser"));
 
-	const [profilePic, setProfilePic] = useState(ProfilePic);
+	const [profilePic, setProfilePic] = useState(
+		logged.photo ? logged.photo : ProfilePic
+	);
 
 	useEffect(() => {
 		dispatch(getUsers());
-		dispatch(getUser(id));
 	}, [dispatch, id]);
 
-	useEffect(() => {
-		if (targetUser?.photo) {
-			setProfilePic(targetUser.photo);
-		}
-    }, [targetUser]);
-    
 	const usedUsernames = users
-		.filter((user) => user.username !== targetUser?.username)
+		.filter((user) => user.username !== logged.username)
 		.map((user) => user.username);
 	const usedEmails = users
-		.filter((user) => user.email !== targetUser?.email)
+		.filter((user) => user.email !== logged.email)
 		.map((user) => user.email);
 
 	const onFinish = async (values) => {
 		try {
 			const formData = new FormData();
+			console.log(logged.birthday, "before");
+			const formattedDate = formatDate(values.birthday);
+			console.log(formattedDate);
 			formData.append("username", values.username);
 			formData.append("nickname", values.nickname);
 			formData.append("email", values.email);
 			formData.append("phone", values.phone);
-			formData.append("birthday", values.birthday);
+			formData.append("birthday", formattedDate);
 			formData.append("gender", values.gender);
 			formData.append("address", values.address);
 			formData.append("bio", values.bio);
-			formData.append("photo", values.profilePic.file); // Assuming values.profilePic.file contains the uploaded file
 
-			const response = await axios.post(
-				`http://127.0.0.1:8000/api/users/${targetUser.id}/updateProfile`,
+			const response = await axios.put(
+				`http://127.0.0.1:8000/api/users/${id}/updateProfile`,
 				formData,
 				{
 					headers: {
-						"Content-Type": "multipart/form-data",
+						"Content-Type": "application/json",
 					},
 				}
 			);
+
 			message.success("Profile updated successfully");
+
+			const updatedUser = { ...logged, ...response.data.user };
+			localStorage.setItem("loggedUser", JSON.stringify(updatedUser));
+			navigate(`/profile/${id}`);
 		} catch (error) {
+			console.log(error.message);
 			message.error("Profile update failed. Please try again.");
 		}
-	};
-
-
-	const handleUpload = ({ file }) => {
-		const reader = new FileReader();
-		reader.onload = () => {
-			setProfilePic(reader.result);
-		};
-		reader.readAsDataURL(file);
 	};
 
 	return (
@@ -96,14 +92,14 @@ function EditProfile() {
 					layout="vertical"
 					onFinish={onFinish}
 					initialValues={{
-						nickname: targetUser.nickname,
-						username: targetUser.username,
-						email: targetUser.email,
-						phone: targetUser.phone,
-						birthday: targetUser.birthday ? moment(targetUser.birthday) : null,
-						gender: targetUser.gender,
-						address: targetUser.address,
-						bio: targetUser.bio,
+						nickname: logged.nickname,
+						username: logged.username,
+						email: logged.email,
+						phone: logged.phone,
+						birthday: moment(logged.birthday),
+						gender: logged.gender,
+						address: logged.address,
+						bio: logged.bio,
 					}}>
 					<Row gutter={[16, 16]}>
 						<Col span={5}>
@@ -113,28 +109,10 @@ function EditProfile() {
 										className="w-full h-full rounded-full object-cover"
 										src={profilePic}
 										alt="Profile"
+										style={{
+											boxShadow: "5px 5px 10px rgba(0,0,0,0.5)",
+										}}
 									/>
-									<ImgCrop>
-										<Upload
-											className="absolute bottom-0 right-0"
-											showUploadList={false}
-											accept=".png,.jpg,.jpeg"
-											beforeUpload={(file) => {
-												handleUpload({ file });
-												return false; // Prevents upload
-											}}>
-											<Button
-												className="bg-white text-gray-500 p-1 rounded-full shadow hover:bg-gray-200"
-												icon={<EditOutlined />}
-												style={{
-													position: "absolute",
-													bottom: "-2px",
-													right: "-2px",
-													zIndex: 1,
-												}}
-											/>
-										</Upload>
-									</ImgCrop>
 								</div>
 							</Form.Item>
 						</Col>
@@ -255,6 +233,7 @@ function EditProfile() {
 										<DatePicker
 											className="w-full"
 											placeholder="Select your birthday"
+											format="YYYY-MM-DD"
 										/>
 									</Form.Item>
 								</Col>
