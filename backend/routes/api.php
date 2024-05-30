@@ -43,6 +43,7 @@ Route::prefix('/users')->group(function () {
     Route::get('/{id}/posts', [UserController::class, 'getUserPosts']);
     Route::put('/{id}/updateProfile', [UserController::class, 'update']);
     Route::post('/{id}/update-profile-pic', [UserController::class, 'updateProfilePic']);
+    Route::post('/{id}/update-cover-pic', [UserController::class, 'updateCoverPic']);
 
 });
 

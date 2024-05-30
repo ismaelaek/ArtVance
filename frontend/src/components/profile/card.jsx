@@ -110,8 +110,6 @@ function Card() {
 		}
 	};
 
-	
-
 	const handleUploadChange = (info) => {
 		if (info.file.status === "uploading") {
 			setLoading(true);
@@ -138,27 +136,33 @@ function Card() {
 		return isJpgOrPng && isLt2M;
 	};
 
-	const handleUpdateProfilePic = async ({ file }) => {
+	const handleUpdatePicture = async ({ file }, type) => {
 		const formData = new FormData();
 		formData.append("photo", file);
 
+		const endpoint =
+			type === "profile"
+				? `http://127.0.0.1:8000/api/users/${logged.id}/update-profile-pic`
+				: `http://127.0.0.1:8000/api/users/${logged.id}/update-cover-pic`;
+
 		try {
 			setLoading(true);
-			const respons = await axios.post(
-				`http://127.0.0.1:8000/api/users/${logged.id}/update-profile-pic`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-					},
-				}
+			console.log(`Uploading ${type} picture to: ${endpoint}`);
+			const response = await axios.post(endpoint, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+			message.success(
+				`${
+					type.charAt(0).toUpperCase() + type.slice(1)
+				} picture updated successfully`
 			);
-			message.success("Profile picture updated successfully");
-			localStorage.setItem("loggedUser", JSON.stringify(respons.data.user));
+			localStorage.setItem("loggedUser", JSON.stringify(response.data.user));
 			navigate(`/profile/${logged.id}`);
 		} catch (error) {
-			console.error("Error updating profile picture:", error);
-			message.error("Failed to update profile picture");
+			console.error(`Failed to update ${type} picture:`, error);
+			message.error(`Failed to update ${type} picture`);
 		} finally {
 			setLoading(false);
 		}
@@ -176,18 +180,25 @@ function Card() {
 						alt=""
 					/>
 					{logged.id === user.id && (
-						<Upload accept="image/*" showUploadList={false}>
-							<button
-								className="edit-cover"
-								onMouseEnter={(e) => {
-									e.target.style.transform = "scale(1.1)";
-								}}
-								onMouseLeave={(e) => {
-									e.target.style.transform = "scale(1)";
-								}}>
-								<FontAwesomeIcon icon={faCamera} /> Edit cover
-							</button>
-						</Upload>
+						<ImgCrop showGrid aspect={3}>
+							<Upload
+								accept="image/*"
+								showUploadList={false}
+								beforeUpload={beforeUpload}
+								onChange={handleUploadChange}
+								customRequest={(info) => handleUpdatePicture(info, "cover")}>
+								<button
+									className="edit-cover"
+									onMouseEnter={(e) => {
+										e.target.style.transform = "scale(1.1)";
+									}}
+									onMouseLeave={(e) => {
+										e.target.style.transform = "scale(1)";
+									}}>
+									<FontAwesomeIcon icon={faCamera} /> Edit cover
+								</button>
+							</Upload>
+						</ImgCrop>
 					)}
 				</div>
 				<div
@@ -234,7 +245,9 @@ function Card() {
 									showUploadList={false}
 									beforeUpload={beforeUpload}
 									onChange={handleUploadChange}
-									customRequest={handleUpdateProfilePic}>
+									customRequest={(info) =>
+										handleUpdatePicture(info, "profile")
+									}>
 									<div className="camera-icon">
 										<FontAwesomeIcon icon={faCamera} />
 										{loading && <span>Uploading...</span>}
