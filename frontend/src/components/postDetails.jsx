@@ -12,6 +12,9 @@ import { BiRepost } from "react-icons/bi";
 import axios from "axios";
 import { likePost, unlikePost } from "@/storage/feedSlice";
 import { savePost, unsavePost } from "./postService";
+import { TbSend } from "react-icons/tb";
+import { formatDate } from "@/lib/utils";
+
 
 
 export default function PostDetails() {
@@ -130,11 +133,11 @@ export default function PostDetails() {
 								to={`/profile/${owner?.id}`}>
 								{owner?.nickname}
 							</Link>
-							<p className="text-sm m-0 text-gray-500">{post?.created_at}</p>
+							<p className="text-sm m-0 text-gray-500">{formatDate(post?.created_at)}</p>
 						</div>
 					</div>
 					<div className="mt-3 min-h-96">
-						<p>{post?.caption}</p>
+						<p className=" text-xl ml-2">{post?.caption}</p>
 					</div>
 					<hr />
 					<div className="flex gap-4 items-center text-lg">
@@ -175,7 +178,9 @@ export default function PostDetails() {
 								setNewComment({ ...newComment, content: e.target.value });
 							}}
 						/>
-						<button className=" btn btn-primary">Post</button>
+						<button className=" btn btn-primary">
+							<TbSend/>
+						</button>
 					</form>
 				</div>
 				<div className=" comments pl-3 overflow-auto ">
@@ -232,15 +237,18 @@ export default function PostDetails() {
 							type="text"
 							name="content"
 							value={newComment.content}
+							maxLength={255}
 							onChange={(e) => {
 								setNewComment({ ...newComment, content: e.target.value });
 							}}
 						/>
-						<button className=" btn btn-primary">Post</button>
+						<button className=" btn btn-primary">
+							<TbSend/>
+						</button>
 					</form>
 				</div>
 				<div>
-					<div className=" flex gap-2 items-center m-0">
+					<div className=" flex gap-2 items-center m-0 ">
 						<Avatar src={owner?.photo} size={50} />
 						<div>
 							<Link
@@ -248,11 +256,11 @@ export default function PostDetails() {
 								to={`/profile/${owner?.id}`}>
 								{owner?.nickname}
 							</Link>
-							<p className="text-sm  text-gray-500">{post?.created_at}</p>
+							<p className="text-sm  text-gray-500">{formatDate(post?.created_at)}</p>
 						</div>
 					</div>
-					<div>
-						<p>{post?.caption}</p>
+					<div >
+						<p className=" text-xl ml-2 text-justify">{post?.caption}</p>
 					</div>
 					<hr className="" />
 					<div
@@ -278,7 +286,7 @@ const CommentItem = ({ comment }) => {
 	return (
 		<div className=" flex gap-3 m-0">
 			<Avatar src={comment.user.photo} size={40} className="m-0" />
-			<div>
+			<div className="max-w-96">
 				<p>
 					<Link
 						className="text-black text-lg m-0 no-underline font-semibold"
@@ -286,7 +294,7 @@ const CommentItem = ({ comment }) => {
 						{comment.user.nickname}
 					</Link>
 				</p>
-				<p className="-mt-3">{comment.content}</p>
+				<p className="-mt-3 text-justify">{comment.content}</p>
 			</div>
 		</div>
 	);

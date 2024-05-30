@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Upload, Button, Form, Input, Checkbox, Avatar, Image } from "antd";
-import { PlusOutlined, PictureOutlined } from "@ant-design/icons";
+import { Upload, Button, Form, Input, Avatar, Image } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import ProfilePic from "../../../assets/profile.jpg";
 import { addPost } from "@/storage/feedSlice";
 import { useDispatch } from "react-redux";
 import { getUserPosts } from "@/storage/profileSlice";
+import { useLocation } from "react-router-dom";
 
 const { Item } = Form;
 
@@ -27,7 +28,10 @@ function CreatePost() {
 		isForSale: "0",
 	});
 
+	const [form] = Form.useForm();
 	const dispatch = useDispatch();
+	const location = useLocation();
+	const [, setKey] = useState(0); // Dummy state to trigger re-render
 
 	const avatarSrc = logged.photo ? logged.photo : ProfilePic;
 
@@ -56,7 +60,13 @@ function CreatePost() {
 			caption: "",
 			isForSale: "0",
 		});
-		dispatch(getUserPosts(logged.id))
+		form.resetFields();
+		setMediaFile(null);
+		setPreviewImage("");
+		dispatch(getUserPosts(logged.id));
+
+		// Trigger re-render to simulate page reload
+		setKey((prevKey) => prevKey + 1);
 	};
 
 	const handleFormChange = (changedValues) => {
@@ -77,10 +87,11 @@ function CreatePost() {
 
 	return (
 		<Form
+			form={form}
 			className="bg-white p-4 rounded-xl shadow-md"
 			onFinish={handleSubmit}
 			onValuesChange={handleFormChange}
-			initialValues={{caption: "",isForSale: "0" }}
+			initialValues={{ caption: "", isForSale: "0" }}
 			style={{
 				margin: "auto",
 				borderRadius: "12px",
@@ -110,7 +121,7 @@ function CreatePost() {
 										status: "done",
 										url: previewImage,
 									},
-							]
+							  ]
 							: []
 					}
 					onChange={handleMediaChange}
@@ -132,8 +143,8 @@ function CreatePost() {
 			</div>
 
 			{/* <Item name="isForSale">
-				<Checkbox defaultChecked={formValues.isForSale==='1'} onChange={handleCheckboxChange}>Is this for sale?</Checkbox>
-			</Item> */}
+                <Checkbox defaultChecked={formValues.isForSale==='1'} onChange={handleCheckboxChange}>Is this for sale?</Checkbox>
+            </Item> */}
 
 			<div className="flex justify-end">
 				<Item>
