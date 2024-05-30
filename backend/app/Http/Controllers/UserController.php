@@ -175,4 +175,23 @@ class UserController extends Controller
 
         return response()->json(['user' =>  $user, 'message' => 'Profile picture updated successfully']);
     }
+    
+    public function updateCoverPic(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($request->hasFile('photo')) {
+            if ($user->cover) {
+                Storage::delete($user->cover);
+            }
+
+            $file = $request->file('photo');
+            $path = $file->store('cover', 'public');
+            $url = url('storage/' . $path);
+            $user->cover = $url;
+            $user->save();
+        }
+
+        return response()->json(['user' =>  $user, 'message' => 'Cover picture updated successfully']);
+    }
 }

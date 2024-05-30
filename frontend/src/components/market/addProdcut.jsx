@@ -141,7 +141,7 @@ export default function AddProduct() {
 			<div>
 				<h3>Preview</h3>
 				<div
-					className="grid gap-3"
+					className="grid gap-3 opacity-65"
 					style={{ gridTemplateColumns: "1fr 0.5fr" }}>
 					<div className="rounded-xl overflow-hidden w-full ratio-1x1">
 						{formData.image ? (

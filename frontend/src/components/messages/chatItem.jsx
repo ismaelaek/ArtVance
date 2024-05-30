@@ -1,28 +1,29 @@
 import ProfilePic from "../../assets/profile.jpg";
+import { Avatar } from "antd";
 
 const ChatItem = ({ read }) => {
 	return (
 		<div className=" flex gap-6 items-center ">
 			<div className="rounded-full overflow-hidden  ">
-				<img
+				<Avatar
 					src={ProfilePic}
 					alt=""
 					width={100}
-					className=" h-full ratio-1x1"
+					size={60}
 				/>
 			</div>
 			<div className="mt-3">
 				<p className={`text-lg m-0 p-0 ${!read ? "font-bold" : " "}`}>
-					Ahmed Mouhssine
+					John Doe
 				</p>
 				<p
 					className={`h-6 text-sm  overflow-hidden ${
 						!read ? "font-bold" : " text-gray-500"
 					}`}>
-					Wech a khayna jhdsahfhsdf sdf hsdg fhsgd fhdsg hhhhhh
+					Hello, I love your art !!
 				</p>
 			</div>
-			<div className={`h-2 w-4 rounded-full ${!read ? 'bg-blue-600' : ''}`}></div>
+			<div className={`h-2 w-2 rounded-full ${!read ? 'bg-blue-600' : ''}`}></div>
 		</div>
 	);
 };

@@ -33,8 +33,6 @@ const Chats = () => {
 				<ChatItem  read={false}/>
 				<ChatItem  read={true}/>
 				<ChatItem  read={true} />
-				<ChatItem  read={false}/>
-				<ChatItem  read={false}/>
 			</div>
 		</div>
 	);
