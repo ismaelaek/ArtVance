@@ -8,8 +8,7 @@ import { getUnfollowedUsers } from "@/storage/usersSlice";
 import SuggestItem from "./suggestItem";
 import { getFeedPosts } from "@/storage/feedSlice";
 import LoadingSuggestion from "./loadingSuggestion";
-
-
+import LoadingPost from "./profile/timeLine/loadingPost";
 
 const Feed = () => {
 	const dispatch = useDispatch();
@@ -40,22 +39,29 @@ const Feed = () => {
 
 	return (
 		<main className="rounded-2xl h-full p-3 feed-main">
-			<div className=" p-3 rounded-2xl">
-				<CreatePost />
-				<div className="posts mt-2">
-					{feedPosts.map((post, index) => (
-						<Post post={post} key={index} logged={logged} />
-					))}
+			{feedIsLoading ? (
+				<div className="p-3 rounded-2xl">
+					<LoadingPost />
+					<LoadingPost />
+					<LoadingPost />
 				</div>
-			</div>
+			) : (
+				<div className=" p-3 rounded-2xl">
+					<CreatePost />
+					<div className="posts mt-2">
+						{feedPosts.map((post, index) => (
+							<Post post={post} key={index} logged={logged} />
+						))}
+					</div>
+				</div>
+			)}
 			<div className="bg-white p-3 rounded-2xl h-fit mt-3">
 				<div>
 					<p className=" text-lg border-b-2 border-gray-100">You might know</p>
 				</div>
 				<div>
 					{usersIsLoading
-						? // Render 8 LoadingSuggestion components while suggestions are loading
-						  Array.from({ length: 8 }).map((_, index) => (
+						? Array.from({ length: 8 }).map((_, index) => (
 								<LoadingSuggestion key={index} />
 						  ))
 						: suggestions.map((user) => (
