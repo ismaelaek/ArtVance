@@ -16,6 +16,8 @@ import SavePosts from "./components/savedPosts";
 import Search from "./components/search";
 import AddProdcut from "./components/market/addProdcut";
 import PostDetails from "./components/postDetails";
+import NotFound from "./components/notFound";
+
 function App() {
 	const location = useLocation();
 
@@ -40,7 +42,7 @@ function App() {
 						<Route path="/saved" element={<SavePosts />} />
 						<Route path="/post/:id" element={<PostDetails />} />
 						<Route path="/search" element={<Search />} />
-						<Route path="*" element={<h1>Page Not Found</h1>} />
+						<Route path="*" element={<NotFound/>} />
 					</Routes>
 				</Container>
 			) : (

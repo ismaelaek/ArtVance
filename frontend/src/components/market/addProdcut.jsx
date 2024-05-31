@@ -38,7 +38,7 @@ export default function AddProduct() {
 		dispatch(addProduct(productData))
 			.then(() => {
 				message.success("Product added successfully!");
-				// navigate("/path-to-redirect");
+				navigate("/marketplace");
 			})
 			.catch((error) => {
 				message.error("Failed to add product: " + error.message);

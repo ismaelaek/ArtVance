@@ -7,6 +7,8 @@ import { getUsers } from "@/storage/usersSlice";
 import { getUnfollowedUsers } from "@/storage/usersSlice";
 import SuggestItem from "./suggestItem";
 import { getFeedPosts } from "@/storage/feedSlice";
+import LoadingSuggestion from "./loadingSuggestion";
+import LoadingPost from "./profile/timeLine/loadingPost";
 
 const Feed = () => {
 	const dispatch = useDispatch();
@@ -18,7 +20,7 @@ const Feed = () => {
 	);
 	const { feedPosts, feedIsLoading } = useSelector((state) => state.feed);
 	useEffect(() => {
-		if(localStorage.getItem("loggedUser") == null) {
+		if (localStorage.getItem("loggedUser") == null) {
 			navigate("/login");
 		}
 		dispatch(getUsers());
@@ -37,27 +39,34 @@ const Feed = () => {
 
 	return (
 		<main className="rounded-2xl h-full p-3 feed-main">
-			<div className=" p-3 rounded-2xl">
-				<CreatePost />
-				{/* // ! hna fin ghaykono les posts*/}
-				<div className="posts mt-2">
-					{/* // ! hadhci ghaytms7 w ghaykon map dyal les post */}
-
-					{feedPosts.map((post, index) => {
-						return <Post post={post} key={index} logged={logged} />
-					})}
+			{feedIsLoading ? (
+				<div className="p-3 rounded-2xl">
+					<LoadingPost />
+					<LoadingPost />
+					<LoadingPost />
 				</div>
-			</div>
+			) : (
+				<div className=" p-3 rounded-2xl">
+					<CreatePost />
+					<div className="posts mt-2">
+						{feedPosts.map((post, index) => (
+							<Post post={post} key={index} logged={logged} />
+						))}
+					</div>
+				</div>
+			)}
 			<div className="bg-white p-3 rounded-2xl h-fit mt-3">
 				<div>
 					<p className=" text-lg border-b-2 border-gray-100">You might know</p>
 				</div>
 				<div>
-					{usersIsLoading ? (
-						<p>Loading...</p>
-					) : (
-						suggestions.map((user) => <SuggestItem key={user.id} user={user} />)
-					)}
+					{usersIsLoading
+						? Array.from({ length: 8 }).map((_, index) => (
+								<LoadingSuggestion key={index} />
+						  ))
+						: suggestions.map((user) => (
+								<SuggestItem key={user.id} user={user} />
+						  ))}
 				</div>
 			</div>
 		</main>
