@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { followUser, unfollowUser } from "@/storage/followSlice";
 import { Link } from "react-router-dom";
 import { setSelectedTab } from "@/storage/profileSlice";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -66,6 +68,7 @@ function Friends({ stats, hint }) {
 export default Friends;
 
 const FollowingCard = ({ user, logged }) => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [isFollowing, setIsFollowing] = useState(true);
 	const avatarSrc = user.photo ? user.photo : ProfilePic;
@@ -85,6 +88,23 @@ const FollowingCard = ({ user, logged }) => {
 			setIsFollowing(false);
 		} catch (error) {
 			message.error(error.message);
+		}
+	};
+	const handleMessageClick = async () => {
+		const data = {
+			user_id: parseInt(logged.id),
+			reciever_id: parseInt(user.id),
+		};
+
+		try {
+			const response = await axios.post(
+				"http://127.0.0.1:8000/api/conversations/start-conversation",
+				data
+			);
+			navigate(`/messages/conversation/${response.data.id}`);
+		} catch (error) {
+			console.log(error.message);
+			message.error("Error starting conversation");
 		}
 	};
 
@@ -108,7 +128,11 @@ const FollowingCard = ({ user, logged }) => {
 			</div>
 			{user.id != logged.id && (
 				<div className="w-full flex justify-evenly text-xl">
-					<button className="btn btn-primary w-2/5">Message</button>
+					<button
+						onClick={handleMessageClick}
+						className="btn btn-primary w-2/5">
+						Message
+					</button>
 					{isFollowing ? (
 						<button
 							className="btn btn-outline-primary w-2/5"
@@ -127,6 +151,7 @@ const FollowingCard = ({ user, logged }) => {
 };
 
 const FollowerCard = ({ user, logged, following }) => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [isFollowingBack, setIsFollowingBack] = useState(false);
 	const avatarSrc = user.photo ? user.photo : ProfilePic;
@@ -155,6 +180,24 @@ const FollowerCard = ({ user, logged, following }) => {
 		}
 	};
 
+	const handleMessageClick = async () => {
+		const data = {
+			user_id: parseInt(logged.id),
+			reciever_id: parseInt(user.id),
+		};
+
+		try {
+			const response = await axios.post(
+				"http://127.0.0.1:8000/api/conversations/start-conversation",
+				data
+			);
+			navigate(`/messages/conversation/${response.data.id}`);
+		} catch (error) {
+			console.log(error.message);
+			message.error("Error starting conversation");
+		}
+	};
+	
 	return (
 		<div className="bg-white p-4 border-2 border-gray-100 mt-2 rounded-xl">
 			<div className="flex items-center mb-2">
@@ -175,7 +218,11 @@ const FollowerCard = ({ user, logged, following }) => {
 			</div>
 			{user.id != logged.id && (
 				<div className="w-full flex justify-evenly text-xl">
-					<button className="btn btn-primary w-2/5">Message</button>
+					<button
+						className="btn btn-primary w-2/5"
+						onClick={handleMessageClick}>
+						Message
+					</button>
 					{isFollowingBack ? (
 						<button
 							className="btn btn-outline-primary w-2/5"

@@ -168,6 +168,24 @@ function Card() {
 		}
 	};
 
+	const handleMessageClick = async () => {
+		const data = {
+			user_id: parseInt(logged.id),
+			reciever_id: parseInt(id),
+		};
+
+		try {
+			const response = await axios.post(
+				"http://127.0.0.1:8000/api/conversations/start-conversation",
+				data
+			);
+			navigate(`/messages/conversation/${response.data.id}`);
+		} catch (error) {
+			console.log(error.message);
+			message.error("Error starting conversation");
+		}
+	};
+
 	return (
 		<div className="w-full mb-5">
 			<div
@@ -317,7 +335,9 @@ function Card() {
 								Follow
 							</button>
 						)}
-						<button className="btn btn-primary">Message</button>
+						<button className="btn btn-primary" onClick={handleMessageClick}>
+							Message
+						</button>
 					</div>
 				</div>
 			)}

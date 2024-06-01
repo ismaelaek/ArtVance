@@ -1,6 +1,19 @@
 import Chats from "./chats";
+import axios from "axios";
 
 const EmptyMessages = () => {
+	useEffect(() => {
+		const deletEmptyConv = async () => {
+			try {
+				await axios.delete(
+					"http://127.0.0.1:8000/api/conversations/delete-empty-conv"
+				);
+			} catch (error) {
+				console.log(error.message);
+			}
+		}
+		deletEmptyConv();
+	},[])
 	return (
 		<main className="message-main">
 			<div className="message-conversation rounded-xl flex justify-center items-center bg-white h-full p-3">
@@ -17,4 +30,4 @@ const EmptyMessages = () => {
 
 export default EmptyMessages;
 
-import React from "react";
+import React, { useEffect } from "react";
