@@ -32,4 +32,9 @@ class Post extends Model
     {
     return $this->hasMany(Save::class);
     }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'reported_post_id');
+    }
 }

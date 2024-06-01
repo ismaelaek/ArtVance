@@ -11,7 +11,7 @@ import TimeLine from "./timeLine/timeLine";
 import Friends from "./friends";
 import About from "./about";
 import { LiaUserEditSolid } from "react-icons/lia";
-import { RiLockPasswordLine } from "react-icons/ri";
+import { MdReportGmailerrorred } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +21,7 @@ import { followUser, unfollowUser } from "@/storage/followSlice";
 import { FaBirthdayCake } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import ImgCrop from "antd-img-crop";
+import { reportUser } from "@/storage/reportsSlice";
 
 function Card() {
 	const dispatch = useDispatch();
@@ -76,21 +77,37 @@ function Card() {
 			case "privacy":
 				navigate("/settings/privacy");
 				break;
+			case "report":
+				dispatch(reportUser(user.id));
+				break;
 			default:
 				break;
 		}
 	};
 
-	const menu = (
-		<Menu onClick={handleClickDrop}>
-			<Menu.Item key="editInfo" icon={<LiaUserEditSolid />}>
-				Edit info
-			</Menu.Item>
-			<Menu.Item key="privacy" icon={<FileProtectOutlined />}>
-				Privacy policy
-			</Menu.Item>
-		</Menu>
-	);
+	let menu;
+
+	if (user.id == logged.id) {
+		menu = (
+			<Menu onClick={handleClickDrop}>
+				<Menu.Item key="editInfo" icon={<LiaUserEditSolid />}>
+					Edit info
+				</Menu.Item>
+				<Menu.Item key="privacy" icon={<FileProtectOutlined />}>
+					Privacy policy
+				</Menu.Item>
+			</Menu>
+		)
+	} else {
+		menu = (
+            <Menu onClick={handleClickDrop}>
+                <Menu.Item key="report" icon={<MdReportGmailerrorred />}>
+                    report
+                </Menu.Item>
+            </Menu>
+        );
+	}
+
 
 	const handleFollow = () => {
 		try {
@@ -356,11 +373,9 @@ function Card() {
 						Following ({followStats.following?.length})
 					</Menu.Item>
 				</Menu>
-				{logged.id === user.id && (
-					<Dropdown overlay={menu}>
+					<Dropdown overlay={menu} className=" cursor-pointer">
 						<HiDotsVertical className="text-xl" />
 					</Dropdown>
-				)}
 			</div>
 			<div className="data">
 				<ContentContainer

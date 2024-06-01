@@ -61,7 +61,11 @@ class User extends Authenticatable implements JWTSubject
     public function userSaves(){
         return $this->hasMany(Save::class);
     }
-
+    
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'reported_user_id');
+    }
 
 
     protected $fillable = [

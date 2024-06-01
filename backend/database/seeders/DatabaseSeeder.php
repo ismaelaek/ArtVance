@@ -5,11 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 use Database\Seeders\UserSeeder;
-use Database\Seeders\MediaTypeSeeder;
 use Database\Seeders\ConversationSeeder;
-use Database\Seeders\NotificationTypeSeeder;
 use Database\Seeders\MediaSeeder;
-use Database\Seeders\CategorySeeder;
 use Database\Seeders\MessageSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\PostSeeder;
@@ -36,6 +33,7 @@ class DatabaseSeeder extends Seeder
             LikeSeeder::class,
             CommentSeeder::class,
             FollowSeeder::class,
+            ReportsTableSeeder::class,
         ]);
     }
 }

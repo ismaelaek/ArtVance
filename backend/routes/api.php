@@ -11,6 +11,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -89,4 +90,12 @@ Route::prefix('/conversations')->group(function () {
     Route::post('/start-conversation', [ConversationController::class, 'startConversation']);
     Route::delete('/{id}', [ConversationController::class, 'deleteConversation']);
     Route::delete('/delete-empty-conv', [ConversationController::class, 'deleteConversationsWithNoMessages']);
+});
+
+
+Route::prefix('report')->group(function () {
+    Route::post('/user', [ReportController::class, 'reportUser']);
+    Route::post('/post', [ReportController::class, 'reportPost']);
+    Route::get('/top-users', [ReportController::class, 'topReportedUsers']);
+    Route::get('/top-posts', [ReportController::class, 'topReportedPosts']);
 });
