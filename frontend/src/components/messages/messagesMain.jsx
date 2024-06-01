@@ -1,7 +1,5 @@
-import { Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import ChatItem from "./chatItem";
 import Conversation from "./conversation";
+import Chats from "./chats";
 
 const Messages = () => {
 	return (
@@ -20,22 +18,5 @@ export default Messages;
 
 import React from "react";
 
-const Chats = () => {
-	return (
-		<div>
-			<Input
-				className="rounded-full p-2"
-				placeholder="Search Message..."
-				prefix={<SearchOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
-			/>
-			<hr />
-			<div className="h-full mt-2 cursor-pointer chat-items-container">
-				<ChatItem  read={false}/>
-				<ChatItem  read={true}/>
-				<ChatItem  read={true} />
-			</div>
-		</div>
-	);
-};
 
 

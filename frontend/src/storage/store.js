@@ -7,6 +7,7 @@ import feedSlice from "./feedSlice";
 import postsSlice from "./postsSlice";
 import productsSlice from "./productsSlice";
 import postDataSlice from "./postDataSlice";
+import messagesSlice from "./messagesSlice";
 
 const store = configureStore({
 	reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
 		posts: postsSlice,
 		products: productsSlice,
 		postData: postDataSlice,
+		messages: messagesSlice,
 	},
 });
 
