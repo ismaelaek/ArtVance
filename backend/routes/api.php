@@ -3,8 +3,10 @@
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\auth\PasswordController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaveController;
@@ -44,14 +46,13 @@ Route::prefix('/users')->group(function () {
     Route::put('/{id}/updateProfile', [UserController::class, 'update']);
     Route::post('/{id}/update-profile-pic', [UserController::class, 'updateProfilePic']);
     Route::post('/{id}/update-cover-pic', [UserController::class, 'updateCoverPic']);
-
 });
 
 Route::post('/follow/{follower_id}/{followed_id}', [FollowController::class, 'follow']);
 Route::post('/unfollow/{follower_id}/{followed_id}', [FollowController::class, 'unfollow']);
 
 
-Route::prefix('/posts')->group( function (){
+Route::prefix('/posts')->group(function () {
     Route::get('/', [PostController::class, 'index']);
     Route::post('/new', [PostController::class, 'store']);
     Route::get('/{id}/media', [PostController::class, 'getPostMedia']);
@@ -73,4 +74,12 @@ Route::prefix('/save')->group(function () {
 Route::prefix('/products')->group(function () {
     Route::post('/', [ProductController::class, 'store']);
     Route::get('/all', [ProductController::class, 'index']);
+});
+
+Route::post('send-message', [MessageController::class, 'sendMessage']);
+
+Route::prefix('/conversations')->group(function () {
+    Route::get('/user/{userId}', [ConversationController::class, 'index']);
+    Route::get('/{id}', [ConversationController::class, 'show']);
+    Route::get('/{id}/messages', [ConversationController::class, 'getConversationMessages']);
 });

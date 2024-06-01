@@ -17,6 +17,7 @@ import Search from "./components/search";
 import AddProdcut from "./components/market/addProdcut";
 import PostDetails from "./components/postDetails";
 import NotFound from "./components/notFound";
+import EmptyMessages from "./components/messages/emptyMessage";
 
 function App() {
 	const location = useLocation();
@@ -35,14 +36,15 @@ function App() {
 						<Route path="/profile/:id" element={<Card />} />
 						<Route path="/profile/:id/edit" element={<EditProfile />} />
 						<Route path="/settings/privacy" element={<PrivacyPolicy />} />
-						<Route path="/messages" element={<Messages />} />
+						<Route path="/messages" element={<EmptyMessages />} />
+						<Route path="/messages/conversation/:id" element={<Messages />} />
 						<Route path="/marketplace" element={<Marketplace />} />
 						<Route path="/marketplace/addlisting" element={<AddProdcut />} />
 						<Route path="/marketplace/art/:id" element={<ProductDetails />} />
 						<Route path="/saved" element={<SavePosts />} />
 						<Route path="/post/:id" element={<PostDetails />} />
 						<Route path="/search" element={<Search />} />
-						<Route path="*" element={<NotFound/>} />
+						<Route path="*" element={<NotFound />} />
 					</Routes>
 				</Container>
 			) : (

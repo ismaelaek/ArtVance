@@ -1,29 +1,28 @@
 import ProfilePic from "../../assets/profile.jpg";
 import { Avatar } from "antd";
 
-const ChatItem = ({ read }) => {
+const ChatItem = ({ conversation, logged }) => {
+	const read = false; 
+	let datails = {};
+	if (conversation.sender.id == logged) {
+		datails = conversation.receiver;
+	} else {
+		datails = conversation.sender;
+	}
+
 	return (
 		<div className=" flex gap-6 items-center ">
 			<div className="rounded-full overflow-hidden  ">
-				<Avatar
-					src={ProfilePic}
-					alt=""
-					width={100}
-					size={60}
-				/>
+				<Avatar src={datails?.photo} alt="" width={100} size={60} />
 			</div>
 			<div className="mt-3">
 				<p className={`text-lg m-0 p-0 ${!read ? "font-bold" : " "}`}>
-					John Doe
+					{datails.nickname}
 				</p>
-				<p
-					className={`h-6 text-sm  overflow-hidden ${
-						!read ? "font-bold" : " text-gray-500"
-					}`}>
-					Hello, I love your art !!
+				<p>
+					tap to chat
 				</p>
 			</div>
-			<div className={`h-2 w-2 rounded-full ${!read ? 'bg-blue-600' : ''}`}></div>
 		</div>
 	);
 };

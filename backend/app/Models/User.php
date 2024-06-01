@@ -47,6 +47,16 @@ class User extends Authenticatable implements JWTSubject
     {
         return Post::whereIn('user_id', $this->following()->pluck('users.id'))->latest()->get();
     }
+    
+    public function sentConversations()
+    {
+        return $this->hasMany(Conversation::class, 'sender_id');
+    }
+
+    public function receivedConversations()
+    {
+        return $this->hasMany(Conversation::class, 'receiver_id');
+    }
 
     public function userSaves(){
         return $this->hasMany(Save::class);
