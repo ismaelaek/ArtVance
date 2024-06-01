@@ -10,12 +10,23 @@ class ConversationController extends Controller
     public function index($userId)
     {
         $userConversations = Conversation::with(['sender', 'receiver'])
-            ->where('sender_id', $userId)
-            ->orWhere('reciever_id', $userId)
-            ->get();
+        ->where(function ($query) use ($userId) {
+            $query->where('sender_id', $userId)
+                ->orWhere('reciever_id', $userId);
+        })
+            ->with(['messages' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }])
+            ->get()
+            ->sortByDesc(function ($conversation) {
+                return $conversation->messages->first()->created_at;
+            })
+            ->values()
+            ->all();
 
         return response()->json($userConversations);
     }
+
 
     public function show($id)
     {

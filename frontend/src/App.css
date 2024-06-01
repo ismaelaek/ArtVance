@@ -72,7 +72,7 @@
 }
 
 .conversation {
-	height: calc(100vh - 160px);
+	height: calc(100vh - 180px);
 }
 
 .prod-details {

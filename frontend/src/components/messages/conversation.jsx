@@ -5,7 +5,7 @@ import axios from "axios";
 import Pusher from "pusher-js";
 import { TbSend } from "react-icons/tb";
 
-
+const { TextArea } = Input;
 
 const Conversation = () => {
 	const { id } = useParams();
@@ -45,9 +45,10 @@ const Conversation = () => {
 		// Initialize Pusher
 		const pusher = new Pusher("dd1bb8b73c7829afcf7e", {
 			cluster: "eu",
+			encrypted: true,
 		});
 
-		const channel = pusher.subscribe(`chat`);
+		const channel = pusher.subscribe(`chat.${id}`);
 		channel.bind("message", function (newMsg) {
 			setMessages((prevMessages) => [...prevMessages, newMsg]);
 		});
@@ -80,7 +81,7 @@ const Conversation = () => {
 				"http://127.0.0.1:8000/api/send-message",
 				newMsg
 			);
-			setMessages((prevMessages) => [...prevMessages, response.data.message]);
+			// setMessages((prevMessages) => [...prevMessages, response.data.message]);
 			setNewMessage("");
 		} catch (error) {
 			console.error("Error sending message:", error);
@@ -97,9 +98,9 @@ const Conversation = () => {
 			</div>
 			<div className="conversation flex flex-col justify-between">
 				<div className="overflow-y-auto overflow-x-hidden">
-					{messages?.map((message) => (
+					{messages?.map((message,index) => (
 						<div
-							key={message.id}
+							key={index}
 							className={`flex ${
 								message.user_id === logged.id ? "justify-end" : "justify-start"
 							} mb-2`}>
@@ -128,7 +129,7 @@ const Conversation = () => {
 					<Form.Item>
 						<button
 							className=" btn btn-primary flex items-center px-2"
-							htmlType="submit"
+							type="submit"
 							disabled={newMessage.trim() === ""}>
 							<TbSend />
 						</button>
