@@ -11,6 +11,7 @@ import {
 	FaBookmark,
 } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
+import { MdReportGmailerrorred } from "react-icons/md";
 
 import { useDispatch } from "react-redux";
 import { likePost, unlikePost } from "@/storage/feedSlice";
@@ -24,7 +25,7 @@ import {
 } from "@ant-design/icons";
 import { deletePost } from "@/storage/postsSlice";
 import { setPostData } from "@/storage/postDataSlice";
-
+import { reportPost } from "@/storage/reportsSlice";
 const { TextArea } = Input;
 const { Item } = Form;
 
@@ -209,19 +210,32 @@ function Post({ post, logged, isBookMarked }) {
 			console.log("Edit post");
 		} else if (e.key === "delete") {
 			handleDlete();
+		} else if (e.key === "report") {
+			dispatch(reportPost(post.id));
 		}
 	};
 
-	const menu = (
-		<Menu onClick={handleMenuClick}>
-			<Menu.Item key="edit" icon={<EditOutlined />}>
-				Edit Post
-			</Menu.Item>
-			<Menu.Item key="delete" icon={<DeleteOutlined />}>
-				Delete Post
-			</Menu.Item>
-		</Menu>
-	);
+	let menu;
+	if (post.user_id == logged.id) {
+		menu = (
+			<Menu onClick={handleMenuClick}>
+				<Menu.Item key="edit" icon={<EditOutlined />}>
+					Edit Post
+				</Menu.Item>
+				<Menu.Item key="delete" icon={<DeleteOutlined />}>
+					Delete Post
+				</Menu.Item>
+			</Menu>
+		);
+	} else {
+		menu = (
+			<Menu onClick={handleMenuClick}>
+				<Menu.Item key="report" icon={<MdReportGmailerrorred />}>
+					Report Post
+				</Menu.Item>
+			</Menu>
+		);
+	}
 
 	return (
 		<div className="p-3 rounded-xl mt-12 bg-white">
@@ -237,14 +251,12 @@ function Post({ post, logged, isBookMarked }) {
 						<p style={{ fontSize: "14px", color: "gray" }}>{formattedTime}</p>
 					</div>
 				</div>
-				{logged.id === post.user_id && (
-					<Dropdown overlay={menu} trigger={["click"]}>
-						<Button
-							icon={<MoreOutlined />}
-							style={{ border: "none", fontSize: "20px" }}
-						/>
-					</Dropdown>
-				)}
+				<Dropdown overlay={menu} trigger={["click"]}>
+					<Button
+						icon={<MoreOutlined />}
+						style={{ border: "none", fontSize: "20px" }}
+					/>
+				</Dropdown>
 			</div>
 			<div className="mt-2 mb-5">
 				<p className="text-lg text-black mb-2">{post.caption}</p>
