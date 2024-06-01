@@ -78,7 +78,7 @@ const Conversation = () => {
 
 		try {
 			const response = await axios.post(
-				"http://127.0.0.1:8000/api/send-message",
+				"http://127.0.0.1:8000/api/messages/send-message",
 				newMsg
 			);
 			// setMessages((prevMessages) => [...prevMessages, response.data.message]);

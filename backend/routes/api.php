@@ -78,8 +78,15 @@ Route::prefix('/products')->group(function () {
 
 Route::post('send-message', [MessageController::class, 'sendMessage']);
 
+Route::prefix('/messages')->group(function () {
+    Route::post('/send-message', [MessageController::class, 'sendMessage']);
+});
+
 Route::prefix('/conversations')->group(function () {
     Route::get('/user/{userId}', [ConversationController::class, 'index']);
     Route::get('/{id}', [ConversationController::class, 'show']);
     Route::get('/{id}/messages', [ConversationController::class, 'getConversationMessages']);
+    Route::post('/start-conversation', [ConversationController::class, 'startConversation']);
+    Route::delete('/{id}', [ConversationController::class, 'deleteConversation']);
+    Route::delete('/delete-empty-conv', [ConversationController::class, 'deleteConversationsWithNoMessages']);
 });

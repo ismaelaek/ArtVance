@@ -47,4 +47,43 @@ class ConversationController extends Controller
 
         return response()->json($messages);
     }
+
+    public function startConversation(Request $request)
+    {
+        $conversation = Conversation::where('sender_id', $request->user_id)
+            ->where('reciever_id', $request->reciever_id)
+            ->orWhere('sender_id', $request->reciever_id)
+            ->where('reciever_id', $request->user_id)
+            ->first();
+
+        if (!$conversation) {
+            $conversation = new Conversation();
+            $conversation->sender_id = $request->user_id;
+            $conversation->reciever_id = $request->reciever_id;
+            $conversation->save();
+        }
+        return response()->json($conversation);
+    }
+
+    public function deleteConversation($id)
+    {
+        $conversation = Conversation::findOrFail($id);
+
+        $conversation->messages()->delete();
+
+        $conversation->delete();
+
+        return response()->json(['message' => 'Conversation deleted successfully']);
+    }
+
+    public function deleteConversationsWithNoMessages()
+    {
+        $conversations = Conversation::doesntHave('messages')->get();
+
+        foreach ($conversations as $conversation) {
+            $conversation->delete();
+        }
+
+        return response()->json(['message' => 'Conversations with no messages deleted successfully']);
+    }
 }
