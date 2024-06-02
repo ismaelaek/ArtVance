@@ -19,7 +19,7 @@ import PostDetails from "./components/postDetails";
 import NotFound from "./components/notFound";
 import EmptyMessages from "./components/messages/emptyMessage";
 import Dashboard from "./admin/dashboard";
-import Statistics from "./admin/Statistics/statistics";
+
 
 function App() {
 	const location = useLocation();
@@ -27,8 +27,7 @@ function App() {
 	const isLoginOrRegister =
 		location.pathname === "/login" ||
 		location.pathname === "/register" ||
-		location.pathname === "/dashboard"||
-		location.pathname === "/statistics";
+		location.pathname === "/dashboard";
 
 	return (
 		<Provider store={store}>
@@ -58,7 +57,6 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
 					<Route path="/dashboard" element={<Dashboard />} />
-					<Route path="/statistics" element={<Statistics />} />
 				</Routes>
 			)}
 		</Provider>
