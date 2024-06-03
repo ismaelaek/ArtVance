@@ -93,7 +93,7 @@ class PostController extends Controller
         $post->delete();
 
         return response()->json([
-            'message' => 'Post, comments, and related media deleted successfully!'
+            'message' => 'Post was deleted successfully!'
         ], 200);
     }
 

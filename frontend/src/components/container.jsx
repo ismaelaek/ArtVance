@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Layout, message, theme } from "antd";
+import { Input, Layout, Dropdown, Menu, theme } from "antd";
 import { NavLink, Link } from "react-router-dom";
 import { FaHome, FaUser, FaBookmark } from "react-icons/fa";
 import { FaShop, FaMessage } from "react-icons/fa6";
@@ -10,12 +10,18 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BiLogOut } from "react-icons/bi";
+import { IoNotificationsOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserNotifications } from "@/storage/notificationsSlice";
+
 
 const { Header, Content, Sider } = Layout;
 
 const Container = ({ children }) => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [loggedUser, setLoggedUser] = useState({});
+	const { userNotifications } = useSelector((state) => state.notifications);
 
 	const handleLogout = () => {
 		const token = Cookies.get("userToken");
@@ -56,7 +62,10 @@ const Container = ({ children }) => {
 			setLoggedUser(logged);
 		}
 	}, [navigate]);
-
+	
+	useEffect(() => {
+		dispatch(fetchUserNotifications(loggedUser.id))
+	},[dispatch, loggedUser.id])
 	const {
 		token: { colorBgContainer, borderRadiusLG },
 	} = theme.useToken();
@@ -67,6 +76,29 @@ const Container = ({ children }) => {
 			navigate(`/search/?q=${encodeURIComponent(value)}`);
 		}
 	};
+
+	const notificationMenu = (
+		<Menu className="max-h-96 overflow-auto w-96 m-0 p-0">
+			{userNotifications?.map((notification) => (
+				<Menu.Item key={notification.id}>
+					<div
+						className={` ${
+							!notification.is_read && " font-semibold"
+						} p-2 rounded-xl flex items-center gap-3`}>
+						<Avatar
+							src={notification.user.photo}
+							className="ratio-1x1"
+							size={30}
+						/>
+						<p>
+							{notification.user.nickname} {notification.content}
+						</p>
+					</div>
+				</Menu.Item>
+			))}
+		</Menu>
+	);
+
 
 	return (
 		<Layout>
@@ -92,6 +124,15 @@ const Container = ({ children }) => {
 						<SearchOutlined style={{ color: "rgba(0,0,0,.25)" }} />
 					}></Input>
 				<div className="flex p-2 gap-3 items-center h-full">
+					<Dropdown
+						overlay={notificationMenu}
+						trigger={["click"]}
+						placement="bottom">
+						<button>
+							<IoNotificationsOutline size={20} className="mr-3" />
+						</button>
+					</Dropdown>
+
 					<Link
 						to={`/profile/${loggedUser.id}`}
 						className="no-underline text-black hover:underline">
