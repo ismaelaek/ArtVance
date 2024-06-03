@@ -81,6 +81,7 @@ Route::prefix('/products')->group(function () {
 
 Route::prefix('/messages')->group(function () {
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
+    Route::post('/start-messaging', [MessageController::class, 'startMessaging']);
 });
 
 Route::prefix('/conversations')->group(function () {
