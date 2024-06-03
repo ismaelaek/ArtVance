@@ -12,7 +12,7 @@ import axios from "axios";
 import { BiLogOut } from "react-icons/bi";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserNotifications } from "@/storage/notificationsSlice";
+import { fetchUserNotifications } from "@/storage/notiSlice";
 
 
 const { Header, Content, Sider } = Layout;

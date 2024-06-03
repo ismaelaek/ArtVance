@@ -8,7 +8,7 @@ import productsSlice from "./productsSlice";
 import postDataSlice from "./postDataSlice";
 import messagesSlice from "./messagesSlice";
 import reportsSlice from "./reportsSlice";
-import notificationsSlice from "./notificationsSlice";
+import notiSlice from "./notiSlice";
 
 const store = configureStore({
 	reducer: {
@@ -21,7 +21,7 @@ const store = configureStore({
 		postData: postDataSlice,
 		messages: messagesSlice,
 		reports: reportsSlice,
-		notifications: notificationsSlice,
+		notifications: notiSlice,
 	},
 });
 
