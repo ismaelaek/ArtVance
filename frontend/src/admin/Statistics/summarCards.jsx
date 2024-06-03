@@ -1,16 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
+import axios from 'axios';
 import PeopleIcon from '@mui/icons-material/People';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
-const summaryData = [
-  { title: 'All Users', count: 256, icon: <PeopleIcon />, color: '#3f51b5' },
-  { title: 'All Products', count: 10983, icon: <ShoppingCartIcon />, color: '#e91e63' },
-  { title: 'All Posts', count: 4578, icon: <PostAddIcon />, color: '#ff9800' },
-];
-
 const SummaryCards = () => {
+  const [summaryData, setSummaryData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const usersResponse = await axios.get('http://127.0.0.1:8000/api/users');
+        const postsResponse = await axios.get('http://127.0.0.1:8000/api/posts');
+        const productsResponse = await axios.get('http://127.0.0.1:8000/api/products/all');
+
+        const usersCount = usersResponse.data.length;
+        const postsCount = postsResponse.data.length;
+        const productsCount = productsResponse.data.length;
+
+        setSummaryData([
+          { title: 'All Users', count: usersCount, icon: <PeopleIcon />, color: '#3f51b5' },
+          { title: 'All Products', count: productsCount, icon: <ShoppingCartIcon />, color: '#e91e63' },
+          { title: 'All Posts', count: postsCount, icon: <PostAddIcon />, color: '#ff9800' },
+        ]);
+      } catch (error) {
+        console.error('Error fetching summary data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Grid container spacing={3} justifyContent="center">
       {summaryData.map((data, index) => (

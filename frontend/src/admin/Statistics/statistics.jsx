@@ -1,8 +1,7 @@
 import React from 'react';
 import { Grid, Paper } from '@mui/material';
 import SummaryCards from './summarCards.jsx';
-import UserProductPostAnalytics from './user&post&product.jsx';
-import UserProductPostPercentage from './pieChart.jsx';
+import UserProductPostPercentage from './pieChart.jsx'; // Importing the pie chart component
 import HighReportedUsers from './highReportedUsers.jsx';
 import HighRepostedPosts from './highReportedPost.jsx';
 
@@ -22,23 +21,6 @@ const Statistics = () => {
                     <SummaryCards />
                 </Grid>
                 
-                {/* Analytics and Percentage */}
-                <Grid container item spacing={2}>
-                    {/* Analytics */}
-                    <Grid item xs={12} sm={6}>
-                        <Paper elevation={3} className="p-4">
-                            <UserProductPostAnalytics />
-                        </Paper>
-                    </Grid>
-                    
-                    {/* Percentage */}
-                    <Grid item xs={12} sm={6}>
-                        <Paper elevation={3} className="p-4">
-                            <UserProductPostPercentage />
-                        </Paper>
-                    </Grid>
-                </Grid>
-                
                 {/* High reported users and posts */}
                 <Grid container item spacing={2}>
                     {/* High reported users */}
@@ -54,6 +36,13 @@ const Statistics = () => {
                             <HighRepostedPosts />
                         </Paper>
                     </Grid>
+                </Grid>
+
+                {/* UserProductPostPercentage (Pie Chart) */}
+                <Grid item xs={12}>
+                    <Paper elevation={3} className="p-4">
+                        <UserProductPostPercentage />
+                    </Paper>
                 </Grid>
             </Grid>
         </main>

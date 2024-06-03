@@ -1,70 +1,84 @@
-import React from "react";
-import { Table, Button, Popconfirm, message, Avatar } from "antd";
-
-const dataSource = [
-  {
-    key: "1",
-    name: "John Brown",
-    email: "john.brown@example.com",
-    reports: 32,
-    photo: "https://via.placeholder.com/40",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    email: "jim.green@example.com",
-    reports: 42,
-    photo: "https://via.placeholder.com/40",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    email: "joe.black@example.com",
-    reports: 28,
-    photo: "https://via.placeholder.com/40",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    email: "jim.red@example.com",
-    reports: 36,
-    photo: "https://via.placeholder.com/40",
-  },
-];
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Popconfirm, message, Avatar } from 'antd';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const UsersReports = () => {
-  const admin = JSON.parse(localStorage.getItem("admin"));
+  const [dataSource, setDataSource] = useState([]);
+  const [error, setError] = useState(null);
 
-  const handleDelete = (key) => {
-    // Add your delete logic here
-    message.success("User deleted successfully");
+  useEffect(() => {
+    const fetchReportedUsers = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/report/top-users`, 
+          {
+            headers: {
+              'Authorization': `Bearer ${Cookies.get('userToken')}`
+            },
+          }
+        );
+
+        const formattedData = response.data.map((item) => ({
+          key: item.reported_user.id,
+          photo: item.reported_user.photo,
+          nickname: item.reported_user.nickname,
+          email: item.reported_user.email,
+          reports: item.total_reports,
+        }));
+
+        setDataSource(formattedData);
+      } catch (error) {
+        console.error('Error getting reported users:', error);
+        setError(error);
+      }
+    };
+
+    fetchReportedUsers();
+  }, []);
+
+  const handleDelete = async (key) => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/users/${key}`, {
+        headers: {
+          'Authorization': `Bearer ${Cookies.get('userToken')}`
+        },
+      });
+      message.success('User deleted successfully');
+      setDataSource(dataSource.filter(item => item.key !== key));
+    } catch (error) {
+      message.error('Failed to delete user');
+      console.error('Error deleting user:', error);
+    }
   };
 
   const columns = [
     {
-      title: "Photo",
-      dataIndex: "photo",
-      key: "photo",
-      render: (text) => <Avatar src={text} />,
+      title: 'Photo',
+      dataIndex: 'photo',
+      key: 'photo',
+      render: (photo) => (
+        <Avatar src={photo} size={64} />
+      ),
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: 'Nickname',
+      dataIndex: 'nickname',
+      key: 'nickname',
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
     },
     {
-      title: "Reports",
-      dataIndex: "reports",
-      key: "reports",
+      title: 'Reports',
+      dataIndex: 'reports',
+      key: 'reports',
     },
     {
-      title: "Action",
-      key: "action",
+      title: 'Action',
+      key: 'action',
       render: (_, record) => (
         <Popconfirm
           title="Are you sure to delete this user?"
@@ -79,6 +93,10 @@ const UsersReports = () => {
       ),
     },
   ];
+
+  if (error) {
+    return <div>Error loading users: {error.message}</div>;
+  }
 
   return (
     <div>

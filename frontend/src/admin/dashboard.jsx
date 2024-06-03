@@ -104,11 +104,11 @@ export default Dashboard;
 const ContentContainer = ({ selectedTab }) => {
   switch (selectedTab) {
     case "1":
-    //   return <Statistics />;
+      return <Statistics />;
     case "2":
       // return <UsersReports />;
     case "3":
-      return <PostsReports />;
+      // return <PostsReports />;
     default:
       return null;
   }
