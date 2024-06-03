@@ -20,6 +20,7 @@ import NotFound from "./components/notFound";
 import EmptyMessages from "./components/messages/emptyMessage";
 import Dashboard from "./admin/dashboard";
 
+
 function App() {
 	const location = useLocation();
 
