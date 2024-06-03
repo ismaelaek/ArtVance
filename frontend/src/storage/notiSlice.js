@@ -37,7 +37,6 @@ const notificationsSlice = createSlice({
 			.addCase(fetchUserNotifications.rejected, (state, action) => {
 				state.notificationIsLoading = false;
 				state.notificationError = action.payload;
-				message.error("Error fetching notifications");
 			});
 	},
 });

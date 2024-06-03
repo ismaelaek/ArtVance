@@ -65,7 +65,7 @@ const Container = ({ children }) => {
 	
 	useEffect(() => {
 		dispatch(fetchUserNotifications(loggedUser.id))
-	},[dispatch, loggedUser.id])
+	},[dispatch, loggedUser])
 	const {
 		token: { colorBgContainer, borderRadiusLG },
 	} = theme.useToken();

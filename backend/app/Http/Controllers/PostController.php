@@ -85,6 +85,8 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         $post->comments()->delete();
+        $post->notifications()->delete();
+        $post->reports()->delete();
 
         if ($post->media()->exists()) {
             $post->media()->delete();
