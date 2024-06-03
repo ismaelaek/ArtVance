@@ -7,6 +7,7 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaveController;
@@ -77,10 +78,10 @@ Route::prefix('/products')->group(function () {
     Route::get('/all', [ProductController::class, 'index']);
 });
 
-Route::post('send-message', [MessageController::class, 'sendMessage']);
 
 Route::prefix('/messages')->group(function () {
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
+    Route::post('/start-messaging', [MessageController::class, 'startMessaging']);
 });
 
 Route::prefix('/conversations')->group(function () {
@@ -98,4 +99,8 @@ Route::prefix('report')->group(function () {
     Route::post('/post', [ReportController::class, 'reportPost']);
     Route::get('/top-users', [ReportController::class, 'topReportedUsers']);
     Route::get('/top-posts', [ReportController::class, 'topReportedPosts']);
+});
+
+Route::prefix('/notifications')->group(function () {
+    Route::get('/{id}', [NotificationController::class, 'usersNotifications']);
 });

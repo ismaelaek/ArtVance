@@ -20,7 +20,6 @@ import { savePost, unsavePost } from "../../postService";
 import {
 	EditOutlined,
 	DeleteOutlined,
-	SendOutlined,
 	MoreOutlined,
 } from "@ant-design/icons";
 import { deletePost } from "@/storage/postsSlice";
@@ -307,7 +306,7 @@ function Post({ post, logged, isBookMarked }) {
 					className="border-none text-xl"
 				/>
 			</div>
-			<hr style={{ borderColor: "gray", width: "100%", marginTop: "10px" }} />
+			{/* <hr style={{ borderColor: "gray", width: "100%", marginTop: "10px" }} />
 			<Form>
 				<div className="flex items-center mt-2 gap-3">
 					<Avatar src={logged.photo} size={40}></Avatar>
@@ -325,7 +324,7 @@ function Post({ post, logged, isBookMarked }) {
 						icon={<SendOutlined />}
 					/>
 				</div>
-			</Form>
+			</Form> */}
 		</div>
 	);
 }

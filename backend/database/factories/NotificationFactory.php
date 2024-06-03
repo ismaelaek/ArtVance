@@ -17,6 +17,7 @@ class NotificationFactory extends Factory
             'content' => $this->faker->sentence,
             'user_id' => User::factory(),
             'post_id' => Post::factory(),
+            'notified_id' => User::factory(),
             'is_read' => $this->faker->boolean,
         ];
     }

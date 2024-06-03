@@ -120,13 +120,22 @@ class UserController extends Controller
     public function likePost(Request $request, $postId)
     {
         $user = User::findOrFail($request->user_id);
-        $post = Post::findOrFail($postId);
+        $postOwner = Post::findOrFail($postId)->user;
 
         if (!$user->likes()->where('post_id', $postId)->exists()) {
             $like = new Like();
             $like->user_id = $request->user_id;
             $like->post_id = $postId;
             $like->save();
+
+            $notification = $postOwner->getNotified()->create([
+                'content' => 'liked your post',
+                'user_id' => $request->user_id,
+                'post_id' => $postId,
+                'notified_id' => $postOwner->id,
+                'is_read' => false,
+            ]);
+            
             return response()->json(['message' => 'Post liked successfully.']);
         }
 
