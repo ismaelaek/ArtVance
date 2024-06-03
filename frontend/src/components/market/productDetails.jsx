@@ -121,27 +121,29 @@ export default function ProductDetails() {
 					</Link>
 				</div>
 				<hr />
-				<div className="rounded-lg">
-					<div className="mb-2 flex items-center">
-						<FaMessage className="mr-2" />
-						Send seller a message
-					</div>
-					<form onSubmit={handleMessageSend}>
-						<div className="mb-2">
-							<input
-								type="text"
-								name="message"
-								defaultValue="Is this available?"
-								className="w-full rounded-xl p-2 h-14 border-black border-solid border-1"
-							/>
+				{logged.id != product?.user_id && (
+					<div className="rounded-lg">
+						<div className="mb-2 flex items-center">
+							<FaMessage className="mr-2" />
+							Send seller a message
 						</div>
-						<button
-							type="submit"
-							className="w-full btn btn-primary rounded-md py-2">
-							Send
-						</button>
-					</form>
-				</div>
+						<form onSubmit={handleMessageSend}>
+							<div className="mb-2">
+								<input
+									type="text"
+									name="message"
+									defaultValue="Is this available?"
+									className="w-full rounded-xl p-2 h-14 border-black border-solid border-1"
+								/>
+							</div>
+							<button
+								type="submit"
+								className="w-full btn btn-primary rounded-md py-2">
+								Send
+							</button>
+						</form>
+					</div>
+				)}
 			</div>
 		</main>
 	);
