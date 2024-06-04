@@ -43,7 +43,7 @@ const Conversation = () => {
 		fetchMessages();
 
 		// Initialize Pusher
-		const pusher = new Pusher("dd1bb8b73c7829afcf7e", {
+		const pusher = new Pusher("cacfc424d7c1c10a1f9f", {
 			cluster: "eu",
 			encrypted: true,
 		});

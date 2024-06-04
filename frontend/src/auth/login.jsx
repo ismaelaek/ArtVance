@@ -30,13 +30,14 @@ const Login = () => {
 				values 
 			);
 			const user = response.data.user;
-			localStorage.setItem("loggedUser", JSON.stringify(user));
 
 			if (user.isAdmin) {
 				Cookies.set("token", response.data.token, { expires: 7, secure: true });
+				localStorage.setItem("admin", JSON.stringify(user));
 				message.success("Logged in as admin");
 				navigate("/dashboard");
 			} else {
+				localStorage.setItem("loggedUser", JSON.stringify(user));
 				Cookies.set("userToken", response.data.token, {
 					expires: 7,
 					secure: true,

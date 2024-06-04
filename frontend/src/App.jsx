@@ -18,12 +18,16 @@ import AddProdcut from "./components/market/addProdcut";
 import PostDetails from "./components/postDetails";
 import NotFound from "./components/notFound";
 import EmptyMessages from "./components/messages/emptyMessage";
+import Dashboard from "./admin/dashboard";
+
 
 function App() {
 	const location = useLocation();
 
 	const isLoginOrRegister =
-		location.pathname === "/login" || location.pathname === "/register";
+		location.pathname === "/login" ||
+		location.pathname === "/register" ||
+		location.pathname === "/dashboard";
 
 	return (
 		<Provider store={store}>
@@ -52,6 +56,7 @@ function App() {
 					{/** hna aykono routes dyal login with google, facebook */}
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
+					<Route path="/dashboard" element={<Dashboard />} />
 				</Routes>
 			)}
 		</Provider>

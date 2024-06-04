@@ -60,7 +60,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function receivedConversations()
     {
-        return $this->hasMany(Conversation::class, 'receiver_id');
+        return $this->hasMany(Conversation::class, 'reciever_id');
     }
 
     public function userSaves(){
