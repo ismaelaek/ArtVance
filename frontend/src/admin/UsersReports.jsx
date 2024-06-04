@@ -100,7 +100,7 @@ const UsersReports = () => {
 	return (
 		<div>
 			<h2>High Report Users</h2>
-			<Table dataSource={dataSource} columns={columns} />
+			<Table dataSource={dataSource} columns={columns} pagination={false} />
 		</div>
 	);
 };

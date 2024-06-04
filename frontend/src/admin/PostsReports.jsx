@@ -122,7 +122,7 @@ const PostsReports = () => {
 	return (
 		<div>
 			<h2>High Report Posts</h2>
-			<Table dataSource={dataSource} columns={columns} />
+			<Table dataSource={dataSource} columns={columns} pagination={false} />
 		</div>
 	);
 };
