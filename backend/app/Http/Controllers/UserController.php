@@ -178,7 +178,8 @@ class UserController extends Controller
 
         $user->likes()->delete();
 
-        $user->notifications()->delete();
+        $user->notify()->delete();
+        $user->getNotified()->delete();
 
         $user->followers()->detach();
         $user->following()->detach();
@@ -194,6 +195,7 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User and all related data successfully deleted']);
     }
+
 
 
     public function updateProfilePic(Request $request, $id)
