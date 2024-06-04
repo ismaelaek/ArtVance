@@ -104,3 +104,6 @@ Route::prefix('report')->group(function () {
 Route::prefix('/notifications')->group(function () {
     Route::get('/{id}', [NotificationController::class, 'usersNotifications']);
 });
+
+
+Route::get('users/{userId}/all-posts-data', [UserController::class, 'getAllPostsData']);

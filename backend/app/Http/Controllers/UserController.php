@@ -112,9 +112,13 @@ class UserController extends Controller
     {
         $user = User::findOrFail($userId);
         $feedPosts = $user->getFeedPosts();
+        $userPosts = $user->posts()->get();
+        $feedPosts = $feedPosts->merge($userPosts);
+        $feedPosts = $feedPosts->sortByDesc('created_at');
 
-        return response()->json($feedPosts);
+        return response()->json($feedPosts->values()->toArray());
     }
+
 
 
     public function likePost(Request $request, $postId)
@@ -203,4 +207,39 @@ class UserController extends Controller
 
         return response()->json(['user' =>  $user, 'message' => 'Cover picture updated successfully']);
     }
+
+    public function getAllPostsData($userId)
+    {
+        $user = User::findOrFail($userId);
+
+        // Assuming getFeedPosts() returns the posts for the user's feed
+        $feedPosts = $user->getFeedPosts();
+        $userPosts = $user->posts()->get();
+        $feedPosts = $feedPosts->merge($userPosts)->sortByDesc('created_at');
+
+        // Eager load related data
+        $feedPosts->load(['user', 'likes']);
+
+        $loggedInUserId = auth()->id();
+        $savedPostIds = $user->saves()->pluck('post_id')->toArray();
+
+        // Prepare posts data
+        $posts = $feedPosts->map(function ($post) use ($savedPostIds, $loggedInUserId) {
+            return [
+                'id' => $post->id,
+                'caption' => $post->caption,
+                'user_id' => $post->user_id,
+                'user' => $post->user,
+                'isForSale' => $post->isForSale,
+                'isSaved' => in_array($post->id, $savedPostIds),
+                'likeCount' => $post->likes->count(),
+                'userHasLiked' => $post->likes->contains('user_id', $loggedInUserId),
+                'created_at' => $post->created_at,
+                'updated_at' => $post->updated_at,
+            ];
+        });
+
+        return response()->json(['posts' => $posts]);
+    }
+
 }
