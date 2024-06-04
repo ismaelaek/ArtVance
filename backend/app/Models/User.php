@@ -12,7 +12,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory;
 
     public function posts()
     {
@@ -28,9 +28,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Like::class);
     }
-    public function notifications()
+    public function notify()
     {
-        return $this->hasMany(Notification::class);
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    public function getNotified()
+    {
+        return $this->hasMany(Notification::class, 'notified_id');
     }
     
     public function followers()

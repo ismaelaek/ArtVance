@@ -29,8 +29,22 @@ class CommentController extends Controller
             'content' => $request->input('content'),
             'post_id' => $request->input('post_id'),
         ]);
+        
+        $postOwner = Post::findOrFail($request->post_id)->user;
 
-        return response()->json(['comment' => $comment, 'message' => 'Comment posted successfully']);
+        $notification = $postOwner->getNotified()->create([
+            'content' => 'commented on your post',
+            'user_id' => $request->user_id, 
+            'post_id' => $request->post_id,
+            'notified_id' => $postOwner->id,
+            'is_read' => false,
+        ]);
+
+        return response()->json([
+            'comment' => $comment,
+            'notification' => $notification,
+            'message' => 'Comment posted and notification sent successfully'
+        ]);
     }
 
 }

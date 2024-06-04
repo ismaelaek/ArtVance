@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Avatar, Button, Form, Input, Dropdown, Menu, Carousel } from "antd";
+import { Avatar, Button, Dropdown, Menu } from "antd";
 import ProfilePic from "../../../assets/profile.jpg";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,22 +12,15 @@ import {
 } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
 import { MdReportGmailerrorred } from "react-icons/md";
-
 import { useDispatch } from "react-redux";
-import { likePost, unlikePost } from "@/storage/feedSlice";
+import { getFeedPosts, likePost, unlikePost } from "@/storage/feedSlice";
 import { debounce } from "lodash";
 import { savePost, unsavePost } from "../../postService";
-import {
-	EditOutlined,
-	DeleteOutlined,
-	SendOutlined,
-	MoreOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, MoreOutlined } from "@ant-design/icons";
 import { deletePost } from "@/storage/postsSlice";
 import { setPostData } from "@/storage/postDataSlice";
 import { reportPost } from "@/storage/reportsSlice";
-const { TextArea } = Input;
-const { Item } = Form;
+import { getUserPosts } from "@/storage/profileSlice";
 
 function Post({ post, logged, isBookMarked }) {
 	const [user, setUser] = useState({});
@@ -40,23 +33,24 @@ function Post({ post, logged, isBookMarked }) {
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const fetchUser = async (userId) => {
+
+	const fetchUser = useCallback(async (userId) => {
 		const cachedUserData = localStorage.getItem(`user_${userId}`);
 		if (cachedUserData) {
-			return JSON.parse(cachedUserData);
+			setUser(JSON.parse(cachedUserData));
 		} else {
 			const response = await axios.get(
 				`http://127.0.0.1:8000/api/users/${userId}`
 			);
 			localStorage.setItem(`user_${userId}`, JSON.stringify(response.data));
-			return response.data;
+			setUser(response.data);
 		}
-	};
+	}, []);
 
-	const fetchPostMedia = async (postId) => {
+	const fetchPostMedia = useCallback(async (postId) => {
 		const cachedPostMedia = localStorage.getItem(`post_media_${postId}`);
 		if (cachedPostMedia) {
-			return JSON.parse(cachedPostMedia);
+			setPostMedia(JSON.parse(cachedPostMedia));
 		} else {
 			const response = await axios.get(
 				`http://127.0.0.1:8000/api/posts/${postId}/media`
@@ -65,84 +59,54 @@ function Post({ post, logged, isBookMarked }) {
 				`post_media_${postId}`,
 				JSON.stringify(response.data.media)
 			);
-			return response.data.media;
+			setPostMedia(response.data.media);
 		}
-	};
+	}, []);
 
-	const fetchPostLikes = async (postId) => {
+	const fetchPostLikes = useCallback(async (postId) => {
 		const response = await axios.get(
 			`http://127.0.0.1:8000/api/posts/${postId}/likes-count`
 		);
-		return response.data.likesCount;
-	};
+		setPostLikes(response.data.likesCount);
+	}, []);
 
-	const checkIfUserLikedPost = async () => {
+	const checkIfUserLikedPost = useCallback(async () => {
 		try {
 			const response = await axios.get(
 				`http://127.0.0.1:8000/api/posts/${post.id}/has-liked/${logged.id}`
 			);
-			return response.data.hasLiked;
+			setLiked(response.data.hasLiked);
 		} catch (error) {
 			console.error("Error checking if user liked post:", error);
-			return false;
 		}
-	};
-	const handleDlete = () => {
+	}, [post.id, logged.id]);
+
+	const handleDelete = () => {
 		dispatch(deletePost(post.id));
 	};
 
 	useEffect(() => {
-		const getUser = async () => {
-			try {
-				const userData = await fetchUser(post.user_id);
-				setUser(userData);
-			} catch (error) {
-				console.error("Error fetching user data:", error);
-			}
-		};
-
-		const getPostMedia = async () => {
-			try {
-				const mediaData = await fetchPostMedia(post.id);
-				setPostMedia(mediaData);
-			} catch (error) {
-				console.error("Error fetching post media:", error);
-			}
-		};
-
-		const getPostLikes = async () => {
-			try {
-				const likesCount = await fetchPostLikes(post.id);
-				setPostLikes(likesCount);
-			} catch (error) {
-				console.error("Error fetching post likes:", error);
-			}
-		};
-
-		const checkLikedStatus = async () => {
-			const likedStatus = await checkIfUserLikedPost();
-			setLiked(likedStatus);
-		};
-
-		getUser();
-		getPostMedia();
-		getPostLikes();
-		checkLikedStatus();
-	}, [post.user_id, post.id]);
+		fetchUser(post.user_id);
+		fetchPostMedia(post.id);
+		fetchPostLikes(post.id);
+		checkIfUserLikedPost();
+	}, [
+		fetchUser,
+		fetchPostMedia,
+		fetchPostLikes,
+		checkIfUserLikedPost,
+		post.user_id,
+		post.id,
+	]);
 
 	const debouncedFetchPostLikes = useCallback(
 		debounce(async () => {
-			try {
-				const likesCount = await fetchPostLikes(post.id);
-				setPostLikes(likesCount);
-			} catch (error) {
-				console.error("Error fetching post likes:", error);
-			}
+			await fetchPostLikes(post.id);
 		}, 500),
-		[post.id]
+		[fetchPostLikes, post.id]
 	);
 
-	const handleLikeClick = () => {
+	const handleLikeClick = async () => {
 		try {
 			if (liked) {
 				dispatch(unlikePost({ userId: logged.id, postId: post.id }));
@@ -209,14 +173,14 @@ function Post({ post, logged, isBookMarked }) {
 		if (e.key === "edit") {
 			console.log("Edit post");
 		} else if (e.key === "delete") {
-			handleDlete();
+			handleDelete();
 		} else if (e.key === "report") {
 			dispatch(reportPost(post.id));
 		}
 	};
 
 	let menu;
-	if (post.user_id == logged.id) {
+	if (post.user_id === logged.id) {
 		menu = (
 			<Menu onClick={handleMenuClick}>
 				<Menu.Item key="edit" icon={<EditOutlined />}>
@@ -307,25 +271,6 @@ function Post({ post, logged, isBookMarked }) {
 					className="border-none text-xl"
 				/>
 			</div>
-			<hr style={{ borderColor: "gray", width: "100%", marginTop: "10px" }} />
-			<Form>
-				<div className="flex items-center mt-2 gap-3">
-					<Avatar src={logged.photo} size={40}></Avatar>
-					<Item name="commentContent" className="flex-1 mt-4">
-						<TextArea
-							className="border-none outline-none rounded-full bg-gray-200 pl-4 pt-2 text-gray-600"
-							placeholder="Write a comment..."
-							autoSize={{ minRows: 1, maxRows: 1 }}
-						/>
-					</Item>
-					<Button
-						type="primary"
-						htmlType="submit"
-						className="bg-blue-500 p-3 rounded-full"
-						icon={<SendOutlined />}
-					/>
-				</div>
-			</Form>
 		</div>
 	);
 }

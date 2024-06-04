@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-
 import usersSlice from "./usersSlice";
 import profileSlice from "./profileSlice";
 import followSlice from "./followSlice";
@@ -10,6 +9,8 @@ import postDataSlice from "./postDataSlice";
 import messagesSlice from "./messagesSlice";
 import reportsSlice from "./reportsSlice";
 import dashboardSlice from "./dashboardSlice";
+import notiSlice from "./notiSlice";
+
 
 const store = configureStore({
 	reducer: {
@@ -22,7 +23,9 @@ const store = configureStore({
 		postData: postDataSlice,
 		messages: messagesSlice,
 		reports: reportsSlice,
+
 		dashboard: dashboardSlice,
+		notifications: notiSlice,
 	},
 });
 

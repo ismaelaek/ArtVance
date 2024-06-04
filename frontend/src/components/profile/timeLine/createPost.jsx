@@ -6,6 +6,7 @@ import { addPost } from "@/storage/feedSlice";
 import { useDispatch } from "react-redux";
 import { getUserPosts } from "@/storage/profileSlice";
 import { useLocation } from "react-router-dom";
+import { getFeedPosts } from "@/storage/feedSlice";
 
 const { Item } = Form;
 
@@ -64,6 +65,7 @@ function CreatePost() {
 		setMediaFile(null);
 		setPreviewImage("");
 		dispatch(getUserPosts(logged.id));
+		dispatch(getFeedPosts(logged != null ? logged.id : null));
 
 		// Trigger re-render to simulate page reload
 		setKey((prevKey) => prevKey + 1);
