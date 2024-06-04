@@ -106,4 +106,4 @@ Route::prefix('/notifications')->group(function () {
 });
 
 
-Route::get('users/{userId}/all-posts-data', [UserController::class, 'getAllPostsData']);
+Route::get('/users/{userId}/all-posts-data', [UserController::class, 'getAllPostsData']);
