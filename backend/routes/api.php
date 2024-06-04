@@ -41,6 +41,7 @@ Route::get('/{id}/feed', [UserController::class, 'getFeedPosts']);
 
 Route::prefix('/users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
+    Route::get('/top/active-users', [UserController::class, 'getTopUsers']);
     Route::get('/{id}', [UserController::class, 'user']);
     Route::get('/unfollowed/{id}', [UserController::class, 'getUnfollowedUsers']);
     Route::get('/{id}/follow-stats', [UserController::class, 'getFollowersAndFollowing']);

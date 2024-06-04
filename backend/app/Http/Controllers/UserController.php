@@ -169,36 +169,27 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Delete user posts and their associated media
         foreach ($user->posts as $post) {
-            $post->media()->delete(); // Delete media associated with the post
+            $post->media()->delete();
             $post->delete();
         }
 
-        // Delete user comments
         $user->comments()->delete();
 
-        // Delete user likes
         $user->likes()->delete();
 
-        // Delete user notifications
         $user->notifications()->delete();
 
-        // Detach followers and following relationships
         $user->followers()->detach();
         $user->following()->detach();
 
-        // Delete user saves
         $user->userSaves()->delete();
 
-        // Delete reports made by the user
         $user->reports()->delete();
 
-        // Delete conversations
         $user->sentConversations()->delete();
         $user->receivedConversations()->delete();
 
-        // Finally, delete the user
         $user->delete();
 
         return response()->json(['message' => 'User and all related data successfully deleted']);
@@ -275,6 +266,17 @@ class UserController extends Controller
         });
 
         return response()->json(['posts' => $posts]);
+    }
+
+    public function getTopUsers()
+    {
+        
+        $users = User::withCount('posts')->with('posts')->orderByDesc('posts_count')->take(5)->get();
+        if ($users->isEmpty()) {
+            return response()->json(['message' => 'No users found.'], 404);
+        }
+
+        return response()->json($users);
     }
 
 }
