@@ -15,7 +15,6 @@ const Conversation = () => {
 	const [newMessage, setNewMessage] = useState("");
 
 	useEffect(() => {
-		// Fetch conversation details
 		const fetchConversation = async () => {
 			try {
 				const response = await axios.get(
@@ -27,7 +26,6 @@ const Conversation = () => {
 			}
 		};
 
-		// Fetch conversation messages
 		const fetchMessages = async () => {
 			try {
 				const response = await axios.get(
@@ -42,8 +40,7 @@ const Conversation = () => {
 		fetchConversation();
 		fetchMessages();
 
-		// Initialize Pusher
-		const pusher = new Pusher("cacfc424d7c1c10a1f9f", {
+		const pusher = new Pusher("dd1bb8b73c7829afcf7e", {
 			cluster: "eu",
 			encrypted: true,
 		});
@@ -53,7 +50,6 @@ const Conversation = () => {
 			setMessages((prevMessages) => [...prevMessages, newMsg]);
 		});
 
-		// Cleanup on unmount
 		return () => {
 			channel.unbind_all();
 			channel.unsubscribe();
