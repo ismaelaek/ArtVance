@@ -22,7 +22,7 @@ export default function TopPostingUsers() {
 
 	const columns = [
 		{
-			title: "Avatar",
+			title: "Photo",
 			dataIndex: "photo",
 			key: "avatar",
 			render: (photo) => <Avatar src={photo} />,
@@ -41,7 +41,7 @@ export default function TopPostingUsers() {
 
 	return (
 		<div>
-			<h4 className="text-gray-400 mb-2">Top Posting Users</h4>
+			<h5 className="text-gray-400">Top Posting Users</h5>
             <Table
                 className=" my-3"
 				dataSource={users}
