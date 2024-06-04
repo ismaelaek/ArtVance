@@ -8,7 +8,7 @@ import HighRepostedPosts from './highReportedPost.jsx';
 const Statistics = () => {
     // Retrieve logged admin information from local storage
     const admin = JSON.parse(localStorage.getItem('admin'));
-    
+
     return (
         <main className="px-4 py-8">
             <div className="statistics-header" style={{ background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', borderRadius: '10px', padding: '20px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', textAlign: 'center', marginBottom: '20px', color: 'white' }}>
@@ -20,7 +20,7 @@ const Statistics = () => {
                 <Grid item xs={12}>
                     <SummaryCards />
                 </Grid>
-                
+
                 {/* High reported users and posts */}
                 <Grid container item spacing={2}>
                     {/* High reported users */}
@@ -29,7 +29,7 @@ const Statistics = () => {
                             <HighReportedUsers />
                         </Paper>
                     </Grid>
-                    
+
                     {/* High reposted posts */}
                     <Grid item xs={12} sm={6}>
                         <Paper elevation={3} className="p-4">

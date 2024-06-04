@@ -1,36 +1,65 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+	LineChart,
+	Line,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	ResponsiveContainer,
+} from "recharts";
 
-const data = [
-  { range: '15+', users: 250 },
-  { range: '10-14', users: 20 },
-  { range: '5-9', users: 150},
-  { range: '4-2', users: 10 },
-  { range: '0-1', users: 5000 },
-];
+const JoinedUsers = () => {
+	const [data, setData] = useState([]);
 
-// Define the color with varying degrees of saturation
-const COLOR = '#ff0000';
+	useEffect(() => {
+		// Fetch data from API
+		axios
+			.get("http://127.0.0.1:8000/api/users")
+			.then((response) => {
+				const users = response.data;
 
-const HighUsersReports = () => {
-  return (
-    <div>
-      <h5 style={{  marginBottom: '20px', color: '#3339' }}>High Users Reports</h5>
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="range" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="users" fill={COLOR}>
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={`hsl(${index * 30}, 70%, 50%)`} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
+				// Initialize array with all 12 months
+				const usersByMonth = Array(12).fill(0);
+
+				// Process data to count users per month
+				users.forEach((user) => {
+					const month = new Date(user.created_at).getMonth();
+					usersByMonth[month] += 1;
+				});
+
+				// Convert to array format suitable for Recharts
+				const chartData = usersByMonth.map((count, month) => ({
+					month: new Date(2024, month).toLocaleString("default", {
+						month: "short",
+					}),
+					users: count,
+				}));
+
+				setData(chartData);
+			})
+			.catch((error) => {
+				console.error("Error fetching data:", error);
+			});
+	}, []);
+
+	return (
+		<div>
+			<h5 style={{ marginBottom: "20px", color: "#3339" }}>
+				Users Joined Per Month
+			</h5>
+			<ResponsiveContainer width="100%" height={400}>
+				<LineChart data={data}>
+					<CartesianGrid strokeDasharray="3 3" />
+					<XAxis dataKey="month" />
+					<YAxis />
+					<Tooltip />
+					<Line type="monotone" dataKey="users" stroke="#8884d8" />
+				</LineChart>
+			</ResponsiveContainer>
+		</div>
+	);
 };
 
-export default HighUsersReports;
+export default JoinedUsers;

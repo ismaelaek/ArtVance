@@ -52,13 +52,18 @@ class ReportController extends Controller
     public function topReportedPosts()
     {
         $topPosts = Report::select('reported_post_id', DB::raw('count(*) as total_reports'))
-        ->whereNotNull('reported_post_id')
-        ->groupBy('reported_post_id')
-        ->orderByDesc('total_reports')
-        ->with('reportedPost')
-        ->take(5)
+            ->whereNotNull('reported_post_id')
+            ->groupBy('reported_post_id')
+            ->orderByDesc('total_reports')
+            ->with([
+                'reportedPost' => function ($query) {
+                    $query->with(['user', 'media']);
+                }
+            ])
+            ->take(5)
             ->get();
 
         return response()->json($topPosts);
     }
+
 }

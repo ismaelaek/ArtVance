@@ -47,6 +47,7 @@ Route::prefix('/users')->group(function () {
     Route::put('/{id}/updateProfile', [UserController::class, 'update']);
     Route::post('/{id}/update-profile-pic', [UserController::class, 'updateProfilePic']);
     Route::post('/{id}/update-cover-pic', [UserController::class, 'updateCoverPic']);
+    Route::delete('/delete/{id}', [UserController::class, 'destroy']);
 });
 
 Route::post('/follow/{follower_id}/{followed_id}', [FollowController::class, 'follow']);
