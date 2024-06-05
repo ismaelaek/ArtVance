@@ -11,8 +11,9 @@ class NotificationController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $notifications = $user->getNotified()->with('user')->get();
+        $notifications = $user->getNotified()->with('user')->orderBy('created_at', 'desc')->get();
 
         return response()->json($notifications);
     }
+
 }
