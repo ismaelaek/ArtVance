@@ -1,7 +1,7 @@
 # ArtVnace
+<img src="frontend/src/assets/artvance_logo.png" alt="Artvance Logo" width="100" height="100">
+
 Hello everybody!
-
-
 ### First step 
 Using the command below, clone this project to your local machine :
 
@@ -35,6 +35,13 @@ Copy the `.env.example` file to `.env` using the command below:
 cp .env.example .env
 ```
 Make sure to create a DataBase in PhpMyAdmin named **Artvance** and set it in the env file
+##### run migration and seed some data
+
+```
+php artisan migrate 
+php arisan db:seed
+```
+
 ### 5th step: installing react dependencies
 Navigate to the **frontend** folder using 
 ```
@@ -69,3 +76,16 @@ Start the server using
 ```
 npm run dev
 ```
+### Interfaces 
+#### Login
+![Login page](<Images/Screenshot from 2024-05-13 21-52-44.png>)
+#### Home (feed)
+![Home page](<Images/Screenshot from 2024-05-30 11-01-06.png>)
+#### Post and comments
+![Single post](<Images/Screenshot from 2024-05-30 11-02-25.png>)
+#### Profile
+![Profile](<Images/Screenshot from 2024-05-30 13-34-06.png>)
+#### Marketplace
+![MarketPlace](<Images/Screenshot from 2024-05-30 13-35-04.png>)
+#### Chat
+![Messages](Images/image.png)
