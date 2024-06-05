@@ -2,6 +2,11 @@
 <img src="frontend/src/assets/artvance_logo.png" alt="Artvance Logo" width="100" height="100">
 
 Hello everybody!
+
+ArtVance is a vibrant social network designed for artists to showcase their artworks, engage with fellow artists, and participate in a dynamic marketplace. On ArtVance, users can follow each other, share their creative pieces, react to others' posts through likes, comments, saves, and reposts, and engage in direct conversations with other users. Additionally, ArtVance offers a marketplace where artists can sell their artworks, providing a comprehensive platform for creative expression and commerce.
+
+Developed by [Ismael Ait El Kamel](https://github.com/ismaelaek) and [Hiba Aassab](https://github.com/Hiba-Aassab), ArtVance aims to foster a supportive and interactive community for artists of all levels.
+
 ### First step 
 Using the command below, clone this project to your local machine :
 
